@@ -13,3 +13,5 @@ class Post(models.Model):
     likes = models.IntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.title} | posted by {self.user} on {self.created_on}"
