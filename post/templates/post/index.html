@@ -11,7 +11,7 @@
 <div class="top-bar"></div>
 <div>
     <div class="image-grid">
-        {% for post in post_list %}
+        {% for post in page_obj %}
         <div class="grid-item">
             <a class="grid-image" href="">
             <img src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
