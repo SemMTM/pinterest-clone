@@ -1,5 +1,7 @@
 {% load static %}
 
+{% url 'home' as home_url %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +20,7 @@
             <nav class="navigation-bar">
                 <div class="nav-1">
                     <div class="nav-2 nav-btn">
-                        <div class="nav-3">
+                        <div class="nav-3 {% if request.path == home_url %}active{% endif %}">
                             <a>
                                 <img class="icon" src="/static/icons/icons8-home.svg">
                             </a>

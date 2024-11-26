@@ -9,61 +9,12 @@
 </div>
 <div id="border"></div>
 <div class="image-grid">
+    {% for post in post_list %}
     <div class="grid-item">
         <a href=""><img
-                src="https://s-media-cache-ak0.pinimg.com/736x/61/4f/1b/614f1b3a481f68b4d492f71c5fe3fc5f.jpg" /></a>
+                src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
     </div>
-    <div class="grid-item">
-        <a href=""><img
-                src="https://s-media-cache-ak0.pinimg.com/736x/1d/6f/2d/1d6f2d4fff0f0d4e83456c28b0645bbd.jpg" /></a>
-    </div>
-    <div class="grid-item">
-        <a href=""><img src="/static/images/March GR Drop Conc 2 2.jpg" /></a>
-    </div>
-    <div class="grid-item">
-        <a href=""><img
-                src="https://s-media-cache-ak0.pinimg.com/736x/61/4f/1b/614f1b3a481f68b4d492f71c5fe3fc5f.jpg" /></a>
-    </div>
-    <div class="grid-item">
-        <a href=""><img
-                src="https://s-media-cache-ak0.pinimg.com/736x/1d/6f/2d/1d6f2d4fff0f0d4e83456c28b0645bbd.jpg" /></a>
-    </div>
-    <div class="grid-item">
-        <a href=""><img
-                src="https://s-media-cache-ak0.pinimg.com/736x/61/4f/1b/614f1b3a481f68b4d492f71c5fe3fc5f.jpg" /></a>
-    </div>
-    <div class="grid-item">
-        <a href=""><img
-                src="https://s-media-cache-ak0.pinimg.com/736x/61/4f/1b/614f1b3a481f68b4d492f71c5fe3fc5f.jpg" /></a>
-    </div>
-    <div class="grid-item">
-        <a href=""><img
-                src="https://s-media-cache-ak0.pinimg.com/736x/61/4f/1b/614f1b3a481f68b4d492f71c5fe3fc5f.jpg" /></a>
-    </div>
-    <div class="grid-item">
-        <a href=""><img
-                src="https://s-media-cache-ak0.pinimg.com/736x/61/4f/1b/614f1b3a481f68b4d492f71c5fe3fc5f.jpg" /></a>
-    </div>
-    <div class="grid-item">
-        <a href=""><img
-                src="https://s-media-cache-ak0.pinimg.com/736x/1d/6f/2d/1d6f2d4fff0f0d4e83456c28b0645bbd.jpg" /></a>
-    </div>
-    <div class="grid-item">
-        <a href=""><img
-                src="https://s-media-cache-ak0.pinimg.com/736x/61/4f/1b/614f1b3a481f68b4d492f71c5fe3fc5f.jpg" /></a>
-    </div>
-    <div class="grid-item">
-        <a href=""><img
-                src="https://s-media-cache-ak0.pinimg.com/736x/61/4f/1b/614f1b3a481f68b4d492f71c5fe3fc5f.jpg" /></a>
-    </div>
-    <div class="grid-item">
-        <a href=""><img
-                src="https://s-media-cache-ak0.pinimg.com/736x/61/4f/1b/614f1b3a481f68b4d492f71c5fe3fc5f.jpg" /></a>
-    </div>
-    <div class="grid-item">
-        <a href=""><img
-                src="https://s-media-cache-ak0.pinimg.com/736x/61/4f/1b/614f1b3a481f68b4d492f71c5fe3fc5f.jpg" /></a>
-    </div>
+    {% endfor %}
 </div>
 
 

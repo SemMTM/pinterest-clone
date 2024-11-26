@@ -7,7 +7,7 @@ import uuid
 # Create your models here.
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    image = CloudinaryField('image', default='placeholder')
+    image = CloudinaryField('image', default='placeholder', blank=False)
     title = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="uploader")
     likes = models.IntegerField(default=0)

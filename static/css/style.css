@@ -126,13 +126,14 @@ body {
 .grid-item {
     display: inline-block;
     width: 100%;
-    border-radius: 15px;
+    border-radius: 0px;
+    margin-bottom: 10px;
 }
 
 .grid-item img {
     display: block;
     width: 100%;
-    border-radius: 15px;
+    border-radius: 0px;
 }
 
 /* Just for decoration: */
@@ -140,10 +141,6 @@ body {
     font-family: sans-serif;
     display: block;
     padding: 10px;
-}
-
-.grid-item {
-    margin-bottom: 15px;
 }
 
 /* Media queries for screensize responsivness from masonry layout */
