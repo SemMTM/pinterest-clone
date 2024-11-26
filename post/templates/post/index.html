@@ -11,8 +11,11 @@
 <div class="image-grid">
     {% for post in post_list %}
     <div class="grid-item">
-        <a href=""><img
-                src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
+        <a class="grid-image" href="">
+        <img src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
+        <div class="grid-item-overlay">
+            <a class="btn save-btn">Save</a>
+        </div>
     </div>
     {% endfor %}
 </div>
