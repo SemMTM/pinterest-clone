@@ -8,18 +8,20 @@
     <input id="home-search-bar" type="text" placeholder="Search...">
 </div>
 <div id="border"></div>
-<div class="image-grid">
-    {% for post in post_list %}
-    <div class="grid-item">
-        <a class="grid-image" href="">
-        <img src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
-        <div class="grid-item-overlay">
-            <a class="btn save-btn">Save</a>
+<div class="top-bar"></div>
+<div>
+    <div class="image-grid">
+        {% for post in post_list %}
+        <div class="grid-item">
+            <a class="grid-image" href="">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
+            <div class="grid-item-overlay">
+                <a class="btn save-btn">Save</a>
+            </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
-
 
 <!-- Image tags scroll bar -->
 <div>
