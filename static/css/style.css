@@ -169,10 +169,14 @@ body {
 
 /* image grid styles */
 .image-grid {
-    column-count: 2;
+    display: grid;
+    grid-gap: 2em;
+    grid-template-columns: repeat( auto-fill, minmax( 200px, 1fr ) );
+    grid-auto-rows: 250px;
+    /*column-count: 2;
     column-gap: 10px;
     max-width: 1400px;
-    padding: 15px 15px 0 15px;
+    padding: 15px 15px 0 15px;*/
 }
 
 .grid-item {
@@ -206,18 +210,18 @@ body {
 /* Media queries for screensize responsivness from masonry layout */
 /* Tablets */
 @media screen and (min-width: 426px) {
-    .image-grid {
+    /*.image-grid {
         column-count: 3;
         column-gap: 10px;
         margin-left: 50px;
-    }    
+    }   */ 
 }
 /* Laptop */
 @media screen and (min-width: 769px) {
-    .image-grid {
+    /*.image-grid {
         column-count: 4;
         column-gap: 10px;
-    }    
+    }    */
 }
 
 #home-search-bar {

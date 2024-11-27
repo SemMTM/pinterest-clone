@@ -1,6 +1,13 @@
 {% load static %}
 
 {% for post in page_obj %}
+<div class="grid-item">
+    <a class="grid-image" href="">
+    <img src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
+    <div class="grid-item-overlay">
+        <a class="btn save-btn">Save</a>
+    </div>
+</div> 
 {% if forloop.last %}
 <div 
     hx-trigger="revealed" 
@@ -11,11 +18,4 @@
 {% else %}
 <div></div>
 {% endif %}
-<div class="grid-item">
-    <a class="grid-image" href="">
-    <img src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
-    <div class="grid-item-overlay">
-        <a class="btn save-btn">Save</a>
-    </div>
-</div> 
 {% endfor %}

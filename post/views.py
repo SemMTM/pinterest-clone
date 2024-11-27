@@ -15,14 +15,3 @@ class PostList(generic.ListView):
             return "post/image-list.html"
         else:
             return self.template_name
-
-
-def homepage(request):
-    page_number = request.GET.get('page', 1)
-    queryset = Paginator(Post.objects.all(), 4)
-    page_obj = queryset.get_page(page_number)
-
-    return render(request, 
-            "post/index.html", 
-            {'page_obj' : page_obj},
-            )
