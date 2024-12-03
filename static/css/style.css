@@ -106,7 +106,7 @@ body {
 
     .nav-1 {
         flex-direction: column;
-        height: 400px;
+        height: 300px;
         justify-content: space-evenly;
     }
 
@@ -130,6 +130,11 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    #profile-btn {
+        bottom: 20px;
+        position: absolute;
     }
     
 }
@@ -156,7 +161,6 @@ body {
         inset -0.12em -0.12em 0.12em 0 rgba(255,255,255,0.8);
         margin-left: 50px;
         width: 100vw;
-        height: 97vh;
     }  
 
     .top-bar {
@@ -165,9 +169,24 @@ body {
         height: 28px;
         background-color: #bfbfbf;
         top: 0px;
-        z-index: 1;
+        z-index: 2;
         margin-left: 58px;
-        box-shadow: 0em 0.12em 0.12em 0 rgba(0, 0, 0, 1);
+        box-shadow: 0em 0.12em 0.12em 0 rgba(0, 0, 0, 0.7);
+    }
+
+    .bottom-bar {
+        position: fixed;
+        width: 100%;
+        height: 18px;
+        background-color: #bfbfbf;
+        bottom: 0px;
+        z-index: 2;
+        margin-left: 58px;
+        box-shadow: 0em -0.12em 0.12em 0 rgba(0, 0, 0, 0.7);
+    }
+
+    .page-container {
+        padding-left: 55px;
     }
 }
 
@@ -179,8 +198,8 @@ body {
     grid-gap: 10px;
     /* the columns should have minimum width 250px and a flexible maximum width which is the same for each column */
     grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
-    grid-auto-rows: 20px;
-    padding: 10px;
+    grid-auto-rows: 10px;
+    padding: 20px;
 }
 
 .grid-item {
@@ -192,11 +211,12 @@ body {
 
 .grid-item-overlay {
     position: absolute;
-    background: rgba(80, 80, 80, 0.158);
+    background: rgba(32, 32, 32, 0.247);
     bottom: 0;
     height: 100%;
     width: 100%;
     opacity: 0;
+    border-radius: 10px;
 }
 
 .grid-item-overlay:hover {
@@ -206,21 +226,25 @@ body {
 .grid-item img {
     display: block;
     width: 100%;
-    border-radius: 0px;
+    border-radius: 10px;
 }
 
 /* Media queries for screensize responsivness from masonry layout */
 /* Tablets */
 @media screen and (min-width: 426px) {
     .image-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
-        padding-left: 65px;
-        grid-auto-rows: 30px;
+        grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+        /*grid-template-columns: repeat(auto-fill, minmax(200px,1fr));*/
+        padding-right: 20px;
+        grid-gap: 20px;
+        grid-auto-rows: 10px;
     }   
 }
 /* Laptop */
 @media screen and (min-width: 769px) {
-    
+    .image-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
+    }   
 } 
 
 
@@ -232,4 +256,31 @@ body {
     #home-search-bar {
         display: block;
     }
+}
+
+
+/* Image Detail Container Styles */
+#image-detail-container-inner {
+    width: 900px;
+    height: 700px;
+    background: white;
+    margin-top: 50px;
+}
+
+#image-detail-container {
+    display: flex;
+    justify-content: center;
+    margin-left: 60px;
+}
+
+.image-container {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background-color: black;
+}
+
+.image-container img {
+    width: 100%;
 }

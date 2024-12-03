@@ -1,0 +1,19 @@
+{% extends 'base.html' %} 
+{% block content %}
+{% load static %}
+
+<div id="border"></div>
+<div class="top-bar"></div>
+<div class="bottom-bar"></div>
+<div id="image-detail-container">
+    <div id="image-detail-container-inner">
+        <div class="image-container">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
+        </div>
+        <div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

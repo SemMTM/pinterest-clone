@@ -4,7 +4,8 @@
 </script>
 {% for post in page_obj %}
 {% if forloop.last %}
-<div class="grid-item" 
+<div 
+    class="grid-item" 
     hx-trigger="revealed" 
     hx-get="{% url 'home' %}?page={{ page_obj.number|add:1 }}"
     hx-swap="afterend">
@@ -20,8 +21,8 @@
 {% else %}
 <div class="grid-item">
     <div class="item-content">
-    <a class="grid-image" href="">
-        <img src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
+    <a class="grid-image" href="{% url 'post_detail' post.id %}">
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="post-link"/></a>
     <div class="grid-item-overlay"> 
         <a class="btn save-btn">Save</a>
     </div>
