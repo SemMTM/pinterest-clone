@@ -9,7 +9,7 @@
 </div>
 <div id="border"></div>
 <div class="top-bar"></div>
-<div>
+<div id="masonry-container">
     <div class="image-grid" id="main-grid">
         {% include 'post/image-list.html' with userimages=userimages %}
     </div>
@@ -20,6 +20,6 @@
 
 </div>
 
-<script src="{% static 'js/masonry.js' %}"></script>
+<script src="{% static 'js/app.js' %}"></script>
 
 {% endblock %}

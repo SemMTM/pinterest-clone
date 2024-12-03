@@ -1,5 +1,7 @@
 {% load static %}
-
+<script>
+    resizeAllGridItems();
+</script>
 {% for post in page_obj %}
 {% if forloop.last %}
 <div class="grid-item" 
@@ -9,9 +11,9 @@
     <div class="item-content">
     <a class="grid-image" href="">
         <img src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
-        <!-- <div class="grid-item-overlay"> 
-            <a class="btn save-btn">Save</a>
-        </div> -->
+    <div class="grid-item-overlay"> 
+        <a class="btn save-btn">Save</a>
+    </div>
     </div>
 </div> 
 
@@ -20,9 +22,9 @@
     <div class="item-content">
     <a class="grid-image" href="">
         <img src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
-        <!-- <div class="grid-item-overlay"> 
-            <a class="btn save-btn">Save</a>
-        </div> -->
+    <div class="grid-item-overlay"> 
+        <a class="btn save-btn">Save</a>
+    </div>
     </div>
 </div> 
 {% endif %}
