@@ -12,8 +12,9 @@
     <div class="item-content">
     <a class="grid-image" href="">
         <img src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
-    <div class="grid-item-overlay"> 
-        <a class="btn save-btn">Save</a>
+    <div class="grid-item-overlay" href="{% url 'post_detail' post.id %}"> 
+        <a class="div-link" href="{% url 'post_detail' post.id %}"></a>
+        <a class="btn overlay-save-btn">Save</a>
     </div>
     </div>
 </div> 
@@ -21,9 +22,10 @@
 {% else %}
 <div class="grid-item">
     <div class="item-content">
-    <a class="grid-image" href="{% url 'post_detail' post.id %}">
+    <a class="grid-image">
         <img src="{{ post.image.url }}" alt="{{ post.title }}" class="post-link"/></a>
-    <div class="grid-item-overlay"> 
+    <div class="grid-item-overlay">
+        <a class="div-link" href="{% url 'post_detail' post.id %}"></a> 
         <a class="btn overlay-save-btn">Save</a>
     </div>
     </div>

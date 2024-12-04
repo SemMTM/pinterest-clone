@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Post
+from .models import Post, Comment
 
 # Register your models here.
 @admin.register(Post)
@@ -11,3 +11,4 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ['title', 'user', 'image_tag', 'created_on']
     list_filter = ['user']
 
+admin.site.register(Comment)

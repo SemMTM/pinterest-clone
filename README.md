@@ -1,6 +1,10 @@
 ### Tech used:
 - imagesLoaded - library:
     - Used to detect when images have been loaded for responsive masonry layout.
+- Djanbgo Crispy Forms
+    - For imporved forms and form validation
+- Django allauth
+    - Used for user authentication and accounts on site.
 
 
 ### Credits:

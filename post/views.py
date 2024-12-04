@@ -20,9 +20,16 @@ class PostList(generic.ListView):
 def post_detail(request, id):
     queryset = Post.objects.all()
     post = get_object_or_404(queryset, id=id)
+    comments = post.comments.all().order_by("-created_on")
+    comment_count = post.comments.count()
 
     return render(
         request,
         "post/post_details.html",
-        {"post": post},
+        {
+            "post": post,
+            "comments": comments,
+            "comment_count": comment_count,
+        },
+
     )
