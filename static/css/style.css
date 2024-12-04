@@ -20,6 +20,7 @@ body {
                 inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
     cursor: pointer;
     padding: 4px 7px;
+    border: 0;
 }
 
 .nav-btn {
@@ -113,8 +114,9 @@ body {
 
     .nav-1 {
         flex-direction: column;
-        height: 300px;
+        height: 350px;
         justify-content: space-evenly;
+        padding-top: 25px;
     }
 
     .nav-btn {
@@ -158,8 +160,10 @@ body {
 
 @media screen and (max-width: 425px) {
     #border {
-        z-index: 1;
-    }
+        border: 0;
+        box-shadow: inset 0.12em 0.12em 0.12em 0 rgba(0, 0, 0, 0), 
+                inset -0.122em -2.3em 0.12em 0.12px rgba(255, 255, 255, 0);
+    }  
 }
 
 @media screen and (min-width: 426px) {
@@ -173,7 +177,7 @@ body {
     .top-bar {
         position: fixed;
         width: 100%;
-        height: 28px;
+        height: 35px;
         background-color: #bfbfbf;
         top: 0px;
         z-index: 2;
@@ -206,7 +210,7 @@ body {
     /* the columns should have minimum width 250px and a flexible maximum width which is the same for each column */
     grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
     grid-auto-rows: 10px;
-    padding: 20px;
+    padding: 10px;
 }
 
 .grid-item {
@@ -243,14 +247,25 @@ body {
 }
 
 /* Media queries for screensize responsivness from masonry layout */
+/* Mobile */
+@media screen and (max-width: 425px) {
+    .grid-item-overlay {
+        display: none;
+    }
+
+    .grid-item-overlay:hover {
+        display: none;
+    }
+}
+
 /* Tablets */
 @media screen and (min-width: 426px) {
     .image-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
-        /*grid-template-columns: repeat(auto-fill, minmax(200px,1fr));*/
         padding-right: 20px;
         grid-gap: 20px;
         grid-auto-rows: 10px;
+        padding-top: 55px;
     }   
 }
 /* Laptop */

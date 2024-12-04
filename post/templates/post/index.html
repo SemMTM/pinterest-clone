@@ -4,12 +4,9 @@
 {% block content %}
 
 <!-- Image Grid -->
-<div id="search-bar-container">
+<div id="search-bar-container" class="hidden">
     <input id="home-search-bar" type="text" placeholder="Search...">
 </div>
-<div id="border"></div>
-<div class="top-bar"></div>
-<div class="bottom-bar"></div>
 <div class="page-container">
     <div class="image-grid" id="main-grid">
         {% include 'post/image_list.html' with userimages=userimages %}

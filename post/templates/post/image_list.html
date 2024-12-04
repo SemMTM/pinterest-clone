@@ -10,24 +10,26 @@
     hx-get="{% url 'home' %}?page={{ page_obj.number|add:1 }}"
     hx-swap="afterend">
     <div class="item-content">
-    <a class="grid-image" href="">
-        <img src="{{ post.image.url }}" alt="{{ post.title }}"/></a>
-    <div class="grid-item-overlay" href="{% url 'post_detail' post.id %}"> 
-        <a class="div-link" href="{% url 'post_detail' post.id %}"></a>
-        <a class="btn overlay-save-btn">Save</a>
-    </div>
+        <a class="grid-image" href="{% url 'post_detail' post.id %}">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}"/>
+        </a>
+        <div class="grid-item-overlay"> 
+            <a class="div-link" href="{% url 'post_detail' post.id %}"></a>
+            <a class="btn overlay-save-btn">Save</a>
+        </div>
     </div>
 </div> 
 
 {% else %}
 <div class="grid-item">
     <div class="item-content">
-    <a class="grid-image">
-        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="post-link"/></a>
-    <div class="grid-item-overlay">
-        <a class="div-link" href="{% url 'post_detail' post.id %}"></a> 
-        <a class="btn overlay-save-btn">Save</a>
-    </div>
+        <a class="div-link" href="{% url 'post_detail' post.id %}">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}"/>
+        </a>
+        <div class="grid-item-overlay">
+            <a class="div-link" href="{% url 'post_detail' post.id %}"></a> 
+            <a class="btn overlay-save-btn">Save</a>
+        </div>
     </div>
 </div> 
 {% endif %}

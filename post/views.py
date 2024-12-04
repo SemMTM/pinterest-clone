@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, reverse
 from django.views import generic
 from django.core.paginator import Paginator
 from .models import Post
+from .forms import CommentForm
 
 # Create your views here.
 class PostList(generic.ListView):
@@ -22,6 +23,7 @@ def post_detail(request, id):
     post = get_object_or_404(queryset, id=id)
     comments = post.comments.all().order_by("-created_on")
     comment_count = post.comments.count()
+    comment_form = CommentForm()
 
     return render(
         request,
@@ -30,6 +32,7 @@ def post_detail(request, id):
             "post": post,
             "comments": comments,
             "comment_count": comment_count,
+            "comment_form": comment_form,
         },
 
     )

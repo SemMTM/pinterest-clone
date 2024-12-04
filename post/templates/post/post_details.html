@@ -1,10 +1,11 @@
 {% extends 'base.html' %} 
 {% block content %}
 {% load static %}
+{% load crispy_forms_tags %}
+{% url 'account_login' as login_url %}
+{% url 'account_signup' as signup_url %}
+{% url 'account_logout' as logout_url %}
 
-<div id="border"></div>
-<div class="top-bar"></div>
-<div class="bottom-bar"></div>
 <div id="image-detail-container">
     <div id="image-detail-container-inner">
         <div class="image-container">
