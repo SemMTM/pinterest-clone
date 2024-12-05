@@ -1,6 +1,8 @@
 {% load static %}
 
 {% url 'home' as home_url %}
+{% url 'account_login' as login_url %}
+{% url 'account_signup' as signup_url %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -78,8 +80,18 @@
             <!-- Borders -->
             <div id="border"></div>
             <div class="top-bar">
-                <button class="btn sign-up-btn">Log-in</button>
-                <button class="btn sign-up-btn">Sign-up</button>
+                <div class="btn-container">
+                    {% if user.is_authenticated %}
+                    <div></div>
+                    {% else %}
+                    <a href="{% url 'account_login' %}">
+                        <button class="btn sign-up-btn">Log-in</button>
+                    </a>
+                    <a href="{% url 'account_signup' %}">
+                        <button class="btn sign-up-btn">Sign-up</button>
+                    </a>
+                    {% endif %}
+                </div>
             </div>
             <div class="bottom-bar"></div>
 

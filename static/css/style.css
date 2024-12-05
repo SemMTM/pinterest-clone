@@ -23,6 +23,10 @@ body {
     border: 0;
 }
 
+.sign-up-btn {
+    margin-left: 10px;
+}
+
 .nav-btn {
     height: 30px;
     width: 70px;
@@ -42,6 +46,14 @@ body {
     box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(0, 0, 0), 
                     inset -0.12em -0.12em 0.12em 0 rgb(255, 255, 255);
     background-color: #eeeeee;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 25px;
+    align-items: center;
+    height: 100%;
 }
 
 /* Post details page buttons */
@@ -158,6 +170,17 @@ body {
                 inset -0.122em -2.3em 0.12em 0.12px rgba(255, 255, 255, 0.8);
 }
 
+.top-bar {
+    position: fixed;
+    width: 100%;
+    z-index: 2;
+    height: 35px;
+    background-color: #bfbfbf;
+    top: 0px;
+    z-index: 2;
+    box-shadow: 0em 0.12em 0.12em 0 rgba(0, 0, 0, 0.7);
+}
+
 @media screen and (max-width: 425px) {
     #border {
         border: 0;
@@ -172,18 +195,7 @@ body {
         inset -0.12em -0.12em 0.12em 0 rgba(255,255,255,0.8);
         margin-left: 50px;
         width: 100vw;
-    }  
-
-    .top-bar {
-        position: fixed;
-        width: 100%;
-        height: 35px;
-        background-color: #bfbfbf;
-        top: 0px;
-        z-index: 2;
-        margin-left: 58px;
-        box-shadow: 0em 0.12em 0.12em 0 rgba(0, 0, 0, 0.7);
-    }
+    } 
 
     .bottom-bar {
         position: fixed;
@@ -211,6 +223,7 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
     grid-auto-rows: 10px;
     padding: 10px;
+    padding-top: 50px;
 }
 
 .grid-item {
@@ -265,7 +278,6 @@ body {
         padding-right: 20px;
         grid-gap: 20px;
         grid-auto-rows: 10px;
-        padding-top: 55px;
     }   
 }
 /* Laptop */
