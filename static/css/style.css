@@ -23,8 +23,19 @@ body {
     border: 0;
 }
 
+.btn:hover {
+    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(0, 0, 0), 
+                    inset -0.12em -0.12em 0.12em 0 rgb(255, 255, 255);
+    background-color: #eeeeee;
+}
+
 .sign-up-btn {
     margin-left: 10px;
+}
+
+.login-btn {
+    margin-left: 10px;
+    background: #e76868;
 }
 
 .nav-btn {
@@ -75,6 +86,7 @@ body {
     z-index: 5;
     padding: 3px;
     box-sizing: border-box;
+    box-shadow: 0em -0.1em 0.12em 0 rgba(0, 0, 0, 0.7);
 }
 
 .nav-1 {
@@ -300,40 +312,79 @@ body {
 
 
 /* Image Detail Container Styles */
-#image-detail-container-inner {
-    width: 900px;
-    height: 700px;
-    background: white;
-    margin-top: 50px;
-    display: flex;
-}
-
 #image-detail-container {
-    display: flex;
-    justify-content: center;
-    margin-left: 60px;
+    padding: 10px;
 }
 
 .image-container {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    background-color: black;
+    padding-top: 45px; 
 }
 
 .image-container img {
     width: 100%;
 }
 
-.details-container {
-    width: 50%;
-    height: 100%;
-    padding: 30px;
-}
-
 .det-container-inner {
     width: 100%;
     display: flex;
+    padding-top: 15px;
     justify-content: space-between;
+}
+
+@media screen and (min-width: 426px) {
+    #image-detail-container-inner {
+        width: 900px;
+        height: 700px;
+        background: white;
+        margin-top: 50px;
+        display: flex;
+    }
+
+    #image-detail-container {
+        display: flex;
+        justify-content: center;
+        margin-left: 60px;
+    }
+
+    .image-container {
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        background-color: black;
+    }
+
+    .details-container {
+        width: 50%;
+        height: 100%;
+        padding: 30px;
+    }
+}
+
+/* Comment Form Styles */
+#comment-form-container {
+    width: 100%;
+}
+
+#commentForm {
+    display: flex;
+    justify-content: center;
+}
+
+#commentForm div {
+    display: inline;
+}
+
+#commentForm label {
+    display: none;
+}
+
+#commentForm textarea {
+    width: 100%;
+    height: 100%;
+}
+
+#submitButton {
+    height: 100%;
+    width: 20px;
 }

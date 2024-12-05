@@ -29,11 +29,25 @@
                 </div>
                 <button class="btn detail-btn">Follow</button>
             </div>
-            <div class="det-container-inner">
-                <div></div>
+
+            <div class="det-container-inner" style="flex-direction: column;">
+                <!-- Display comments -->
                 <div>
-                    <form>
-                        
+                    {% if comment_count == 0 %}
+                    <h3>No comments yet</h3>
+                    {% else %}
+                    <h3>{{ comment_count }} Comments</h3>
+                    {% endif %}
+                </div>
+
+                <!-- Creating New Comments -->
+                <div id="comment-form-container">
+                    <form id="commentForm" method="post">
+                        {% csrf_token %}
+                        {{ comment_form }}
+                        <div>
+                        <button id="submitButton" class="btn" type="submit">></button>
+                        </div>
                     </form>
                 </div>
             </div>
