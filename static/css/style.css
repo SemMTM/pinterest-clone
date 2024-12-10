@@ -275,6 +275,7 @@ body {
 }
 
 
+/* IMAGE DETAIL PAGE STYLES */
 /* Image Detail Container Styles */
 #image-detail-container {
     padding: 10px;
@@ -351,4 +352,18 @@ body {
 #submitButton {
     height: 100%;
     width: 20px;
+}
+
+/* User Icon styles*/
+.user-icon {
+    background: black;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    margin-right: 5px;
+}
+
+#user-icon-container {
+    display: flex;
+    align-items: center;
 }
