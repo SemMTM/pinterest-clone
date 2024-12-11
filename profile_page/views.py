@@ -6,6 +6,7 @@ from .models import Profile
 # Create your views here.
 
 def profile_page(request, user):
+    
     # Checks if user has a profile, if they do not then one is created for them.
     try:
         queryset = Profile.objects.all()

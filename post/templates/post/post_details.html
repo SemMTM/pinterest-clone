@@ -37,12 +37,22 @@
                     {% if comment_count == 0 %}
                     <h3>No comments yet</h3>
                     {% else %}
-                    <h3>{{ comment_count }} Comments</h3>
+                    <h3>{{ comment_count }} Comments:</h3>
                     {% endif %}
+                </div>
+                <div>
+                    {% for comment in comments %}
+                    <div>
+                        <p>{{ comment.author }}</p>
+                        <p>{{ comment.created_on }}</p>
+                        <span>{{ comment.body }}</span>
+                    </div>
+                    {% endfor %}
                 </div>
 
                 <!-- Creating New Comments -->
                 <div id="comment-form-container">
+                    {% if user.is_authenticated %}
                     <form id="commentForm" method="post">
                         {% csrf_token %}
                         {{ comment_form }}
@@ -50,6 +60,9 @@
                         <button id="submitButton" class="btn" type="submit">></button>
                         </div>
                     </form>
+                    {% else %}
+                    <p>Log in to leave a comment</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
