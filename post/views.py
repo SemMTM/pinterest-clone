@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, reverse
 from django.views import generic
 from django.core.paginator import Paginator
-from public_profile.models import Profile
 from .models import Post
 from .forms import CommentForm
 
