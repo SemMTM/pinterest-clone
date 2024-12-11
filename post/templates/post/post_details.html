@@ -22,11 +22,11 @@
                 <div id="user-icon-container">
                     <div class="user-icon">
                         <div>
-                            <a href=""><img></a>
+                            <a href="{% url 'profile_page' 'post.user_id'  %}"><img></a>
                         </div>
                     </div>
                     <div>
-                        <a href="">{{ post.user }}</a>    
+                        <a href="{% url 'profile_page' post.user_id %}">{{ post.user }}</a>    
                     </div>
                 </div>
             </div>
