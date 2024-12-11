@@ -4,6 +4,7 @@
 {% url 'account_login' as login_url %}
 {% url 'account_signup' as signup_url %}
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,15 +64,7 @@
                     {% if user.is_authenticated %}
                     <div class="nav-2 nav-btn" id="profile-btn">
                         <div class="nav-3">
-                            <a class="nav-a">
-                                <img class="icon" src="/static/icons/icons8-home.svg">
-                            </a>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="nav-2 nav-btn hidden" id="profile-btn">
-                        <div class="nav-3">
-                            <a class="nav-a">
+                            <a class="nav-a" href="{% url 'profile_page' user=user.pk  %}">
                                 <img class="icon" src="/static/icons/icons8-home.svg">
                             </a>
                         </div>

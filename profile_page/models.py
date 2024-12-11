@@ -11,9 +11,9 @@ class Profile(models.Model):
     """
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="user")
-    about = models.TextField()
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
+    about = models.TextField(blank=True)
+    first_name = models.CharField(max_length=200, blank=True)
+    last_name = models.CharField(max_length=200, blank=True)
     profile_image = CloudinaryField('image', default='placeholder', blank=False)
     
     def __str__(self):

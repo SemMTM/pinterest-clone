@@ -364,8 +364,8 @@ body {
 #profile-user-icon {
     background: black;
     border-radius: 50%;
-    height: 50px;
-    width: 50px;
+    height: 80px;
+    width: 80px;
 }
 
 #profile-page-container {
@@ -379,4 +379,5 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
+    margin-top: 15px;
 }
