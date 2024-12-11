@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'cloudinary',
     'post',
+    'profile_page',
 ]
 
 SITE_ID = 1
