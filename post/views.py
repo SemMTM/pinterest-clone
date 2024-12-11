@@ -34,5 +34,4 @@ def post_detail(request, id):
             "comment_count": comment_count,
             "comment_form": comment_form,
         },
-
     )
