@@ -80,19 +80,15 @@
                 </div>
             </nav>
 
-            <!-- Borders -->
-            <div class="top-bar">
+            <!-- Top Bar -->
+            <div class="top-bar {% if user.is_authenticated %}hidden{% endif %}">
                 <div class="btn-container">
-                    {% if user.is_authenticated %}
-                    <div></div>
-                    {% else %}
                     <a href="{% url 'account_login' %}">
                         <button class="btn login-btn">Log-in</button>
                     </a>
                     <a href="{% url 'account_signup' %}">
                         <button class="btn sign-up-btn">Sign-up</button>
                     </a>
-                    {% endif %}
                 </div>
             </div>
 
