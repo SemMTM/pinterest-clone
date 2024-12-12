@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from django.core.validators import RegexValidator
 from cloudinary.models import CloudinaryField
 import uuid
 
@@ -11,14 +12,11 @@ class Post(models.Model):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     image = CloudinaryField('image', default='placeholder', blank=False)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, blank=False)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="uploader")
     likes = models.IntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.title} | posted by {self.user} on {self.created_on}"
 
 
 class Comment(models.Model):
@@ -39,3 +37,38 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment: {self.body} by {self.author}"
+
+
+class ImageTags(models.Model):
+    """
+    Stores a single image tag related to: model: `blog.Post`
+    """
+    tag_name = models.CharField(
+        primary_key=True, 
+        max_length=200,
+        validators=[
+            RegexValidator(
+                regex=r'^[a-zA-Z0-9 \-]+$',
+                message="Tag name must contain only letters, digits, spaces, and hyphens.",
+                code='invalid_tag_name'
+            )
+        ])
+
+    def save(self, *args, **kwargs):
+        if self.tag_name:
+            self.tag_name = self.tag_name.lower()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.tag_name
+
+
+class ImageTagRelationships(models.Model):
+    """
+    Stores an entry of the tag and which post it is paired with, related to: model: `blog.Post` and model: `blog.ImageTags`
+    """
+    post_id = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name="post_id")
+    tag_name = models.ForeignKey(
+        ImageTags, on_delete=models.CASCADE, related_name="image_tag")
+
