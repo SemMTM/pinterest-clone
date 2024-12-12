@@ -2,6 +2,7 @@
 {% block content %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% load custom_filters %}
 
 <div id="image-detail-container">
     <div id="image-detail-container-inner">
@@ -44,7 +45,7 @@
                     {% for comment in comments %}
                     <div>
                         <p>{{ comment.author }}</p>
-                        <p>{{ comment.created_on }}</p>
+                        <p>{{ comment.created_on | time_ago }}</p>
                         <span>{{ comment.body }}</span>
                     </div>
                     {% endfor %}
