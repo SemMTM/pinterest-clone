@@ -3,6 +3,8 @@
 {% url 'home' as home_url %}
 {% url 'account_login' as login_url %}
 {% url 'account_signup' as signup_url %}
+{% url 'create_post' as create_post_url %}
+{% url 'profile' as profile_url %}
 
 
 <!DOCTYPE html>
@@ -47,9 +49,9 @@
                             </a>
                         </div>
                     </div>
-                    <div class="nav-2 nav-btn">
+                    <div class="nav-2 nav-btn {% if request.path == create_post_url %}active{% endif %}">
                         <div class="nav-3">
-                            <a class="nav-a">
+                            <a class="nav-a" href="{% url 'create_post' %}">
                                 <img class="icon" src="/static/icons/icons8-plus.svg">
                             </a>
                         </div>

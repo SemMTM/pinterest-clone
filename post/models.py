@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, FileExtensionValidator
 from cloudinary.models import CloudinaryField
 import uuid
 
@@ -11,7 +11,9 @@ class Post(models.Model):
     Stores a single image post related to: model:`auth.User`.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    image = CloudinaryField('image', blank=False)
+    image = CloudinaryField('image', blank=False,
+            validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])]
+            )
     title = models.CharField(max_length=100, blank=False)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="uploader")
