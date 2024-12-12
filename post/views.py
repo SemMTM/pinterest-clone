@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
+from django.contrib import messages
 from django.core.paginator import Paginator
-from .models import Post
+from .models import Post, Comment
 from .forms import CommentForm
 
 # Create your views here.
@@ -23,7 +24,17 @@ def post_detail(request, id):
     post = get_object_or_404(queryset, id=id)
     comments = post.comments.all().order_by("-created_on")
     comment_count = post.comments.count()
-    comment_form = CommentForm()
+
+    if request.method == "POST":
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+            return redirect('post_detail', id=post.id)
+    else:
+        comment_form = CommentForm()
 
     return render(
         request,
@@ -34,4 +45,11 @@ def post_detail(request, id):
             "comment_count": comment_count,
             "comment_form": comment_form,
         },
+    )
+
+
+def create_post(request):
+    return render(
+        request,
+        "post/post_create.html"
     )

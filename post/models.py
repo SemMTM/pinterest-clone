@@ -15,6 +15,7 @@ class Post(models.Model):
     title = models.CharField(max_length=100, blank=False)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="uploader")
+    description = models.TextField(blank=True)
     likes = models.IntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
 
@@ -36,7 +37,7 @@ class Comment(models.Model):
         ordering = ["-created_on"]
 
     def __str__(self):
-        return f"Comment: {self.body} by {self.author}"
+        return f"Comment: '{self.body}' by {self.author}"
 
 
 class ImageTags(models.Model):

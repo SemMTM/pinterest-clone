@@ -381,3 +381,8 @@ body {
     justify-content: center;
     margin-top: 15px;
 }
+
+/* Post Create Page Styles */
+.pc-main-con {
+    padding: 10px;
+}

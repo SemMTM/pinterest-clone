@@ -54,9 +54,9 @@
                 <!-- Creating New Comments -->
                 <div id="comment-form-container">
                     {% if user.is_authenticated %}
-                    <form id="commentForm" method="post">
-                        {% csrf_token %}
+                    <form id="commentForm" method="POST">
                         {{ comment_form }}
+                        {% csrf_token %}
                         <div>
                         <button id="submitButton" class="btn" type="submit">></button>
                         </div>

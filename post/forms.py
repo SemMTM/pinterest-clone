@@ -1,5 +1,5 @@
-from .models import Comment
 from django import forms
+from .models import Comment, Post
 
 
 class CommentForm(forms.ModelForm):
@@ -12,3 +12,8 @@ class CommentForm(forms.ModelForm):
 
         self.fields['body'].widget.attrs['placeholder'] = 'Add a comment'
         self.fields['body'].widget.attrs['rows'] = '2'
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['image', 'title', 'description']
