@@ -29,7 +29,6 @@ SECRET_KEY = 'django-insecure-9e6+5rjh2x)&jnayp!)s=e6(0g9%riso5ovzkga77@-61xh_4r
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = ['8000-semmtm-pinterestclone-yymd39f8mut.ws.codeinstitute-ide.net',
                 '.herokuapp.com',
                 ]
@@ -62,6 +61,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
