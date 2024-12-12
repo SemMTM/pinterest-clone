@@ -21,7 +21,22 @@
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <img id="image-preview" src="" alt="Image preview" style="display: none; max-width:200px; max-height:200px;"/>
-                {{ post_form.as_p }}  <!-- Render the form fields -->
+                {{ post_form.image }}
+                {{ post_form.title }}
+                {{ post_form.description }}
+
+                <div style="display:none;">
+                    {{ form.tags }}
+                </div>
+
+                <div id="selected-tags"></div>
+
+                <label for="tag-input">Tags (up to 3):</label>
+                <div id="tag-autocomplete-container">
+                    <input type="text" id="tag-input" placeholder="Search for tags...">
+                    <div id="tag-suggestions"></div>
+                </div>
+
                 <button type="submit">Create Post</button>
             </form>
         </div>

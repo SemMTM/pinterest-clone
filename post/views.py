@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
+from django.http import JsonResponse
 from django.contrib import messages
 from django.core.paginator import Paginator
-from .models import Post, Comment, ImageTagRelationships
+from .models import Post, Comment, ImageTagRelationships, ImageTags
 from .forms import CommentForm, PostForm
 
 # Create your views here.
@@ -72,3 +73,15 @@ def create_post(request):
         "post/post_create.html",
         {"post_form": post_form},
     )
+
+
+def tag_suggestions(request):
+    query = request.GET.get('q', '')
+    if query:
+        # Filter tags containing the query
+        tags = ImageTags.objects.filter(tag_name__icontains=query)[:10]  # Limit to 10 results
+    else:
+        tags = ImageTags.objects.all()[:10]
+
+    data = [{"tag_name": tag.tag_name} for tag in tags]
+    return JsonResponse(data, safe=False)
