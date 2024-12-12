@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
 from django.contrib import messages
 from django.core.paginator import Paginator
-from .models import Post, Comment
+from .models import Post, Comment, ImageTagRelationships
 from .forms import CommentForm, PostForm
 
 # Create your views here.
@@ -56,6 +56,15 @@ def create_post(request):
             post = post_form.save(commit=False)
             post.user = request.user
             post.save()
+
+            selected_tags = post_form.cleaned_data['tags']
+
+            for tag in selected_tags:
+                ImageTagRelationships.objects.create(post_id=post, tag_name=tag)
+                # Create relationships for each selected tag
+
+            messages.success(request, "Your post has been created successfully!")
+
             return redirect('create_post')
 
     return render(
