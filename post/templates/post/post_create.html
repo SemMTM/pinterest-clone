@@ -9,7 +9,11 @@
             <h1>Create Post</h1>
         </div>
         <div>
-            
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ post_form.as_p }}  <!-- Render the form fields -->
+                <button type="submit">Create Post</button>
+            </form>
         </div>
         <div></div>
         <div></div>

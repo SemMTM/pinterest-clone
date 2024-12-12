@@ -3,7 +3,7 @@ from django.views import generic
 from django.contrib import messages
 from django.core.paginator import Paginator
 from .models import Post, Comment
-from .forms import CommentForm
+from .forms import CommentForm, PostForm
 
 # Create your views here.
 class PostList(generic.ListView):
@@ -49,7 +49,17 @@ def post_detail(request, id):
 
 
 def create_post(request):
+    post_form = PostForm()
+    if request.method == 'POST':
+        post_form = PostForm(data=request.POST, files=request.FILES)
+        if post_form.is_valid():
+            post = post_form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect('post_create')
+
     return render(
         request,
-        "post/post_create.html"
+        "post/post_create.html",
+        {"post_form": post_form},
     )
