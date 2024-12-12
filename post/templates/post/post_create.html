@@ -11,6 +11,7 @@
         <div>
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+                <img id="image-preview" src="" alt="Image preview" style="display: none; max-width:200px; max-height:200px;"/>
                 {{ post_form.as_p }}  <!-- Render the form fields -->
                 <button type="submit">Create Post</button>
             </form>
@@ -21,4 +22,8 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/image_preview.js' %}"></script>
 {% endblock %}

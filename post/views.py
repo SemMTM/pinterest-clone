@@ -56,7 +56,7 @@ def create_post(request):
             post = post_form.save(commit=False)
             post.user = request.user
             post.save()
-            return redirect('post_create')
+            return redirect('create_post')
 
     return render(
         request,
