@@ -10,7 +10,7 @@ from .forms import CommentForm, PostForm
 class PostList(generic.ListView):
     queryset = Post.objects.all()
     template_name = "post/index.html"
-    paginate_by = 6
+    paginate_by = 3
     context_object_name = "userimages"
 
     def get_template_names(self, *args, **kwargs):

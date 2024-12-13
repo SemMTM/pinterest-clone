@@ -41,7 +41,7 @@
                     <h3>{{ comment_count }} Comments:</h3>
                     {% endif %}
                 </div>
-                <div>
+                <div id="comments-container" class="hidden">
                     {% for comment in comments %}
                     <div>
                         <p>{{ comment.author }}</p>
@@ -55,8 +55,8 @@
                 <div id="comment-form-container">
                     {% if user.is_authenticated %}
                     <form id="commentForm" method="POST">
-                        {{ comment_form }}
                         {% csrf_token %}
+                        {{ comment_form }}
                         <div>
                         <button id="submitButton" class="btn" type="submit">></button>
                         </div>
@@ -69,5 +69,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block scripts %}
+<script src="{% static 'js/post_create_js.js' %}"></script>
 {% endblock %}
