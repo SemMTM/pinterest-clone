@@ -83,5 +83,5 @@ def tag_suggestions(request):
     else:
         tags = ImageTags.objects.all()[:10]
 
-    data = [{"tag_name": tag.tag_name} for tag in tags]
+    data = [{"id": tag.pk, "tag_name": tag.tag_name} for tag in tags]
     return JsonResponse(data, safe=False)
