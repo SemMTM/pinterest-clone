@@ -33,22 +33,37 @@
             </div>
 
             <div class="det-container-inner" style="flex-direction: column;">
-                <!-- Display comments -->
+                <!-- Comment icon and count outside the modal -->
                 <div>
-                    {% if comment_count == 0 %}
-                    <h3>No comments yet</h3>
-                    {% else %}
-                    <h3>{{ comment_count }} Comments:</h3>
-                    {% endif %}
+                    <span id="comment-icon" style="cursor:pointer;">
+                        🗨️ {{ comment_count }}
+                    </span>
                 </div>
-                <div id="comments-container" class="hidden">
-                    {% for comment in comments %}
-                    <div>
-                        <p>{{ comment.author }}</p>
-                        <p>{{ comment.created_on | time_ago }}</p>
-                        <span>{{ comment.body }}</span>
+
+                <!-- Modal for displaying comments -->
+                <div id="comment-modal" class="hidden">
+                    <div class="modal-content">
+                        <span id="close-modal" class="close-btn">&times;</span>
+                        
+                        <div>
+                            {% if comment_count == 0 %}
+                                <h3>No comments yet</h3>
+                            {% else %}
+                                <h3>{{ comment_count }} Comments:</h3>
+                            {% endif %}
+                        </div>
+
+                        <!-- Only comments are displayed here -->
+                        <div id="comments-container">
+                            {% for comment in comments %}
+                                <div class="comment">
+                                    <p>{{ comment.author }}</p>
+                                    <p>{{ comment.created_on|time_ago }}</p>
+                                    <span>{{ comment.body }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                    {% endfor %}
                 </div>
 
                 <!-- Creating New Comments -->
@@ -72,5 +87,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'js/post_create_js.js' %}"></script>
+<script src="{% static 'js/post_details_js.js' %}"></script>
 {% endblock %}
