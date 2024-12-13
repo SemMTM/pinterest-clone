@@ -63,23 +63,30 @@
                                 </div>
                             {% endfor %}
                         </div>
+                        
+                        <!-- Creating New Comments -->
+                        <div id="comment-form-container">
+                            {% if user.is_authenticated %}
+                            <form id="commentForm" method="POST">
+                                {% csrf_token %}
+                                {{ comment_form }}
+                                <div>
+                                <button id="submitButton" class="btn" type="submit">></button>
+                                </div>
+                            </form>
+                            {% else %}
+                            <p>Log in to leave a comment</p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
 
                 <!-- Creating New Comments -->
-                <div id="comment-form-container">
-                    {% if user.is_authenticated %}
-                    <form id="commentForm" method="POST">
-                        {% csrf_token %}
-                        {{ comment_form }}
-                        <div>
-                        <button id="submitButton" class="btn" type="submit">></button>
-                        </div>
-                    </form>
-                    {% else %}
-                    <p>Log in to leave a comment</p>
-                    {% endif %}
-                </div>
+                {% if user.is_authenticated %}
+                <button id="open-comment-modal" class="btn">Add a comment</button>
+                {% else %}
+                <button class="btn">Login to leave a comment</button>
+                {% endif %}
             </div>
         </div>
     </div>

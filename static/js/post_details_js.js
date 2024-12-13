@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModal = document.getElementById('close-modal');
     const commentForm = document.getElementById('commentForm');
     const commentInput = commentForm ? commentForm.querySelector('textarea, input[type="text"]') : null;
+    const openCommentModal = document.getElementById('open-comment-modal')
 
     // Open the modal
     function openModal() {
@@ -21,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Focus on the comment input also opens the modal
-    if (commentInput) {
-        commentInput.addEventListener('focus', openModal);
+    if (openCommentModal) {
+        openCommentModal.addEventListener('focus', openModal);
     }
 
     // Close modal when the close button is clicked
