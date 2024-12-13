@@ -20,12 +20,21 @@
         <div>
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <img id="image-preview" src="" alt="Image preview" style="display: none; max-width:200px; max-height:200px;"/>
-                {{ post_form.image }}
-                {{ post_form.title }}
-                {{ post_form.description }}
+                
+                <div>
+                    <img id="image-preview" src="" alt="Image preview" style="display: none; max-width:200px; max-height:200px;"/>
+                    {{ post_form.image }}
+                </div>
+                <div>
+                    <label for="id_title">Title:</label>
+                    {{ post_form.title }}
+                </div>
+                <div>
+                    <label for="id_description">Description:</label>
+                    {{ post_form.description }}
+                </div>
 
-                <div style="display:none;">
+                <div id="hidden_tags" style="display:none;">
                     {{ form.tags }}
                 </div>
 

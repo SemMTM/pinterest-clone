@@ -50,19 +50,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const tagInput = document.getElementById('tag-input');
     const suggestionsBox = document.getElementById('tag-suggestions');
     const selectedTagsContainer = document.getElementById('selected-tags');
-    const hiddenTagsField = document.getElementById('id_tags');
+    const hiddenTagsContainer = document.getElementById('hidden_tags');
 
     let selectedTags = []; // store {id, tag_name} of chosen tags
 
     // Update hidden field whenever selectedTags changes
     function updateHiddenField() {
-        const ids = selectedTags.map(t => t.id);
-        // Set the hidden select field to these ids
-        // If form.tags is a MultipleHiddenInput, you can just set value as a comma-separated list or
-        // dynamically create option elements. 
-        // For MultipleHiddenInput, just set it as a comma-separated string:
-        hiddenTagsField.value = ids.join(',');
-    }
+        hiddenTagsContainer.innerHTML = '';
+        selectedTags.forEach(tag => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'tags';
+          input.value = tag.id;
+          hiddenTagsContainer.appendChild(input);
+        });
+      }
 
     // Render the selected tags in the UI
     function renderSelectedTags() {
