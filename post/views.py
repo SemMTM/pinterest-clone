@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from .models import Post, Comment, ImageTagRelationships, ImageTags
 from .forms import CommentForm, PostForm
+import json
 
 # Create your views here.
 class PostList(generic.ListView):
@@ -112,28 +113,20 @@ def comment_delete(request, post_id, comment_id):
 
 
 @login_required
-def edit_comment(request, post_id, comment_id):
+def update_comment(request, post_id, comment_id):
     post = get_object_or_404(Post, id=post_id)
     comment = get_object_or_404(Comment, id=comment_id, post=post)
 
-    # Ensure only the comment author can edit the comment
-    if comment.author != request.user:
-        messages.error(request, "You are not authorized to edit this comment.")
-        return redirect('post_detail', id=post.id)
+    # Ensure the user is authorized
+    if comment.author != request.user and post.author != request.user:
+        return HttpResponseForbidden("You are not authorized to edit this comment.")
 
     if request.method == 'POST':
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             form.save()
-            messages.success(request, "Comment updated successfully.")
             return redirect('post_detail', id=post.id)
     else:
         form = CommentForm(instance=comment)
 
-    return render(
-        request, 
-        'post/edit_comment.html', 
-        {'form': form, 
-        'post': post, 
-        'comment': comment}
-        )
+    return redirect('post_detail', id=post.id)

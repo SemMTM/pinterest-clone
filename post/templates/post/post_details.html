@@ -79,16 +79,21 @@
                         </div>
 
                         <!-- Only comments are displayed here -->
-                        <div id="comments-container">
+                        <div id="comments-container" data-post-id="{{ post.id }}">
                             {% for comment in comments %}
-                            <div class="comment">
+                            <div class="comment" data-comment-id="{{ comment.id }}">
                                 <div>
                                     <p><strong>{{ comment.author }}</strong> {{ comment.created_on|time_ago }}</p>
                                     <span class="comment-body">{{ comment.body }}</span>
                                 </div>
                                 {% if user.is_authenticated and comment.author == user or post.author == user%}
                                 <div class="comment-btns-container">
-                                    <span><a href="{% url 'edit_comment' post.id comment.id %}" class="edit-comment-btn">Edit</a></span>
+                                    <span><button 
+                                        class="edit-comment-btn" 
+                                        data-comment-body="{{ comment.body|escape }}" 
+                                        data-comment-id="{{ comment.id }}">
+                                        Edit
+                                    </button></span>
                                     <span class="comment-close-btn" comment_id="{{ comment.id }}" post_id="{{ post.id }}">&times;</span>
                                 </div>
                                 {% endif %}
@@ -102,6 +107,7 @@
                             <form id="commentForm" method="POST">
                                 {% csrf_token %}
                                 {{ comment_form }}
+                                <input type="hidden" id="edit-comment-id" name="comment_id" value="">
                                 <div>
                                     <button id="submitButton" class="btn" type="submit">></button>
                                 </div>
