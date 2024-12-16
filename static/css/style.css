@@ -286,7 +286,6 @@ body {
     width: 100%;
     display: flex;
     padding-top: 15px;
-    justify-content: space-between;
 }
 
 @media screen and (min-width: 426px) {
@@ -347,8 +346,10 @@ body {
     width: 20px;
 }
 
-.modal-show {
+#comment-modal.modal-show {
     display: flex;
+    opacity: 1; /* Make visible */
+    pointer-events: auto; /* Enable interaction */
 }
 
 #comment-modal {
@@ -360,16 +361,26 @@ body {
     height: 100%;
     background-color: rgba(0,0,0,0.5); /* Dim background */
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
+    opacity: 0;
+    pointer-events: none; /* Prevent interaction when hidden */
+    transition: opacity 0.4s ease; /* Smooth fade-in */
 }
 
-.modal-content {
+#comment-modal .modal-content {
     background: #fff;
-    padding: 20px;
-    width: 80%;
+    width: 100%;
     max-width: 600px;
+    border-radius: 10px 10px 0 0;
+    padding: 20px;
     position: relative;
-    border-radius: 5px;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(100%); /* Start off-screen */
+    transition: transform 0.4s ease; /* Smooth slide effect */
+}
+
+#comment-modal.modal-show .modal-content {
+    transform: translateY(0); /* Slide into view */
 }
 
 .close-btn {
