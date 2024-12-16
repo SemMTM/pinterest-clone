@@ -13,18 +13,17 @@
         <div class="details-container">
             <div class="det-container-inner">
                 <div>
-                    <div>
-                        <i class="fa-regular fa-heart"></i>
-                        <i class="fa-solid fa-heart"></i>
-                    </div>
+                    <button class="btn">Like</button>
                 </div>
                 <!-- Comment icon and count outside the modal -->
                 <div>
                     <span id="comment-icon" style="cursor:pointer;">
-                        🗨️ {{ comment_count }}
+                        <button class="btn">Comment</button>
                     </span>
                 </div>
-                <button class="btn detail-btn">Save</button>
+                <div>
+                    <button class="btn">Save</button>
+                </div>
             </div>
             <div class="det-container-inner">
                 <div id="user-icon-container">
@@ -55,7 +54,13 @@
                     <div class="latest-comment-container">
                         <p><strong>{{ comments.0.author }}</strong> {{ comments.0.created_on|time_ago }}</p>
                         <span>{{ comments.0.body }}</span>
-                        <span id="view-all"><strong>View all</strong></span>
+                        <div>
+                            <span id="view-all"><strong>View all
+                                {% if comment_count > 0 %}
+                                {{ comment_count }} comments
+                                {% endif %}
+                            </strong></span>
+                        </div>
                     </div>
                     {% endif %}
                 </div>
@@ -94,18 +99,11 @@
                                 </div>
                             </form>
                             {% else %}
-                            <p>Log in to leave a comment</p>
+                            <a href="{% url 'account_login' %}"><p>Log in to leave a comment</p></div>
                             {% endif %}
                         </div>
                     </div>
                 </div>
-
-                <!-- Creating New Comments -->
-                {% if user.is_authenticated %}
-                <button id="open-comment-modal" class="btn">Add a comment</button>
-                {% else %}
-                <a href="{% url 'account_login' %}"><button class="btn">Login to leave a comment</button></a>
-                {% endif %}
             </div>
         </div>
     </div>

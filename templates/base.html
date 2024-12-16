@@ -76,14 +76,19 @@
             </nav>
 
             <!-- Top Bar -->
-            <div class="top-bar {% if user.is_authenticated %}hidden{% endif %}">
+            <div class="top-bar">
                 <div class="btn-container">
-                    <a href="{% url 'account_login' %}">
-                        <button class="btn login-btn">Log-in</button>
-                    </a>
-                    <a href="{% url 'account_signup' %}">
-                        <button class="btn sign-up-btn">Sign-up</button>
-                    </a>
+                    <span class="{% if user.is_authenticated %}hidden{% endif %}">
+                        <a href="{% url 'account_login' %}">
+                            <button class="btn login-btn">Log-in</button>
+                        </a>
+                        <a href="{% url 'account_signup' %}">
+                            <button class="btn sign-up-btn">Sign-up</button>
+                        </a>
+                    </span>
+                    <span class="{% if request.path == home_url %}hidden{% endif %}">
+                        <a id="back-button" href="{% url 'home' %}"><button class="btn">Back</button></a>
+                    </span>    
                 </div>
             </div>
 
@@ -94,6 +99,8 @@
             </div>
         </div>
     </div>
-    {% block scripts %}{% endblock %}
+    {% block scripts %}
+    <script src="{% static 'js/base_js.js' %}"></script>
+    {% endblock %}
 </body>
 </html>
