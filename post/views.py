@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, reverse, redirect
+from django.shortcuts import render, get_object_or_404, reverse, redirect, reverse
 from django.views import generic
 from django.http import JsonResponse
 from django.contrib import messages
@@ -85,3 +85,26 @@ def tag_suggestions(request):
 
     data = [{"id": tag.pk, "tag_name": tag.tag_name} for tag in tags]
     return JsonResponse(data, safe=False)
+
+
+def comment_delete(request, post_id, comment_id):
+    """
+    Delete an individual comment.
+
+    **Context**
+
+    ``post``
+        An instance of :model:`blog.Post`.
+    ``comment``
+        A single comment related to the post.
+    """
+    post = get_object_or_404(Post, id=post_id)
+    comment = get_object_or_404(Comment, id=comment_id, post=post)
+
+    if comment.author == request.user or post.author == request.user:
+        comment.delete()
+        messages.success(request, 'Comment deleted!')
+    else:
+        messages.error(request, 'You can only delete your own comments!')
+
+    return redirect('post_detail', id=post.id)

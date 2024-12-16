@@ -402,6 +402,16 @@ body {
     padding: 10px 0;
 }
 
+.comment-close-btn {
+    right: 20px;
+    cursor: pointer;
+}
+
+.comment-body {
+    display: inline-block;
+    width: 95%;
+}
+
 /* USER PROFILE PAGE STYLES */
 .user-icon {
     background: black;
