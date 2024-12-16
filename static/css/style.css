@@ -400,16 +400,22 @@ body {
 .comment {
     border-bottom: 1px solid #ccc;
     padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment-btns-container {
+    display: flex;
+    align-items: center;
+}
+
+.comment-btns-container span {
+    margin-right: 7px;
 }
 
 .comment-close-btn {
     right: 20px;
     cursor: pointer;
-}
-
-.comment-body {
-    display: inline-block;
-    width: 95%;
 }
 
 /* USER PROFILE PAGE STYLES */
