@@ -88,7 +88,7 @@
                                 </div>
                                 {% if user.is_authenticated and comment.author == user or post.author == user%}
                                 <div class="comment-btns-container">
-                                    <span><a href class="edit-comment-btn">Edit</a></span>
+                                    <span><a href="{% url 'edit_comment' post.id comment.id %}" class="edit-comment-btn">Edit</a></span>
                                     <span class="comment-close-btn" comment_id="{{ comment.id }}" post_id="{{ post.id }}">&times;</span>
                                 </div>
                                 {% endif %}

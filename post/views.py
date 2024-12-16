@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, reverse, redirect, rever
 from django.views import generic
 from django.http import JsonResponse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from .models import Post, Comment, ImageTagRelationships, ImageTags
 from .forms import CommentForm, PostForm
@@ -108,3 +109,31 @@ def comment_delete(request, post_id, comment_id):
         messages.error(request, 'You can only delete your own comments!')
 
     return redirect('post_detail', id=post.id)
+
+
+@login_required
+def edit_comment(request, post_id, comment_id):
+    post = get_object_or_404(Post, id=post_id)
+    comment = get_object_or_404(Comment, id=comment_id, post=post)
+
+    # Ensure only the comment author can edit the comment
+    if comment.author != request.user:
+        messages.error(request, "You are not authorized to edit this comment.")
+        return redirect('post_detail', id=post.id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Comment updated successfully.")
+            return redirect('post_detail', id=post.id)
+    else:
+        form = CommentForm(instance=comment)
+
+    return render(
+        request, 
+        'post/edit_comment.html', 
+        {'form': form, 
+        'post': post, 
+        'comment': comment}
+        )
