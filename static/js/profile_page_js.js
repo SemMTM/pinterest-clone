@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Load created posts script
     const createdButton = document.getElementById('created-btn');
     const createdContainer = document.getElementById('created-container');
     const username = createdContainer.dataset.username; // Fetch the username from the data attribute

@@ -1,9 +1,8 @@
 {% extends 'base.html' %} 
-{% block content %}
 {% load static %}
 {% url 'account_logout' as logout_url %}
 
-
+{% block content %}
 <div id="profile-page-container">
 
     <div class="p-con">
@@ -40,8 +39,7 @@
 
     <div class="p-con">
         <div id='created-container' data-username="{{ profile.user.username }}">
-            {% block created_pins %}
-            {% endblock %}
+            {% include 'profile_page/created_pins.html' %}
         </div>
     </div>
     

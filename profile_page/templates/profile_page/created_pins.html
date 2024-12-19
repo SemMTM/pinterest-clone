@@ -1,13 +1,18 @@
-{% load static %}
-
-{% block created_pins %}
-<div class="created-posts-grid">
-    {% for post in created_posts %}
+{% for post in created_posts %}
+{% if forloop.last %}
+    <div class="post-item infinite-scroll-trigger"
+    hx-get="{% url 'created_pins' profile_user.username %}?page={{ created_posts.number|add:1 }}" 
+    hx-trigger="revealed" 
+    hx-swap="afterend">
+        <a href="{% url 'post_detail' post.id %}">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}">
+        </a>
+    </div>
+{% else %}
     <div class="post-item">
         <a href="{% url 'post_detail' post.id %}">
             <img src="{{ post.image.url }}" alt="{{ post.title }}">
         </a>
     </div>
-    {% endfor %}
-</div>
-{% endblock %}
+{% endif %}
+{% endfor %}
