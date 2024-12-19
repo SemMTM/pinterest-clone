@@ -114,19 +114,31 @@ def comment_delete(request, post_id, comment_id):
 
 @login_required
 def update_comment(request, post_id, comment_id):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Invalid request method.'}, status=405)
+
     post = get_object_or_404(Post, id=post_id)
     comment = get_object_or_404(Comment, id=comment_id, post=post)
 
-    # Ensure the user is authorized
     if comment.author != request.user and post.author != request.user:
-        return HttpResponseForbidden("You are not authorized to edit this comment.")
+        return JsonResponse({'error': 'You are not authorized to edit this comment.'}, status=403)
 
-    if request.method == 'POST':
-        form = CommentForm(request.POST, instance=comment)
-        if form.is_valid():
-            form.save()
-            return redirect('post_detail', id=post.id)
-    else:
-        form = CommentForm(instance=comment)
+    try:
+        data = json.loads(request.body)
+        updated_body = data.get('body', '').strip()
 
-    return redirect('post_detail', id=post.id)
+        if not updated_body:
+            return JsonResponse({'error': 'Comment body cannot be empty.'}, status=400)
+
+        comment.body = updated_body
+        comment.save()
+
+        return JsonResponse({
+            'success': True,
+            'body': comment.body,
+            'redirect_url': reverse('post_detail', kwargs={'id': post.id}),
+        })
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
+    except Exception:
+        return JsonResponse({'error': 'Internal Server Error'}, status=500)

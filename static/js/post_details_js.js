@@ -58,14 +58,56 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
+// Edit button functionality
     const commentsContainer = document.getElementById('comments-container');
-    const commentInput = document.querySelector('#commentForm textarea[name="body"]');
+    const commentForm = document.getElementById('commentForm');
+    const commentInput = commentForm.querySelector('textarea[name="body"]');
     const commentIdInput = document.getElementById('edit-comment-id');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
+    // Populate the form with the comment to edit
     commentsContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('edit-comment-btn')) {
-            commentInput.value = e.target.dataset.commentBody; // Populate textarea
-            commentIdInput.value = e.target.dataset.commentId; // Set comment ID in hidden input
+            commentInput.value = e.target.dataset.commentBody;
+            commentIdInput.value = e.target.dataset.commentId;
+        }
+    });
+
+    // Handle comment form submission
+    commentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const updatedBody = commentInput.value.trim();
+        const commentId = commentIdInput.value;
+        const postId = commentsContainer.dataset.postId;
+
+        if (!updatedBody) {
+            alert("Comment body can't be empty.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/${postId}/update_comment/${commentId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify({ body: updatedBody }),
+            });
+
+            if (!response.ok) throw new Error('Failed to update comment');
+            const data = await response.json();
+
+            // Update comment in the DOM
+            const commentBodySpan = commentsContainer.querySelector(`[data-comment-id="${commentId}"] .comment-body`);
+            commentBodySpan.textContent = data.body;
+
+            // Redirect to post detail view
+            window.location.href = data.redirect_url;
+        } catch (error) {
+            console.error(error);
+            alert('Error updating comment.');
         }
     });
 });
