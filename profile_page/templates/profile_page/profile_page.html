@@ -32,19 +32,24 @@
     <div class="p-con">
         <div>
             <div>
-                <button class="btn pp-btn">Created</button>
+                <button class="btn pp-btn" id="created-btn">Created</button>
                 <button class="btn pp-btn">Saved</button>
             </div>
         </div>
     </div>
 
     <div class="p-con">
-        <div>
-
+        <div id='created-container' data-user="{{ profile.user }}">
+            {% block created_pins %}
+            {% endblock %}
         </div>
     </div>
     
 </div>
 
 
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/profile_page_js.js' %}"></script>
 {% endblock %}

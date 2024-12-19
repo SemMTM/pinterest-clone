@@ -87,13 +87,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
+            // Sends a POST request to update the comment via the Django view
             const response = await fetch(`/${postId}/update_comment/${commentId}/`, {
-                method: 'POST',
+                method: 'POST', // Specifies the HTTP method
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json', // Declares the request content type
+                    'X-CSRFToken': csrfToken, // Includes the CSRF token for security
                 },
-                body: JSON.stringify({ body: updatedBody }),
+                body: JSON.stringify({ body: updatedBody }), // Sends the updated comment body in JSON format
             });
 
             if (!response.ok) throw new Error('Failed to update comment');

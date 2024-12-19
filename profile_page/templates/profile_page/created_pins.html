@@ -1,0 +1,14 @@
+{% load static %}
+
+{% block created_pins %}
+<div class="created-posts-grid">
+    {% for post in created_posts %}
+    <div class="post-item">
+        <a href="{% url 'post_detail' post.id %}">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}">
+            <h4>{{ post.title }}</h4>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
