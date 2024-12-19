@@ -74,4 +74,3 @@ class ImageTagRelationships(models.Model):
         Post, on_delete=models.CASCADE, related_name="post_id")
     tag_name = models.ForeignKey(
         ImageTags, on_delete=models.CASCADE, related_name="image_tag")
-

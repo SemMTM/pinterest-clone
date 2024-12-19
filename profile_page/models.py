@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from cloudinary.models import CloudinaryField
+from post.models import Post
 
 # Create your models here.
 
@@ -18,3 +19,19 @@ class Profile(models.Model):
     
     def __str__(self):
         return f"Profile for user: {self.user}"
+
+
+class ImageBoard(models.Model):
+    title = models.CharField(max_length=150, blank=False)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="board_creator")
+
+    def __str__(self):
+        return f"Image Board of user: {self.user}. Title:{self.title}"
+
+
+class BoardImageRelationship(models.Model):
+    post_id = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name="pinned_image")
+    board_id = models.ForeignKey(
+        ImageBoard, on_delete=models.CASCADE, related_name="image_board_id")
