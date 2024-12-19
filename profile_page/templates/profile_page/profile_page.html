@@ -31,7 +31,13 @@
     <div class="p-con">
         <div>
             <div>
-                <button class="btn pp-btn" id="created-btn">Created</button>
+                <button class="btn pp-btn" 
+                        id="created-btn"
+                        hx-get="{% url 'created_pins' profile.user.username %}?page=1" 
+                        hx-target="#created-container" 
+                        hx-swap="innerHTML">
+                    Created
+                </button>
                 <button class="btn pp-btn">Saved</button>
             </div>
         </div>
