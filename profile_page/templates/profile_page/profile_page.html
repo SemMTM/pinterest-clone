@@ -44,7 +44,7 @@
     </div>
 
     <div class="p-con">
-        <div id='created-container' data-username="{{ profile.user.username }}">
+        <div class="image-grid" id='created-container' data-username="{{ profile.user.username }}">
             {% include 'profile_page/created_pins.html' %}
         </div>
     </div>
@@ -54,6 +54,7 @@
 
 {% endblock %}
 
-{% block scripts %}
+{% block scripts %} 
     <script src="{% static 'js/profile_page_js.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
 {% endblock %}
