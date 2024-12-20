@@ -501,39 +501,40 @@ body {
     cursor: pointer;
 }
 
-/* Created posts section
-.post-item {
-    background: #f9f9f9;
+.boards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Image boards styles */
+.board-tile {
+    position: relative;
     border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden;
-    text-align: center;
+    background: #f9f9f9;
 }
 
-.post-item img {
-    max-width: 100%;
+.tile-images {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tile-image.large {
+    flex: 2 1 100%;
+}
+
+.tile-image.small {
+    flex: 1 1 50%;
+}
+
+.tile-image img {
+    width: 100%;
     height: auto;
-    display: block;
 }
 
-.post-item h4 {
-    margin: 10px 0;
-    font-size: 1rem;
-    color: #333;
-}
-
-#created-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-}
-
-.post-item {
+h4 {
+    margin: 10px;
     text-align: center;
 }
-
-.post-item img {
-    max-width: 100%;
-    border-radius: 5px;
-}
-     */

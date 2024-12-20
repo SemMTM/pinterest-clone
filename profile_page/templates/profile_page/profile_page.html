@@ -30,22 +30,26 @@
 
     <div class="p-con">
         <div>
-            <div>
-                <button class="btn pp-btn" 
-                        id="created-btn"
-                        hx-get="{% url 'created_pins' profile.user.username %}?page=1" 
-                        hx-target="#created-container" 
-                        hx-swap="innerHTML">
-                    Created
-                </button>
-                <button class="btn pp-btn">Saved</button>
-            </div>
+            <button class="btn pp-btn active" 
+                    id="saved-btn" 
+                    hx-get="{% url 'image_boards' profile.user.username %}" 
+                    hx-target="#created-container" 
+                    hx-swap="innerHTML">
+                Saved
+            </button>
+            <button class="btn pp-btn" 
+                    id="created-btn" 
+                    hx-get="{% url 'created_pins' profile.user.username %}?page=1" 
+                    hx-target="#created-container" 
+                    hx-swap="innerHTML">
+                Created
+            </button>
         </div>
     </div>
 
     <div class="p-con">
-        <div class="image-grid" id='created-container' data-username="{{ profile.user.username }}">
-            {% include 'profile_page/created_pins.html' %}
+        <div class="" id='created-container' data-username="{{ profile.user.username }}">
+            {% include 'profile_page/image_boards.html' %}
         </div>
     </div>
     

@@ -1,0 +1,18 @@
+{% load static %}
+
+<div class="boards-grid">
+    {% for item in boards_with_images %}
+    <div class="board-tile">
+        <a href="{% url 'board_detail' item.board.id %}">
+            <div class="tile-images">
+                {% for image in item.images %}
+                <div class="tile-image {% if forloop.first %}large{% else %}small{% endif %}">
+                    <img src="{{ image.post_id.image.url }}" alt="{{ image.post_id.title }}">
+                </div>
+                {% endfor %}
+            </div>
+            <h4>{{ item.board.title }}</h4>
+        </a>
+    </div>
+    {% endfor %}
+</div>

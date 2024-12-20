@@ -23,4 +23,24 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Error loading created posts. Please try again later.');
         }
     });
+
+    const savedButton = document.getElementById('saved-btn');
+
+    const toggleActive = (buttonToActivate, buttonToDeactivate) => {
+        buttonToActivate.classList.add('active');
+        buttonToDeactivate.classList.remove('active');
+    };
+
+    createdButton.addEventListener('click', () => toggleActive(createdButton, savedButton));
+    savedButton.addEventListener('click', () => toggleActive(savedButton, createdButton));
+
+    const editBoardButton = document.getElementById('edit-board-btn');
+
+    if (editBoardButton) {
+        editBoardButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const modal = document.getElementById('edit-board-modal');
+            modal.classList.remove('hidden'); // Show the modal
+        });
+    }
 });

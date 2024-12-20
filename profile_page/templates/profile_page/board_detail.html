@@ -1,0 +1,45 @@
+{% extends 'base.html' %} 
+{% load static %}
+
+{% block content %}
+<div class="board-detail">
+    <h1>{{ board.title }}</h1>
+    {% if user == board.user %}
+    <button class="btn" 
+        id="edit-board-btn" 
+        hx-get="{% url 'edit_board' board.id %}" 
+        hx-target="#edit-board-modal" 
+        hx-swap="innerHTML">
+        Edit Board
+    </button>
+    {% endif %}
+
+    <div class="images-grid">
+        {% for image in images %}
+        <div class="image-item">
+            <a href="{% url 'post_detail' image.post_id.id %}">
+                <img src="{{ image.post_id.image.url }}" alt="{{ image.post_id.title }}">
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal for editing the board -->
+<div id="edit-board-modal" class="hidden">
+    <div class="modal-content">
+        <form method="POST" action="{% url 'edit_board' board.id %}">
+            {% csrf_token %}
+            <label for="title">Board Title:</label>
+            <input type="text" id="title" name="title" value="{{ board.title }}" required>
+            <button type="submit" class="btn">Save</button>
+            <button type="button" id="cancel-edit-btn" class="btn">Cancel</button>
+        </form>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <button type="submit" class="btn danger">Delete Board</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
