@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.dispatch import receiver
+from django.db.models.signals import post_save, post_delete
 from django.http import Http404, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
@@ -16,6 +18,22 @@ def profile_page(request, username):
         return redirect('profile_page', username=user.username.lower())
 
     profile, created = Profile.objects.get_or_create(user=user)
+
+    all_pins_board, created = ImageBoard.objects.get_or_create(
+        user=user,
+        title="All Pins"
+    )
+
+    if created:
+        # Add all posts saved to any board into the "All Pins" board
+        saved_posts = Post.objects.filter(
+            pinned_image__board_id__user=user
+        ).distinct()  # Collect unique posts across all boards
+        for post in saved_posts:
+            BoardImageRelationship.objects.get_or_create(
+                post_id=post,
+                board_id=all_pins_board
+            )
 
     return render(
         request,
@@ -45,7 +63,13 @@ def created_pins(request, username):
 
 def image_boards(request, username):
     user = get_object_or_404(User.objects.filter(username__iexact=username))
-    boards = ImageBoard.objects.filter(user=user)
+
+    sync_all_pins_board(user)
+
+    all_pins_board = ImageBoard.objects.filter(user=user, title="All Pins").first()
+    other_boards = ImageBoard.objects.filter(user=user).exclude(title="All Pins")
+
+    boards = [all_pins_board] + list(other_boards)
 
     # Fetch up to 3 images for each board
     boards_with_images = []
@@ -88,3 +112,42 @@ def edit_board(request, board_id):
             return JsonResponse({'success': True, 'redirect_url': reverse('profile_page', args=[request.user.username])})
         
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+def sync_all_pins_board(user):
+    """Ensures the 'All Pins' board contains all posts saved to any board."""
+    all_pins_board, _ = ImageBoard.objects.get_or_create(user=user, title="All Pins")
+    
+    # Collect all saved posts across all boards
+    saved_posts = Post.objects.filter(
+        pinned_image__board_id__user=user
+    ).distinct()
+
+    # Add posts not already in "All Pins"
+    for post in saved_posts:
+        BoardImageRelationship.objects.get_or_create(
+            post_id=post,
+            board_id=all_pins_board
+        )
+
+    # Remove posts from "All Pins" that aren't saved to any other board
+    all_pins_posts = BoardImageRelationship.objects.filter(board_id=all_pins_board)
+    for relationship in all_pins_posts:
+        if not BoardImageRelationship.objects.filter(
+            post_id=relationship.post_id
+        ).exclude(board_id=all_pins_board).exists():
+            relationship.delete()
+
+
+@receiver(post_save, sender=BoardImageRelationship)
+def handle_post_save(sender, instance, **kwargs):
+    """Add a post to 'All Pins' if it's saved to any board."""
+    user = instance.board_id.user
+    sync_all_pins_board(user)
+
+
+@receiver(post_delete, sender=BoardImageRelationship)
+def handle_post_delete(sender, instance, **kwargs):
+    """Remove a post from 'All Pins' if it's not saved to any other board."""
+    user = instance.board_id.user
+    sync_all_pins_board(user)

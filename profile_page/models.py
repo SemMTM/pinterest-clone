@@ -26,6 +26,9 @@ class ImageBoard(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="board_creator")
 
+    def is_all_pins(self):
+        return self.title == "All Pins"
+
     def __str__(self):
         return f"Image Board of user: {self.user}. Title:{self.title}"
 
@@ -35,3 +38,6 @@ class BoardImageRelationship(models.Model):
         Post, on_delete=models.CASCADE, related_name="pinned_image")
     board_id = models.ForeignKey(
         ImageBoard, on_delete=models.CASCADE, related_name="image_board_id")
+
+    class Meta:
+        unique_together = ('post_id', 'board_id')
