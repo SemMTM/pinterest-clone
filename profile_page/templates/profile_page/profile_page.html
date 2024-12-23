@@ -48,10 +48,13 @@
     </div>
 
     <div class="p-con">
-        <div class="image-grid" id='created-container' data-username="{{ profile.user.username }}">
+        <div class="hidden" id='created-container' data-username="{{ profile.user.username }}">
         </div>
-        <div class="" id='saved-container' data-username="{{ profile.user.username }}">
-            {% include 'profile_page/image_boards.html' %}
+        <div class="" id='saved-container'
+            hx-get="{% url 'image_boards' profile.user.username %}"
+            hx-trigger="load"
+            hx-target="this"
+            hx-swap="innerHTML">
         </div>
     </div>
     

@@ -14,5 +14,7 @@
             <h4>{{ item.board.title }}</h4>
         </a>
     </div>
+    {% empty %}
+    <p>No boards available.</p>
     {% endfor %}
 </div>
