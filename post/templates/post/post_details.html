@@ -22,7 +22,7 @@
                     </span>
                 </div>
                 <div>
-                    <button class="btn">Save</button>
+                    <button class="save-btn btn" id="save-btn" data-post-id="{{ post.id }}">Save</button>
                 </div>
             </div>
             <div class="det-container-inner">
@@ -130,6 +130,26 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- Save to Board Modal -->
+    <div id="save-to-board-modal" class="save-modal-hidden">
+        <div class="save-modal-content">
+            <h3>Save Post to a Board</h3>
+            <ul id="save-modal-board-list">
+                {% for board in user_boards %}
+                <li>
+                    <button 
+                        class="save-modal-board-btn" 
+                        data-board-id="{{ board.id }}">
+                        {{ board.title }}
+                    </button>
+                </li>
+                {% empty %}
+                <li class="save-modal-no-boards">No boards available.</li>
+                {% endfor %}
+            </ul>
+            <button id="close-save-modal" class="save-modal-close-btn">Cancel</button>
         </div>
     </div>
 </div>

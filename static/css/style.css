@@ -538,3 +538,64 @@ h4 {
     margin: 10px;
     text-align: center;
 }
+
+/* Save modal styles */
+/* Hidden state for the modal */
+.save-modal-hidden {
+    display: none !important;
+}
+
+/* Modal overlay */
+#save-to-board-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dimmed background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal box */
+.save-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.save-modal-board-btn {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.save-modal-board-btn:hover {
+    background: #ddd;
+}
+
+.save-modal-no-boards {
+    color: #666;
+    font-size: 14px;
+}
+
+.save-modal-close-btn {
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.save-modal-close-btn:hover {
+    background: #d32f2f;
+}

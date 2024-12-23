@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from profile_page.models import ImageBoard, BoardImageRelationship
 from .models import Post, Comment, ImageTagRelationships, ImageTags
 from .forms import CommentForm, PostForm
 import json
@@ -27,6 +28,7 @@ def post_detail(request, id):
     post = get_object_or_404(queryset, id=id)
     comments = post.comments.all().order_by("-created_on")
     comment_count = post.comments.count()
+    user_boards = ImageBoard.objects.filter(user=request.user) if request.user.is_authenticated else []
 
     if request.method == "POST":
         comment_form = CommentForm(data=request.POST)
@@ -47,6 +49,7 @@ def post_detail(request, id):
             "comments": comments,
             "comment_count": comment_count,
             "comment_form": comment_form,
+            "user_boards": user_boards,
         },
     )
 

@@ -151,3 +151,19 @@ def handle_post_delete(sender, instance, **kwargs):
     """Remove a post from 'All Pins' if it's not saved to any other board."""
     user = instance.board_id.user
     sync_all_pins_board(user)
+
+
+def save_to_board(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.method == 'POST':
+        board_id = request.POST.get('board_id')
+        if not board_id:
+            return JsonResponse({'success': False, 'message': 'No board selected.'}, status=400)
+        
+        board = get_object_or_404(ImageBoard, id=board_id, user=request.user)
+        BoardImageRelationship.objects.get_or_create(post_id=post, board_id=board)
+        return JsonResponse({'success': True, 'message': 'Post Saved!'})
+
+    # If accessed via GET or invalid method
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)
