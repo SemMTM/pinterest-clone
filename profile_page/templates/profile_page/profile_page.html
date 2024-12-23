@@ -33,7 +33,7 @@
             <button class="btn pp-btn active" 
                     id="saved-btn" 
                     hx-get="{% url 'image_boards' profile.user.username %}" 
-                    hx-target="#created-container" 
+                    hx-target="#saved-container" 
                     hx-swap="innerHTML">
                 Saved
             </button>
@@ -48,7 +48,9 @@
     </div>
 
     <div class="p-con">
-        <div class="" id='created-container' data-username="{{ profile.user.username }}">
+        <div class="image-grid" id='created-container' data-username="{{ profile.user.username }}">
+        </div>
+        <div class="" id='saved-container' data-username="{{ profile.user.username }}">
             {% include 'profile_page/image_boards.html' %}
         </div>
     </div>
