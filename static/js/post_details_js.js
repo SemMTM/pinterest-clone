@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('save-to-board-modal');
     const closeModalButton = document.getElementById('close-save-modal');
     const boardButtons = document.querySelectorAll('.save-modal-board-btn');
-    const isAuthenticated = saveButton.getAttribute('data-authenticated') === 'true';
+    const isAuthenticated = saveButton.getAttribute('data-authenticated');
 
     // Open modal
     saveButton.addEventListener('click', () => {
