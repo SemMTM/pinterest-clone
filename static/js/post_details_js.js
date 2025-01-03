@@ -135,7 +135,7 @@ boardButtons.forEach(button => {
         const boardId = button.getAttribute('data-board-id');
         const postId = saveButton.getAttribute('data-post-id');
 
-        fetch(`/profile_page/save-to-board/${postId}/`, {
+        fetch(`/profile/save-to-board/${postId}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

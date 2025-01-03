@@ -154,10 +154,13 @@ def handle_post_delete(sender, instance, **kwargs):
 
 
 def save_to_board(request, post_id):
+    print(f"Received post_id: {post_id}")
+
     post = get_object_or_404(Post, id=post_id)
 
     if request.method == 'POST':
         board_id = request.POST.get('board_id')
+        print(f"Received board_id: {board_id}")
         if not board_id:
             return JsonResponse({'success': False, 'message': 'No board selected.'}, status=400)
         
