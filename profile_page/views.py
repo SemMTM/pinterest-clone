@@ -167,3 +167,24 @@ def save_to_board(request, post_id):
 
     # If accessed via GET or invalid method
     return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)
+
+
+def create_board(request):
+    if request.method == 'POST':
+        title = request.POST.get('title', '').strip()
+        post_id = request.POST.get('post_id')
+        print(f"Received title: {title}")  # Debug log
+        print(f"Received post_id: {post_id}")  # Debug log
+
+        if not title:
+            return JsonResponse({'success': False, 'error': 'Board title is required.'})
+
+        post = get_object_or_404(Post, id=post_id)
+        board, created = ImageBoard.objects.get_or_create(user=request.user, title=title)
+
+        if created:
+            BoardImageRelationship.objects.create(post_id=post, board_id=board)
+
+        return JsonResponse({'success': True, 'message': 'Board created successfully!'})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'})

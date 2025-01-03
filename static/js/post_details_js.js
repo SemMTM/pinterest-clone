@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Error updating comment.');
         }
     });
-    
+
     // Save modal scripts
     const saveButton = document.getElementById('save-btn');
     const modal = document.getElementById('save-to-board-modal');
@@ -128,6 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.classList.add('save-modal-hidden');
     });
 
+    
     // Handle board selection
     boardButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -175,4 +176,60 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         return cookieValue;
     }
+
+
+    const saveModal = document.getElementById('save-to-board-modal');
+    const createModal = document.getElementById('create-board-modal');
+    const closeSaveModalBtn = document.getElementById('close-save-modal');
+    const openCreateBoardBtn = document.getElementById('open-create-board-modal');
+    const cancelCreateBoardBtn = document.getElementById('cancel-create-board');
+    const submitCreateBoardBtn = document.getElementById('submit-create-board');
+    const boardTitleInput = document.getElementById('board-title-input');
+    const postImagePreview = document.getElementById('post-image-preview');
+
+    // Open Create Board Modal
+    openCreateBoardBtn.addEventListener('click', () => {
+        saveModal.classList.add('save-modal-hidden');
+        createModal.classList.remove('create-modal-hidden');
+    });
+
+    // Close Create Board Modal
+    cancelCreateBoardBtn.addEventListener('click', () => {
+        createModal.classList.add('create-modal-hidden');
+    });
+
+    // Submit Create Board
+    submitCreateBoardBtn.addEventListener('click', () => {
+        const boardTitle = boardTitleInput.value.trim();
+        if (!boardTitle) {
+            alert('Please enter a board title.');
+            return;
+        }
+
+        const postId = postImagePreview.getAttribute('data-post-id'); // Pass the post ID dynamically
+
+        fetch('/profile/create-board/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: `title=${encodeURIComponent(boardTitle)}&post_id=${postId}`,
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to create board.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    createModal.classList.add('create-modal-hidden');
+                } else {
+                    alert(data.error || 'An error occurred.');
+                }
+            })
+            .catch(error => console.error('Error creating board:', error));
+    });
 });

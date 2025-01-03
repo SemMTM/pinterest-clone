@@ -163,7 +163,7 @@
                 <label for="board-title-input">Board Title:</label>
                 <input type="text" id="board-title-input" placeholder="Enter board title">
                 <div class="image-preview">
-                    <img src="{{ post.image.url }}" alt="Post Image" id="post-image-preview">
+                    <img src="{{ post.image.url }}" alt="Post Image" id="post-image-preview" data-post-id="{{ post.id }}">
                 </div>
             </div>
             <div class="create-modal-actions">
