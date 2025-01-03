@@ -185,7 +185,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const saveModal = document.getElementById('save-to-board-modal');
     const createModal = document.getElementById('create-board-modal');
-    const closeSaveModalBtn = document.getElementById('close-save-modal');
     const openCreateBoardBtn = document.getElementById('open-create-board-modal');
     const cancelCreateBoardBtn = document.getElementById('cancel-create-board');
     const submitCreateBoardBtn = document.getElementById('submit-create-board');
@@ -237,4 +236,23 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => console.error('Error creating board:', error));
     });
+
+    // Variables specific to the delete post modal
+    const deletePostBtn = document.getElementById('delete-post-btn');
+    const deletePostModal = document.getElementById('delete-post-modal');
+    const cancelDeletePostBtn = document.getElementById('cancel-delete-post-btn');
+
+    // Open the delete post modal
+    if (deletePostBtn) {
+        deletePostBtn.addEventListener('click', () => {
+            deletePostModal.classList.add('show');
+        });
+    }
+
+    // Close the delete post modal
+    if (cancelDeletePostBtn) {
+        cancelDeletePostBtn.addEventListener('click', () => {
+            deletePostModal.classList.remove('show');
+        });
+    }
 });

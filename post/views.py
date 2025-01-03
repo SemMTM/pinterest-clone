@@ -145,3 +145,14 @@ def update_comment(request, post_id, comment_id):
         return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
     except Exception:
         return JsonResponse({'error': 'Internal Server Error'}, status=500)
+
+
+@login_required
+def post_delete(request, post_id):
+    post = get_object_or_404(Post, id=post_id, user=request.user)
+
+    if request.method == "POST":
+        post.delete()
+        return redirect('home')  
+
+    return redirect('post_detail', id=post_id)

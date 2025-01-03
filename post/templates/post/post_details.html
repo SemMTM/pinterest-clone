@@ -11,6 +11,7 @@
             <img src="{{ post.image.url }}" alt="{{ post.title }}" /></a>
         </div>
         <div class="details-container">
+            <h2>{{ post.title }}</h2>
             <div class="det-container-inner">
                 <div>
                     <button class="btn">Like</button>
@@ -28,6 +29,11 @@
                         data-post-id="{{ post.id }}"
                         data-authenticated="{{ user.is_authenticated }}"
                         >Save</button>
+                </div>
+                <div>
+                    {% if user.is_authenticated and post.user == user %}
+                        <button id="delete-post-btn" class="btn delete-post-btn">Delete</button>
+                    {% endif %}
                 </div>
             </div>
             <div class="det-container-inner">
@@ -183,6 +189,20 @@
                 <button id="cancel-create-board" class="create-modal-cancel-btn">Cancel</button>
                 <button id="submit-create-board" class="create-modal-create-btn">Create</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-post-modal" class="modal hidden">
+        <div class="delete-post-modal-content">
+            <h3 class="delete-post-modal-title">Are you sure you want to delete this post?</h3>
+            <form action="{% url 'post_delete' post.id %}" method="POST">
+                {% csrf_token %}
+                <div class="delete-post-modal-actions">
+                    <button type="submit" class="btn delete-post-confirm-btn">Yes, Delete</button>
+                    <button type="button" id="cancel-delete-post-btn" class="btn delete-post-cancel-btn">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

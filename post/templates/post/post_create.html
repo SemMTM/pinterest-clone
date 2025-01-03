@@ -5,6 +5,7 @@
 
 <div class="pc-main-con">
     <div class="pc-main-con-inner">
+        {% if user.is_authenticated %}
         <div>
             <h1>Create Post</h1>
             {% if messages %}
@@ -52,6 +53,9 @@
         <div></div>
         <div></div>
         <div></div>
+        {% else %}
+        <a href="{% url 'account_login' %}"><p>Log in to create a post</p></div>
+        {% endif %}
     </div>
 </div>
 
