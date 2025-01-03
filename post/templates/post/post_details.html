@@ -132,6 +132,7 @@
             </div>
         </div>
     </div>
+
     <!-- Save to Board Modal -->
     <div id="save-to-board-modal" class="save-modal-hidden">
         <div class="save-modal-content">
@@ -150,6 +151,25 @@
                 {% endfor %}
             </ul>
             <button id="close-save-modal" class="save-modal-close-btn">Cancel</button>
+            <button id="open-create-board-modal" class="save-modal-create-board-btn">Create Board</button>
+        </div>
+    </div>
+
+    <!-- Create Board Modal -->
+    <div id="create-board-modal" class="create-modal-hidden">
+        <div class="create-modal-content">
+            <h3>Create Board</h3>
+            <div class="create-modal-body">
+                <label for="board-title-input">Board Title:</label>
+                <input type="text" id="board-title-input" placeholder="Enter board title">
+                <div class="image-preview">
+                    <img src="{{ post.image.url }}" alt="Post Image" id="post-image-preview">
+                </div>
+            </div>
+            <div class="create-modal-actions">
+                <button id="cancel-create-board" class="create-modal-cancel-btn">Cancel</button>
+                <button id="submit-create-board" class="create-modal-create-btn">Create</button>
+            </div>
         </div>
     </div>
 </div>
