@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-// Edit button functionality
+    // Edit button functionality
     const commentsContainer = document.getElementById('comments-container');
     const commentForm = document.getElementById('commentForm');
     const commentInput = commentForm.querySelector('textarea[name="body"]');
@@ -117,10 +117,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('save-to-board-modal');
     const closeModalButton = document.getElementById('close-save-modal');
     const boardButtons = document.querySelectorAll('.save-modal-board-btn');
+    const isAuthenticated = saveButton.getAttribute('data-authenticated') === 'true';
 
     // Open modal
     saveButton.addEventListener('click', () => {
-        modal.classList.remove('save-modal-hidden');
+        if (!isAuthenticated) {
+            alert("Log in to save posts");
+        } else {
+            modal.classList.remove('save-modal-hidden');
+        }
     });
 
     // Close modal

@@ -22,7 +22,12 @@
                     </span>
                 </div>
                 <div>
-                    <button class="save-btn btn" id="save-btn" data-post-id="{{ post.id }}">Save</button>
+                    <button 
+                        class="save-btn btn" 
+                        id="save-btn" 
+                        data-post-id="{{ post.id }}"
+                        data-authenticated="{{ user.is_authenticated }}"
+                        >Save</button>
                 </div>
             </div>
             <div class="det-container-inner">
@@ -114,6 +119,14 @@
                             </form>
                             {% else %}
                             <a href="{% url 'account_login' %}"><p>Log in to leave a comment</p></div>
+                            <form id="commentForm" method="POST" style="display: none;">
+                                {% csrf_token %}
+                                {{ comment_form }}
+                                <input type="hidden" id="edit-comment-id" name="comment_id" value="">
+                                <div>
+                                    <button id="submitButton" class="btn" type="submit">></button>
+                                </div>
+                            </form>
                             {% endif %}
                         </div>
 
