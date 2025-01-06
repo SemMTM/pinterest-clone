@@ -144,7 +144,7 @@ def update_comment(request, post_id, comment_id):
     post = get_object_or_404(Post, id=post_id)
     comment = get_object_or_404(Comment, id=comment_id, post=post)
 
-    if comment.author != request.user and post.author != request.user:
+    if comment.author != request.user:
         return JsonResponse({'error': 'You are not authorized to edit this comment.'}, status=403)
 
     try:

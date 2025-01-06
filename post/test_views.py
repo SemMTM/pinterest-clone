@@ -422,7 +422,7 @@ class CommentDeleteViewTest(TestCase):
         messages = list(get_messages(response.wsgi_request))
         self.assertIn("Comment deleted!", [message.message for message in messages])
 
-    def test_post_author_can_delete_comment(self):
+    def test_post_user_can_delete_comment(self):
         """Test that the post's author can delete any comment on their post."""
         self.client.login(username="user1", password="password123")
         url = reverse('delete_comment', args=[self.post.id, self.comment_by_user2.id])
@@ -433,3 +433,94 @@ class CommentDeleteViewTest(TestCase):
 
         messages = list(get_messages(response.wsgi_request))
         self.assertIn("Comment deleted!", [message.message for message in messages])
+
+
+class UpdateCommentViewTest(TestCase):
+
+    def setUp(self):
+        # Create users
+        self.user1 = User.objects.create_user(username="user1", password="password123")
+        self.user2 = User.objects.create_user(username="user2", password="password123")
+
+        # Create a post
+        self.post = Post.objects.create(
+            user=self.user1,
+            image="test_image.jpg",
+            title="Test Post",
+            description="Test Description"
+        )
+
+        # Create a comment
+        self.comment = Comment.objects.create(
+            post=self.post,
+            author=self.user1,
+            body="Original Comment"
+        )
+
+        self.url = reverse('edit_comment', args=[self.post.id, self.comment.id])
+
+    def test_update_comment_success(self):
+        """Test that a user can successfully update their own comment."""
+        self.client.login(username="user1", password="password123")
+        response = self.client.post(
+            self.url,
+            data=json.dumps({'body': 'Updated Comment'}),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get('success'), True)
+        self.assertEqual(response.json().get('body'), 'Updated Comment')
+
+        # Check the comment was updated in the database
+        self.comment.refresh_from_db()
+        self.assertEqual(self.comment.body, 'Updated Comment')
+
+    def test_update_comment_invalid_method(self):
+        """Test that a non-POST request returns a 405 error."""
+        self.client.login(username="user1", password="password123")
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json().get('error'), 'Invalid request method.')
+
+    def test_update_comment_unauthorized_user(self):
+        """Test that a user cannot edit another user's comment."""
+        self.client.login(username="user2", password="password123")
+        response = self.client.post(
+            self.url,
+            data=json.dumps({'body': 'Updated Comment'}),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json().get('error'), 'You are not authorized to edit this comment.')
+
+    def test_update_comment_empty_body(self):
+        """Test that an empty comment body returns a 400 error."""
+        self.client.login(username="user1", password="password123")
+        response = self.client.post(
+            self.url,
+            data=json.dumps({'body': ''}),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json().get('error'), 'Comment body cannot be empty.')
+
+    def test_update_comment_invalid_json(self):
+        """Test that invalid JSON data returns a 400 error."""
+        self.client.login(username="user1", password="password123")
+        response = self.client.post(
+            self.url,
+            data="Invalid JSON String",
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json().get('error'), 'Invalid JSON data.')
+
+    def test_update_comment_unauthenticated(self):
+        """Test that an unauthenticated user cannot update a comment."""
+        response = self.client.post(
+            self.url,
+            data=json.dumps({'body': 'Updated Comment'}),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 302)  # Redirect to login
+        self.assertIn(reverse('account_login'), response.url)
