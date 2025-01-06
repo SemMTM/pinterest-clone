@@ -6,6 +6,7 @@ urlpatterns = [
     path('create_post/', views.create_post, name='create_post'),
     path('tag-suggestions/', views.tag_suggestions, name='tag_suggestions'),
     path('<slug:id>/', views.post_detail, name='post_detail'),
+    path('<slug:post_id>/add_comment/', views.add_comment, name='add_comment'),
     path('<slug:post_id>/update_comment/<int:comment_id>/', 
         views.update_comment, name='edit_comment'),
     path('<slug:post_id>/delete_comment/<int:comment_id>/', 

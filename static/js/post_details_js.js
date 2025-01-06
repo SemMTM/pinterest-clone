@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModal = document.getElementById('close-modal');
     const openCommentModal = document.getElementById('open-comment-modal')
     const viewAll = document.getElementById('view-all')
+    const commentForm = document.getElementById('commentForm');
+    const commentInput = commentForm.querySelector('textarea[name="body"]');
+    const commentIdInput = document.getElementById('edit-comment-id');
 
     function openModal() {
         commentModal.classList.add('modal-show');
@@ -13,7 +16,11 @@ document.addEventListener('DOMContentLoaded', function() {
         commentModal.classList.remove('modal-show');
     }
     if (commentIcon) {
-        commentIcon.addEventListener('click', openModal);
+        commentIcon.addEventListener('click', () => {
+        openModal();
+        commentInput.value = ''; // Clear the textarea
+        commentIdInput.value = ''; // Reset the hidden input for a new comment
+        });
     }
     if (viewAll) {
         viewAll.addEventListener('click', openModal);
@@ -60,9 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Edit button functionality
     const commentsContainer = document.getElementById('comments-container');
-    const commentForm = document.getElementById('commentForm');
-    const commentInput = commentForm.querySelector('textarea[name="body"]');
-    const commentIdInput = document.getElementById('edit-comment-id');
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
     // Populate the form with the comment to edit
@@ -76,39 +80,70 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle comment form submission
     commentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-
+    
         const updatedBody = commentInput.value.trim();
-        const commentId = commentIdInput.value;
+        const commentId = commentIdInput.value; // Check if it's an edit
         const postId = commentsContainer.dataset.postId;
-
+    
         if (!updatedBody) {
             alert("Comment body can't be empty.");
             return;
         }
-
+    
         try {
-            // Sends a POST request to update the comment via the Django view
-            const response = await fetch(`/${postId}/update_comment/${commentId}/`, {
-                method: 'POST', // Specifies the HTTP method
-                headers: {
-                    'Content-Type': 'application/json', // Declares the request content type
-                    'X-CSRFToken': csrfToken, // Includes the CSRF token for security
-                },
-                body: JSON.stringify({ body: updatedBody }), // Sends the updated comment body in JSON format
+            let url, payload, headers;
+    
+            if (commentId) {
+                // Update existing comment
+                url = `/${postId}/update_comment/${commentId}/`;
+                headers = {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
+                };
+                payload = JSON.stringify({ body: updatedBody });
+            } else {
+                // Add new comment
+                url = `/${postId}/add_comment/`;
+                headers = {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
+                };
+                payload = new URLSearchParams({
+                    body: updatedBody,
+                    csrfmiddlewaretoken: csrfToken,
+                }).toString();
+            }
+    
+            const response = await fetch(url, {
+                method: 'POST',
+                headers,
+                body: payload,
             });
-
-            if (!response.ok) throw new Error('Failed to update comment');
+    
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to submit comment: ${errorText}`);
+            }
+    
             const data = await response.json();
-
-            // Update comment in the DOM
-            const commentBodySpan = commentsContainer.querySelector(`[data-comment-id="${commentId}"] .comment-body`);
-            commentBodySpan.textContent = data.body;
-
-            // Redirect to post detail view
-            window.location.href = data.redirect_url;
+    
+            if (commentId) {
+                // Update comment in DOM
+                const commentBodySpan = commentsContainer.querySelector(`[data-comment-id="${commentId}"] .comment-body`);
+                if (commentBodySpan) commentBodySpan.textContent = data.body;
+            } else {
+                // Add new comment (reload or dynamic rendering)
+                window.location.href = data.redirect_url;
+            }
+    
+            // Clear form
+            commentInput.value = '';
+            commentIdInput.value = '';
         } catch (error) {
-            console.error(error);
-            alert('Error updating comment.');
+            console.error('Error submitting comment:', error);
+            alert('Failed to submit comment.');
         }
     });
 

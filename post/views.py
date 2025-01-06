@@ -3,6 +3,7 @@ from django.views import generic
 from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
 from profile_page.models import ImageBoard, BoardImageRelationship
 from .models import Post, Comment, ImageTagRelationships, ImageTags
@@ -29,17 +30,7 @@ def post_detail(request, id):
     comments = post.comments.all().order_by("-created_on")
     comment_count = post.comments.count()
     user_boards = ImageBoard.objects.filter(user=request.user) if request.user.is_authenticated else []
-
-    if request.method == "POST":
-        comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.author = request.user
-            comment.post = post
-            comment.save()
-            return redirect('post_detail', id=post.id)
-    else:
-        comment_form = CommentForm()
+    comment_form = CommentForm()
 
     return render(
         request,
@@ -90,6 +81,36 @@ def tag_suggestions(request):
 
     data = [{"id": tag.pk, "tag_name": tag.tag_name} for tag in tags]
     return JsonResponse(data, safe=False)
+
+
+@require_POST
+@login_required
+def add_comment(request, post_id):
+    """
+    Handles adding a new comment to a post via an AJAX request.
+    """
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Ensure it's an AJAX request
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+
+            # Return JSON response
+            return JsonResponse({
+                'success': True,
+                'body': comment.body,
+                'author': comment.author.username,
+                'created_on': comment.created_on.strftime('%Y-%m-%d %H:%M:%S'),
+                'redirect_url': reverse('post_detail', kwargs={'id': post.id}),
+            })
+
+        return JsonResponse({'error': 'Invalid form data'}, status=400)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 def comment_delete(request, post_id, comment_id):
