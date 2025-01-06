@@ -1,165 +1,119 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Comment modal functions
-    const commentIcon = document.getElementById('comment-icon');
-    const commentModal = document.getElementById('comment-modal');
-    const closeModal = document.getElementById('close-modal');
-    const openCommentModal = document.getElementById('open-comment-modal')
-    const viewAll = document.getElementById('view-all')
-    const commentForm = document.getElementById('commentForm');
-    const commentInput = commentForm.querySelector('textarea[name="body"]');
-    const commentIdInput = document.getElementById('edit-comment-id');
+document.addEventListener('DOMContentLoaded', () => {
+    // Utility Functions
+    const getElement = (id) => document.getElementById(id);
+    const addEvent = (element, event, handler) => element?.addEventListener(event, handler);
+    const toggleClass = (element, className, action) => element?.classList[action](className);
 
-    function openModal() {
-        commentModal.classList.add('modal-show');
-    }
-    function closeTheModal() {
-        commentModal.classList.remove('modal-show');
-    }
-    if (commentIcon) {
-        commentIcon.addEventListener('click', () => {
-        openModal();
-        commentInput.value = ''; // Clear the textarea
-        commentIdInput.value = ''; // Reset the hidden input for a new comment
+    const resetCommentForm = (commentInput, commentIdInput) => {
+        if (commentInput) commentInput.value = '';
+        if (commentIdInput) commentIdInput.value = '';
+    };
+
+    // Modal Handlers
+    const setupModal = (modal, openTriggers, closeTriggers, resetForm = null) => {
+        const openModal = () => {
+            toggleClass(modal, 'modal-show', 'add');
+            if (resetForm) resetForm();
+        };
+        const closeModal = () => toggleClass(modal, 'modal-show', 'remove');
+
+        openTriggers.forEach(trigger => addEvent(trigger, 'click', openModal));
+        closeTriggers.forEach(trigger => addEvent(trigger, 'click', closeModal));
+
+        modal?.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
         });
-    }
-    if (viewAll) {
-        viewAll.addEventListener('click', openModal);
-    }
-    if (openCommentModal) {
-        openCommentModal.addEventListener('click', openModal);
-    }
-    if (closeModal) {
-        closeModal.addEventListener('click', closeTheModal);
-    }
-    commentModal.addEventListener('click', function(e) {
-        if (e.target === commentModal) {
-            closeTheModal();
-        }
-    });
+    };
 
+    // Comment Modal Setup
+    const commentModal = getElement('comment-modal');
+    const commentIcon = getElement('comment-icon');
+    const closeModal = getElement('close-modal');
+    const viewAll = getElement('view-all');
+    const commentForm = getElement('commentForm');
+    const commentInput = commentForm?.querySelector('textarea[name="body"]');
+    const commentIdInput = getElement('edit-comment-id');
 
-    // Delete comment functions
-    const deleteModal = document.getElementById('delete-comment-modal'); // Delete confirmation modal
-    const confirmDeleteBtn = document.getElementById('confirm-delete-btn'); // Confirm delete button
-    const cancelDeleteBtn = document.getElementById('cancel-delete-btn'); // Cancel delete button
+    setupModal(
+        commentModal,
+        [commentIcon, viewAll],
+        [closeModal],
+        () => resetCommentForm(commentInput, commentIdInput)
+    );
 
-    let deleteUrl = null; // URL to delete the comment
+    // Delete Comment Modal
+    const deleteModal = getElement('delete-comment-modal');
+    const confirmDeleteBtn = getElement('confirm-delete-btn');
+    const cancelDeleteBtn = getElement('cancel-delete-btn');
+    let deleteUrl = null;
 
-    // Attach click event to all delete buttons
     document.querySelectorAll('.comment-close-btn').forEach(button => {
-        button.addEventListener('click', function () {
-            deleteUrl = `/${this.getAttribute('post_id')}/delete_comment/${this.getAttribute('comment_id')}/`; // Construct delete URL
-            deleteModal.classList.remove('hidden'); // Show the modal
+        addEvent(button, 'click', () => {
+            deleteUrl = `/${button.getAttribute('post_id')}/delete_comment/${button.getAttribute('comment_id')}/`;
+            toggleClass(deleteModal, 'hidden', 'remove');
         });
     });
-    // Confirm delete action
-    confirmDeleteBtn.addEventListener('click', function () {
-        if (deleteUrl) {
-            window.location.href = deleteUrl; // Redirect to the delete URL
-        }
-    });
-    // Cancel delete action
-    cancelDeleteBtn.addEventListener('click', function () {
-        deleteModal.classList.add('hidden'); // Hide the modal
-        deleteUrl = null; // Clear the delete URL
+
+    addEvent(confirmDeleteBtn, 'click', () => {
+        if (deleteUrl) window.location.href = deleteUrl;
     });
 
+    addEvent(cancelDeleteBtn, 'click', () => {
+        toggleClass(deleteModal, 'hidden', 'add');
+        deleteUrl = null;
+    });
 
-    // Edit button functionality
-    const commentsContainer = document.getElementById('comments-container');
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-    // Populate the form with the comment to edit
-    commentsContainer.addEventListener('click', (e) => {
+    // Edit Comment
+    const commentsContainer = getElement('comments-container');
+    addEvent(commentsContainer, 'click', (e) => {
         if (e.target.classList.contains('edit-comment-btn')) {
             commentInput.value = e.target.dataset.commentBody;
             commentIdInput.value = e.target.dataset.commentId;
         }
     });
 
-    // Handle comment form submission
-    commentForm.addEventListener('submit', async (e) => {
+    // Comment Form Submission
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+    addEvent(commentForm, 'submit', async (e) => {
         e.preventDefault();
-    
-        const updatedBody = commentInput.value.trim();
-        const commentId = commentIdInput.value; // Check if it's an edit
-        const postId = commentsContainer.dataset.postId;
-    
-        if (!updatedBody) {
+
+        const body = commentInput?.value.trim();
+        const commentId = commentIdInput?.value;
+        const postId = commentsContainer?.dataset.postId;
+
+        if (!body) {
             alert("Comment body can't be empty.");
             return;
         }
-    
+
+        const url = commentId
+            ? `/${postId}/update_comment/${commentId}/`
+            : `/${postId}/add_comment/`;
+        const headers = {
+            'X-CSRFToken': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': commentId ? 'application/json' : 'application/x-www-form-urlencoded',
+        };
+        const payload = commentId
+            ? JSON.stringify({ body })
+            : new URLSearchParams({ body, csrfmiddlewaretoken: csrfToken }).toString();
+
         try {
-            let url, payload, headers;
-    
-            if (commentId) {
-                // Update existing comment
-                url = `/${postId}/update_comment/${commentId}/`;
-                headers = {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken,
-                    'X-Requested-With': 'XMLHttpRequest',
-                };
-                payload = JSON.stringify({ body: updatedBody });
-            } else {
-                // Add new comment
-                url = `/${postId}/add_comment/`;
-                headers = {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': csrfToken,
-                    'X-Requested-With': 'XMLHttpRequest',
-                };
-                payload = new URLSearchParams({
-                    body: updatedBody,
-                    csrfmiddlewaretoken: csrfToken,
-                }).toString();
-            }
-    
-            const response = await fetch(url, {
-                method: 'POST',
-                headers,
-                body: payload,
-            });
-    
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Failed to submit comment: ${errorText}`);
-            }
-    
+            const response = await fetch(url, { method: 'POST', headers, body: payload });
+            if (!response.ok) throw new Error(await response.text());
+
             const data = await response.json();
-    
             if (commentId) {
-                // Update comment in DOM
                 const commentBodySpan = commentsContainer.querySelector(`[data-comment-id="${commentId}"] .comment-body`);
-                if (commentBodySpan) commentBodySpan.textContent = data.body;
+                commentBodySpan.textContent = data.body;
             } else {
-                // Add new comment (reload or dynamic rendering)
                 window.location.href = data.redirect_url;
             }
-    
-            // Clear form
-            commentInput.value = '';
-            commentIdInput.value = '';
+
+            resetCommentForm(commentInput, commentIdInput);
         } catch (error) {
             console.error('Error submitting comment:', error);
             alert('Failed to submit comment.');
         }
     });
-
-    // Utility function to get CSRF token
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.startsWith(name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
 });
