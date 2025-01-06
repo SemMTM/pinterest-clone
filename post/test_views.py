@@ -15,6 +15,7 @@ import json
 
 
 class PostListViewTest(TestCase):
+
     @classmethod
     def setUpTestData(cls):
         cls.user = User.objects.create_user(username="testuser", password="testpassword")
@@ -53,6 +54,7 @@ class PostListViewTest(TestCase):
 
 
 class PostDetailViewTest(TestCase):
+
     def setUp(self):
         # Create a user
         self.user = User.objects.create_user(username='testuser', password='password')
@@ -124,6 +126,7 @@ class PostDetailViewTest(TestCase):
 
 
 class CreatePostViewTest(TestCase):
+
     def setUp(self):
         # Create a user
         self.user = User.objects.create_user(username="testuser", password="testpassword")
@@ -205,6 +208,7 @@ class CreatePostViewTest(TestCase):
 
 
 class TagSuggestionsViewTest(TestCase):
+
     def setUp(self):
         self.client = Client()
         self.url = reverse("tag_suggestions")
@@ -274,6 +278,7 @@ class TagSuggestionsViewTest(TestCase):
 
 
 class AddCommentViewTest(TestCase):
+
     def setUp(self):
         self.client = Client()
 
@@ -384,6 +389,7 @@ class AddCommentViewTest(TestCase):
 
 
 class CommentDeleteViewTest(TestCase):
+
     def setUp(self):
         # Create users
         self.user1 = User.objects.create_user(username="user1", password="password123")
@@ -524,3 +530,56 @@ class UpdateCommentViewTest(TestCase):
         )
         self.assertEqual(response.status_code, 302)  # Redirect to login
         self.assertIn(reverse('account_login'), response.url)
+
+
+class PostDeleteViewTest(TestCase):
+
+    def setUp(self):
+        # Create a user
+        self.user = User.objects.create_user(username="user", password="password123")
+        self.other_user = User.objects.create_user(username="other_user", password="password123")
+
+        # Create a post
+        self.post = Post.objects.create(
+            user=self.user,
+            image="test_image.jpg",
+            title="Test Post",
+            description="Test Description"
+        )
+
+        self.url = reverse('post_delete', args=[self.post.id])
+
+    def test_post_delete_success(self):
+        """Test that a user can successfully delete their own post."""
+        self.client.login(username="user", password="password123")
+        response = self.client.post(self.url)
+        self.assertRedirects(response, reverse('home'))
+
+        # Check that the post has been deleted
+        self.assertFalse(Post.objects.filter(id=self.post.id).exists())
+
+    def test_post_delete_unauthorized_user(self):
+        """Test that a user cannot delete a post they do not own."""
+        self.client.login(username="other_user", password="password123")
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 404)
+
+        # Check that the post still exists
+        self.assertTrue(Post.objects.filter(id=self.post.id).exists())
+
+    def test_post_delete_unauthenticated_user(self):
+        """Test that an unauthenticated user cannot delete a post."""
+        response = self.client.post(self.url)
+        self.assertRedirects(response, f"{reverse('account_login')}?next={self.url}")
+
+        # Check that the post still exists
+        self.assertTrue(Post.objects.filter(id=self.post.id).exists())
+
+    def test_post_delete_invalid_method(self):
+        """Test that a non-POST request does not delete the post."""
+        self.client.login(username="user", password="password123")
+        response = self.client.get(self.url)
+        self.assertRedirects(response, reverse('post_detail', args=[self.post.id]))
+
+        # Check that the post still exists
+        self.assertTrue(Post.objects.filter(id=self.post.id).exists())
