@@ -57,7 +57,6 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
-LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 

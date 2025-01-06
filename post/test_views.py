@@ -10,6 +10,8 @@ from profile_page.models import ImageBoard
 from io import BytesIO
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.messages import get_messages
+from django.utils.timezone import now
+import json
 
 
 class PostListViewTest(TestCase):
@@ -200,3 +202,182 @@ class CreatePostViewTest(TestCase):
 
         # Assert redirect to login
         self.assertRedirects(response, f"/accounts/login/?next={self.url}")
+
+
+class TagSuggestionsViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.url = reverse("tag_suggestions")
+
+        # Create sample tags
+        self.tag1 = ImageTags.objects.create(tag_name="nature")
+        self.tag2 = ImageTags.objects.create(tag_name="technology")
+        self.tag3 = ImageTags.objects.create(tag_name="travel")
+        self.tag4 = ImageTags.objects.create(tag_name="health")
+
+    def test_tag_suggestions_with_query(self):
+        """
+        Test that the view returns tags that match the query.
+        """
+        response = self.client.get(self.url, {"q": "tech"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/json")
+
+        # Parse the response data
+        data = json.loads(response.content)
+        self.assertEqual(len(data), 1)  # Only "technology" matches
+        self.assertEqual(data[0]["tag_name"], "technology")
+
+    def test_tag_suggestions_with_partial_query(self):
+        """
+        Test that the view returns tags that partially match the query.
+        """
+        response = self.client.get(self.url, {"q": "t"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/json")
+
+        # Parse the response data
+        data = json.loads(response.content)
+        self.assertGreaterEqual(len(data), 2)  # "technology" and "travel" match
+        tag_names = [tag["tag_name"] for tag in data]
+        self.assertIn("technology", tag_names)
+        self.assertIn("travel", tag_names)
+
+    def test_tag_suggestions_with_no_query(self):
+        """
+        Test that the view returns the first 10 tags when no query is provided.
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/json")
+
+        # Parse the response data
+        data = json.loads(response.content)
+        self.assertEqual(len(data), min(10, ImageTags.objects.count()))
+        tag_names = [tag["tag_name"] for tag in data]
+        self.assertIn("nature", tag_names)
+        self.assertIn("technology", tag_names)
+        self.assertIn("travel", tag_names)
+        self.assertIn("health", tag_names)
+
+    def test_tag_suggestions_with_no_results(self):
+        """
+        Test that the view returns an empty list when no tags match the query.
+        """
+        response = self.client.get(self.url, {"q": "nonexistent"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/json")
+
+        # Parse the response data
+        data = json.loads(response.content)
+        self.assertEqual(len(data), 0)
+
+
+class AddCommentViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+        # Create a test user
+        self.user = User.objects.create_user(username='testuser', password='testpass')
+
+        # Create a test post
+        self.post = Post.objects.create(
+            image='test_image.jpg',
+            title='Test Post',
+            user=self.user,
+            description='This is a test post',
+            likes=0,
+            created_on=now()
+        )
+
+        # Define the URL for adding a comment
+        self.url = reverse('add_comment', kwargs={'post_id': str(self.post.id)})
+
+    def test_add_comment_valid_data(self):
+        """
+        Test that a valid AJAX POST request adds a comment to the post.
+        """
+        self.client.login(username='testuser', password='testpass')
+
+        data = {'body': 'This is a test comment.'}
+        headers = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
+
+        response = self.client.post(self.url, data, **headers)
+
+        # Check the response status
+        self.assertEqual(response.status_code, 200)
+
+        # Parse the JSON response
+        response_data = json.loads(response.content)
+        self.assertTrue(response_data['success'])
+        self.assertEqual(response_data['body'], 'This is a test comment.')
+        self.assertEqual(response_data['author'], self.user.username)
+        self.assertIn('created_on', response_data)
+
+        # Ensure the comment was saved in the database
+        self.assertEqual(Comment.objects.count(), 1)
+        comment = Comment.objects.first()
+        self.assertEqual(comment.body, 'This is a test comment.')
+        self.assertEqual(comment.author, self.user)
+        self.assertEqual(comment.post, self.post)
+
+    def test_add_comment_invalid_data(self):
+        """
+        Test that an AJAX POST request with invalid data does not add a comment.
+        """
+        self.client.login(username='testuser', password='testpass')
+
+        # Send empty data
+        data = {'body': ''}
+        headers = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
+
+        response = self.client.post(self.url, data, **headers)
+
+        # Check the response status
+        self.assertEqual(response.status_code, 400)
+
+        # Parse the JSON response
+        response_data = json.loads(response.content)
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'Invalid form data')
+
+        # Ensure no comment was created
+        self.assertEqual(Comment.objects.count(), 0)
+
+    def test_add_comment_non_ajax_request(self):
+        """
+        Test that a non-AJAX request returns an error.
+        """
+        self.client.login(username='testuser', password='testpass')
+
+        data = {'body': 'This is a test comment.'}
+
+        response = self.client.post(self.url, data)
+
+        # Check the response status
+        self.assertEqual(response.status_code, 400)
+
+        # Parse the JSON response
+        response_data = json.loads(response.content)
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'Invalid request')
+
+        # Ensure no comment was created
+        self.assertEqual(Comment.objects.count(), 0)
+
+    def test_add_comment_unauthenticated(self):
+        """
+        Test that an unauthenticated user cannot add a comment.
+        """
+        data = {'body': 'This is a test comment.'}
+        headers = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
+
+        response = self.client.post(self.url, data, **headers)
+
+        # Check that the response is a redirect to the login page
+        login_url = reverse('account_login')  # Replace with your LOGIN_URL name
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith(login_url))
+
+        # Ensure no comment was created
+        self.assertEqual(Comment.objects.count(), 0)
