@@ -97,7 +97,7 @@
                                     <p><strong>{{ comment.author }}</strong> {{ comment.created_on|time_ago }}</p>
                                     <span class="comment-body">{{ comment.body }}</span>
                                 </div>
-                                {% if user.is_authenticated and comment.author == user or post.author == user%}
+                                {% if user.is_authenticated and comment.author == user %}
                                 <div class="comment-btns-container">
                                     <span><button 
                                         class="edit-comment-btn" 
@@ -105,6 +105,10 @@
                                         data-comment-id="{{ comment.id }}">
                                         Edit
                                     </button></span>
+                                    <span class="comment-close-btn" comment_id="{{ comment.id }}" post_id="{{ post.id }}">&times;</span>
+                                </div>
+                                {% elif user.is_authenticated and post.user == user %}
+                                <div class="comment-btns-container">
                                     <span class="comment-close-btn" comment_id="{{ comment.id }}" post_id="{{ post.id }}">&times;</span>
                                 </div>
                                 {% endif %}

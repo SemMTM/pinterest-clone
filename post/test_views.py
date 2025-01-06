@@ -381,3 +381,55 @@ class AddCommentViewTest(TestCase):
 
         # Ensure no comment was created
         self.assertEqual(Comment.objects.count(), 0)
+
+
+class CommentDeleteViewTest(TestCase):
+    def setUp(self):
+        # Create users
+        self.user1 = User.objects.create_user(username="user1", password="password123")
+        self.user2 = User.objects.create_user(username="user2", password="password123")
+        self.user3 = User.objects.create_user(username="user3", password="password123")
+
+        # Create a post
+        self.post = Post.objects.create(
+            user=self.user1,
+            image="test_image.jpg",
+            title="Test Post",
+            description="Test Description"
+        )
+
+        # Create comments
+        self.comment_by_user1 = Comment.objects.create(
+            post=self.post,
+            author=self.user1,
+            body="Comment by user1"
+        )
+        self.comment_by_user2 = Comment.objects.create(
+            post=self.post,
+            author=self.user2,
+            body="Comment by user2"
+        )
+
+    def test_comment_delete_own_comment(self):
+        """Test that a user can delete their own comment."""
+        self.client.login(username="user1", password="password123")
+        url = reverse('delete_comment', args=[self.post.id, self.comment_by_user1.id])
+        response = self.client.post(url, follow=True)
+
+        self.assertRedirects(response, reverse('post_detail', args=[self.post.id]))
+        self.assertEqual(Comment.objects.filter(id=self.comment_by_user1.id).count(), 0)
+
+        messages = list(get_messages(response.wsgi_request))
+        self.assertIn("Comment deleted!", [message.message for message in messages])
+
+    def test_post_author_can_delete_comment(self):
+        """Test that the post's author can delete any comment on their post."""
+        self.client.login(username="user1", password="password123")
+        url = reverse('delete_comment', args=[self.post.id, self.comment_by_user2.id])
+        response = self.client.post(url, follow=True)
+
+        self.assertRedirects(response, reverse('post_detail', args=[self.post.id]))
+        self.assertEqual(Comment.objects.filter(id=self.comment_by_user2.id).count(), 0)
+
+        messages = list(get_messages(response.wsgi_request))
+        self.assertIn("Comment deleted!", [message.message for message in messages])
