@@ -44,7 +44,7 @@ def post_detail(request, id):
         },
     )
 
-
+@login_required
 def create_post(request):
     post_form = PostForm()
     if request.method == 'POST':

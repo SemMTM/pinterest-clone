@@ -1,9 +1,15 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.conf import settings
 from uuid import uuid4
-from post.models import Post, Comment
+from post.models import Post, Comment, ImageTags, ImageTagRelationships
+from post.forms import PostForm
+from unittest.mock import patch
 from profile_page.models import ImageBoard
+from io import BytesIO
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.contrib.messages import get_messages
 
 
 class PostListViewTest(TestCase):
@@ -113,3 +119,84 @@ class PostDetailViewTest(TestCase):
         
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user_boards'], [])
+
+
+class CreatePostViewTest(TestCase):
+    def setUp(self):
+        # Create a user
+        self.user = User.objects.create_user(username="testuser", password="testpassword")
+        self.client.login(username="testuser", password="testpassword")
+
+        # Create tags
+        self.tag1 = ImageTags.objects.create(tag_name="tag1")
+        self.tag2 = ImageTags.objects.create(tag_name="tag2")
+
+        # Set the URL for the create post view
+        self.url = reverse("create_post")
+
+        # Prepare invalid data (missing image)
+        self.invalid_data = {
+            "description": "This is a test post with invalid data.",
+        }
+
+    def test_create_post_get_request_authenticated(self):
+        """Test that a GET request renders the form for authenticated users."""
+        self.client.login(username="testuser", password="testpassword")
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "post/post_create.html")
+        self.assertIn("post_form", response.context)
+
+    def test_create_post_post_request_valid_data(self):
+        """Test that a valid POST request creates a post and associated tags."""
+        valid_image = SimpleUploadedFile(
+            name="test_image.jpg",
+            content=b"\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\xFF\xFF\xFF\x21\xF9\x04\x01\x00\x00\x01\x00\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3B",
+            content_type="image/jpeg",
+        )
+        data = {
+            "description": "This is a test post.",
+            "tags": [self.tag1.tag_name, self.tag2.tag_name],
+        }
+        files = {"image": valid_image}
+
+        response = self.client.post(self.url, {**data, **files}, follow=True)
+
+        # Debugging
+        form_errors = response.context["post_form"].errors
+        print("Form Errors:", form_errors)
+
+        # Assert that a post is created
+        self.assertEqual(Post.objects.count(), 1)
+        post = Post.objects.first()
+        self.assertIsNone(post.title, "")
+        self.assertEqual(post.description, data["description"])
+        self.assertEqual(post.user, self.user)
+
+        # Assert that tags are associated with the post
+        self.assertEqual(ImageTagRelationships.objects.count(), 2)
+        tags = ImageTagRelationships.objects.filter(post_id=post)
+        self.assertListEqual(
+            sorted(tag.tag_name.tag_name for tag in tags),
+            sorted(["tag1", "tag2"]),
+        )
+
+    def test_create_post_post_request_invalid_data(self):
+        """Test that an invalid POST request does not create a post."""
+        response = self.client.post(self.url, self.invalid_data, follow=True)
+
+        # Assert that no post is created
+        self.assertEqual(Post.objects.count(), 0)
+
+        # Assert that validation errors are displayed
+        form_errors = response.context["post_form"].errors
+        self.assertIn("image", form_errors)  # Image is required
+        self.assertEqual(form_errors["image"][0], "No file selected!")  
+
+    def test_create_post_unauthenticated(self):
+        """Test that an unauthenticated user is redirected to login."""
+        self.client.logout()
+        response = self.client.get(self.url)
+
+        # Assert redirect to login
+        self.assertRedirects(response, f"/accounts/login/?next={self.url}")
