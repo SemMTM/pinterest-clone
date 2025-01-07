@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 from django.http import Http404, HttpResponse, JsonResponse
@@ -56,7 +56,7 @@ def created_pins(request, username):
     try:
         page = paginator.page(page_number)
     except EmptyPage:
-        return HttpResponse("") 
+        return HttpResponse("", status=200) 
 
     return render(request, 'profile_page/created_pins.html', {'created_posts': page, 'profile_user': user})
 
