@@ -386,3 +386,39 @@ body {
 .pc-main-con {
     padding: 10px;
 }
+
+/* Board Detail Page Styles */
+#edit-board-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 10 !important;
+}
+
+div.board-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn.danger {
+    background-color: red;
+    color: white;
+}
+
+#delete-confirmation-modal {
+    background-color: pink;
+}
+
+.test {
+    color: pink
+}

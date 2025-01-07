@@ -91,30 +91,6 @@ def board_detail(request, board_id):
     return render(request, 'profile_page/board_detail.html', {'board': board, 'images': images})
 
 
-@csrf_exempt
-def edit_board(request, board_id):
-    board = get_object_or_404(ImageBoard, id=board_id)
-
-    if request.method == 'POST':
-        action = request.POST.get('action')
-        
-        if action == 'update':
-            # Update the board title
-            new_title = request.POST.get('title', '').strip()
-            if new_title:
-                board.title = new_title
-                board.save()
-                return JsonResponse({'success': True, 'title': board.title})
-            return JsonResponse({'success': False, 'error': 'Title cannot be empty'})
-
-        elif action == 'delete':
-            # Delete the board
-            board.delete()
-            return JsonResponse({'success': True, 'redirect_url': reverse('profile_page', args=[request.user.username])})
-        
-    return JsonResponse({'success': False, 'error': 'Invalid request method'})
-
-
 def sync_all_pins_board(user):
     """Ensures the 'All Pins' board contains all posts saved to any board."""
     all_pins_board, _ = ImageBoard.objects.get_or_create(user=user, title="All Pins")
@@ -182,3 +158,4 @@ def create_board(request):
             return JsonResponse({'success': False, 'error': 'An unexpected error occurred.'}, status=500)
 
     return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=405)
+
