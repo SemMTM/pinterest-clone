@@ -130,25 +130,10 @@ def sync_all_pins_board(user):
             board_id=all_pins_board
         )
 
-    # Remove posts from "All Pins" that aren't saved to any other board
-    all_pins_posts = BoardImageRelationship.objects.filter(board_id=all_pins_board)
-    for relationship in all_pins_posts:
-        if not BoardImageRelationship.objects.filter(
-            post_id=relationship.post_id
-        ).exclude(board_id=all_pins_board).exists():
-            relationship.delete()
-
 
 @receiver(post_save, sender=BoardImageRelationship)
 def handle_post_save(sender, instance, **kwargs):
     """Add a post to 'All Pins' if it's saved to any board."""
-    user = instance.board_id.user
-    sync_all_pins_board(user)
-
-
-@receiver(post_delete, sender=BoardImageRelationship)
-def handle_post_delete(sender, instance, **kwargs):
-    """Remove a post from 'All Pins' if it's not saved to any other board."""
     user = instance.board_id.user
     sync_all_pins_board(user)
 

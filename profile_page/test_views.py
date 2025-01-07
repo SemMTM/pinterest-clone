@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import Profile, ImageBoard, BoardImageRelationship
@@ -6,6 +6,7 @@ from post.models import Post
 from profile_page.views import sync_all_pins_board
 from unittest.mock import patch
 from django.utils.timezone import now, timedelta
+from django.http import JsonResponse
 
 
 class ProfilePageViewTest(TestCase):
@@ -244,3 +245,199 @@ class ImageBoardsViewTest(TestCase):
         """Test that a nonexistent user returns a 404 error."""
         response = self.client.get(reverse("image_boards", kwargs={"username": "NonexistentUser"}))
         self.assertEqual(response.status_code, 404)
+
+
+class BoardDetailViewTest(TestCase):
+    def setUp(self):
+        # Create a user
+        self.user = User.objects.create_user(username="TestUser", password="password123")
+
+        # Create an image board for the user
+        self.board = ImageBoard.objects.create(user=self.user, title="Test Board")
+
+        # Create sample posts and relationships for testing
+        self.posts = [
+            Post.objects.create(
+                user=self.user,
+                title=f"Post {i}",
+                description=f"Description {i}",
+                image="test_image.jpg",
+                created_on=now(),
+            )
+            for i in range(3)
+        ]
+
+        # Create BoardImageRelationship for the posts
+        self.relationships = [
+            BoardImageRelationship.objects.create(post_id=post, board_id=self.board)
+            for post in self.posts
+        ]
+
+        # URL for the board_detail view
+        self.url = reverse("board_detail", kwargs={"board_id": self.board.id})
+
+    def test_board_detail_renders_correct_template(self):
+        """Test that the board_detail view uses the correct template."""
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "profile_page/board_detail.html")
+
+    def test_board_detail_context_contains_board(self):
+        """Test that the board object is passed to the template context."""
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["board"], self.board)
+
+    def test_board_detail_context_contains_images(self):
+        """Test that the images related to the board are passed to the template context."""
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        images = response.context["images"]
+        self.assertEqual(images.count(), len(self.relationships))
+        for relationship in self.relationships:
+            self.assertIn(relationship, images)
+
+    def test_board_detail_no_images(self):
+        """Test that the board detail view works when there are no images on the board."""
+        # Create a new board without any relationships
+        empty_board = ImageBoard.objects.create(user=self.user, title="Empty Board")
+        url = reverse("board_detail", kwargs={"board_id": empty_board.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerySetEqual(response.context["images"], [])
+
+    def test_nonexistent_board_404(self):
+        """Test that the view returns a 404 error for a nonexistent board."""
+        url = reverse("board_detail", kwargs={"board_id": 9999})  # Nonexistent ID
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_board_belongs_to_user(self):
+        """Test that the board detail page displays only images associated with the given board."""
+        # Create a new board and add relationships
+        another_board = ImageBoard.objects.create(user=self.user, title="Another Board")
+        other_post = Post.objects.create(
+            user=self.user,
+            title="Other Post",
+            description="This post belongs to another board.",
+            image="other_image.jpg",
+            created_on=now(),
+        )
+        BoardImageRelationship.objects.create(post_id=other_post, board_id=another_board)
+
+        response = self.client.get(self.url)
+        images = response.context["images"]
+        self.assertNotIn(other_post, [relationship.post_id for relationship in images])
+
+    def test_board_detail_other_user_access(self):
+        """Test that the board detail page is accessible to other users."""
+        other_user = User.objects.create_user(username="OtherUser", password="password123")
+        self.client.login(username="OtherUser", password="password123")
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["board"], self.board)
+
+    def test_board_detail_invalid_access(self):
+        """Test that the board detail page shows only boards that exist."""
+        invalid_url = reverse("board_detail", kwargs={"board_id": 9999})  # Nonexistent board ID
+        response = self.client.get(invalid_url)
+        self.assertEqual(response.status_code, 404)
+
+class SyncAllPinsBoardTest(TestCase):
+    def setUp(self):
+        # Create test user
+        self.user = User.objects.create_user(username="TestUser", password="password123")
+
+        # Create another user
+        self.other_user = User.objects.create_user(username="OtherUser", password="password123")
+
+        # Create boards for the test user
+        self.all_pins_board = ImageBoard.objects.create(user=self.user, title="All Pins")
+        self.board1 = ImageBoard.objects.create(user=self.user, title="Travel")
+        self.board2 = ImageBoard.objects.create(user=self.user, title="Nature")
+
+        # Create posts for the test user
+        self.posts = [
+            Post.objects.create(
+                user=self.user,
+                title=f"Post {i}",
+                description=f"Description {i}",
+                image="test_image.jpg",
+                created_on=now(),
+            )
+            for i in range(5)
+        ]
+
+        # Create posts for another user
+        self.other_posts = [
+            Post.objects.create(
+                user=self.other_user,
+                title=f"Other Post {i}",
+                description=f"Other Description {i}",
+                image="test_image.jpg",
+                created_on=now(),
+            )
+            for i in range(2)
+        ]
+
+    def test_sync_all_pins_with_no_saved_posts(self):
+        """Test that 'All Pins' remains empty if no posts are saved."""
+        sync_all_pins_board(self.user)
+        all_pins_relationships = BoardImageRelationship.objects.filter(board_id=self.all_pins_board)
+        self.assertEqual(all_pins_relationships.count(), 0)
+
+    def test_sync_all_pins_with_saved_posts(self):
+        """Test that saved posts are added to 'All Pins'."""
+        # Pin some posts to board1
+        BoardImageRelationship.objects.create(post_id=self.posts[0], board_id=self.board1)
+        BoardImageRelationship.objects.create(post_id=self.posts[1], board_id=self.board1)
+
+        sync_all_pins_board(self.user)
+
+        all_pins_relationships = BoardImageRelationship.objects.filter(board_id=self.all_pins_board)
+        self.assertEqual(all_pins_relationships.count(), 2)
+        self.assertTrue(
+            BoardImageRelationship.objects.filter(post_id=self.posts[0], board_id=self.all_pins_board).exists()
+        )
+        self.assertTrue(
+            BoardImageRelationship.objects.filter(post_id=self.posts[1], board_id=self.all_pins_board).exists()
+        )
+
+    def test_sync_all_pins_with_duplicate_posts(self):
+        """Test that duplicate posts are not added to 'All Pins'."""
+        # Pin the same post to multiple boards
+        BoardImageRelationship.objects.create(post_id=self.posts[0], board_id=self.board1)
+        BoardImageRelationship.objects.create(post_id=self.posts[0], board_id=self.board2)
+
+        sync_all_pins_board(self.user)
+
+        all_pins_relationships = BoardImageRelationship.objects.filter(board_id=self.all_pins_board)
+        self.assertEqual(all_pins_relationships.count(), 1)
+
+    def test_sync_all_pins_does_not_include_other_user_posts(self):
+        """Test that posts from another user are not added to 'All Pins'."""
+        # Pin other user's post to their board
+        other_board = ImageBoard.objects.create(user=self.other_user, title="Other User Board")
+        BoardImageRelationship.objects.create(post_id=self.other_posts[0], board_id=other_board)
+
+        sync_all_pins_board(self.user)
+
+        all_pins_relationships = BoardImageRelationship.objects.filter(board_id=self.all_pins_board)
+        self.assertEqual(all_pins_relationships.count(), 0)
+
+    def test_all_pins_with_new_posts_added(self):
+        """Test that newly pinned posts are added to 'All Pins'."""
+        BoardImageRelationship.objects.create(post_id=self.posts[0], board_id=self.board1)
+
+        sync_all_pins_board(self.user)
+
+        # Add another post to board2
+        BoardImageRelationship.objects.create(post_id=self.posts[1], board_id=self.board2)
+
+        sync_all_pins_board(self.user)
+
+        all_pins_relationships = BoardImageRelationship.objects.filter(board_id=self.all_pins_board)
+        self.assertEqual(all_pins_relationships.count(), 2)
+        self.assertTrue(
+            BoardImageRelationship.objects.filter(post_id=self.posts[1], board_id=self.all_pins_board).exists()
+        )
