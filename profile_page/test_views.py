@@ -148,16 +148,13 @@ class ImageBoardsViewTest(TestCase):
         self.user = User.objects.create_user(username="TestUser", password="password123")
         self.other_user = User.objects.create_user(username="OtherUser", password="password123")
 
-        # Create sample boards for the test user
         self.all_pins_board = ImageBoard.objects.create(user=self.user, title="All Pins")
         self.board1 = ImageBoard.objects.create(user=self.user, title="Travel")
         self.board2 = ImageBoard.objects.create(user=self.user, title="Nature")
 
-        # Create a board for another user
         self.other_user_board1 = ImageBoard.objects.create(user=self.other_user, title="Other Board 1")
         self.other_user_board2 = ImageBoard.objects.create(user=self.other_user, title="Other Board 2")
 
-        # Create posts and pin them to boards
         self.posts = [
             Post.objects.create(
                 user=self.user,
@@ -166,7 +163,7 @@ class ImageBoardsViewTest(TestCase):
                 image="test_image.jpg",
                 created_on=now()
             )
-            for i in range(6)  # Create 6 posts for assigning to boards
+            for i in range(6)  
         ]
 
         # Pin some posts to boards
@@ -249,13 +246,9 @@ class ImageBoardsViewTest(TestCase):
 
 class BoardDetailViewTest(TestCase):
     def setUp(self):
-        # Create a user
         self.user = User.objects.create_user(username="TestUser", password="password123")
-
-        # Create an image board for the user
         self.board = ImageBoard.objects.create(user=self.user, title="Test Board")
 
-        # Create sample posts and relationships for testing
         self.posts = [
             Post.objects.create(
                 user=self.user,
@@ -267,13 +260,11 @@ class BoardDetailViewTest(TestCase):
             for i in range(3)
         ]
 
-        # Create BoardImageRelationship for the posts
         self.relationships = [
             BoardImageRelationship.objects.create(post_id=post, board_id=self.board)
             for post in self.posts
         ]
 
-        # URL for the board_detail view
         self.url = reverse("board_detail", kwargs={"board_id": self.board.id})
 
     def test_board_detail_renders_correct_template(self):
@@ -345,18 +336,13 @@ class BoardDetailViewTest(TestCase):
 
 class SyncAllPinsBoardTest(TestCase):
     def setUp(self):
-        # Create test user
         self.user = User.objects.create_user(username="TestUser", password="password123")
-
-        # Create another user
         self.other_user = User.objects.create_user(username="OtherUser", password="password123")
 
-        # Create boards for the test user
         self.all_pins_board = ImageBoard.objects.create(user=self.user, title="All Pins")
         self.board1 = ImageBoard.objects.create(user=self.user, title="Travel")
         self.board2 = ImageBoard.objects.create(user=self.user, title="Nature")
 
-        # Create posts for the test user
         self.posts = [
             Post.objects.create(
                 user=self.user,
@@ -368,7 +354,6 @@ class SyncAllPinsBoardTest(TestCase):
             for i in range(5)
         ]
 
-        # Create posts for another user
         self.other_posts = [
             Post.objects.create(
                 user=self.other_user,
@@ -441,3 +426,184 @@ class SyncAllPinsBoardTest(TestCase):
         self.assertTrue(
             BoardImageRelationship.objects.filter(post_id=self.posts[1], board_id=self.all_pins_board).exists()
         )
+
+
+class SaveToBoardViewTest(TestCase):
+    """
+    Unit tests for the save_to_board view.
+    """
+    def setUp(self):
+        """
+        Set up test data, including test users, boards, and posts.
+        """
+        self.client = Client()
+
+        # Create test user and another user
+        self.user = User.objects.create_user(username="TestUser", password="password123")
+        self.other_user = User.objects.create_user(username="OtherUser", password="password123")
+
+        # Log in test user
+        self.client.login(username="TestUser", password="password123")
+
+        # Create a board for the test user
+        self.board = ImageBoard.objects.create(user=self.user, title="Test Board")
+
+        # Create posts
+        self.post = Post.objects.create(
+            user=self.user,
+            title="Test Post",
+            description="Test Description",
+            image="test_image.jpg",
+            created_on=now(),
+        )
+        self.other_post = Post.objects.create(
+            user=self.other_user,
+            title="Other Post",
+            description="Other Description",
+            image="other_image.jpg",
+            created_on=now(),
+        )
+
+        # URL for the save_to_board view
+        self.url = reverse("save_to_board", kwargs={"post_id": self.post.id})
+
+    def test_save_post_to_board_success(self):
+        """
+        Test that a user can successfully save a post to their board.
+        """
+        response = self.client.post(self.url, {"board_id": self.board.id})
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"success": True, "message": "Post Saved!"})
+        self.assertTrue(BoardImageRelationship.objects.filter(post_id=self.post, board_id=self.board).exists())
+
+    def test_save_other_user_post_to_board(self):
+        """
+        Test that a user can save another user's post to their own board.
+        """
+        url = reverse("save_to_board", kwargs={"post_id": self.other_post.id})
+        response = self.client.post(url, {"board_id": self.board.id})
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"success": True, "message": "Post Saved!"})
+        self.assertTrue(BoardImageRelationship.objects.filter(post_id=self.other_post, board_id=self.board).exists())
+
+    def test_unauthenticated_user_save_post_to_board(self):
+        """
+        Test that unauthenticated users cannot save posts to boards and are redirected to login.
+        """
+        self.client.logout()
+        response = self.client.post(self.url, {"board_id": self.board.id})
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith(reverse('account_login')))
+        self.assertFalse(BoardImageRelationship.objects.filter(post_id=self.post, board_id=self.board).exists())
+
+    def test_save_post_to_nonexistent_board(self):
+        """
+        Test that saving a post to a non-existent board results in a 404 error.
+        """
+        response = self.client.post(self.url, {"board_id": 9999})
+        self.assertEqual(response.status_code, 404)
+
+    def test_save_post_with_no_board_selected(self):
+        """
+        Test that saving a post without selecting a board returns a 400 error.
+        """
+        response = self.client.post(self.url, {})
+        self.assertEqual(response.status_code, 400)
+        self.assertJSONEqual(response.content, {"success": False, "message": "No board selected."})
+
+    def test_save_to_board_get_request(self):
+        """
+        Test that accessing the save_to_board view with a GET request returns a 405 error.
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 405)
+        self.assertJSONEqual(response.content, {"success": False, "message": "Invalid request method."})
+
+    def test_save_same_post_to_board_twice(self):
+        """
+        Test that saving the same post to the same board multiple times only creates one relationship.
+        """
+        response1 = self.client.post(self.url, {"board_id": self.board.id})
+        response2 = self.client.post(self.url, {"board_id": self.board.id})
+        self.assertEqual(response2.status_code, 200)
+        self.assertEqual(BoardImageRelationship.objects.filter(post_id=self.post, board_id=self.board).count(), 1)
+
+
+class CreateBoardViewTest(TestCase):
+    """
+    Unit tests for the create_board view.
+    """
+
+    def setUp(self):
+        """
+        Set up test data, including users, posts, and client authentication.
+        """
+        self.client = Client()
+
+        # Create test user
+        self.user = User.objects.create_user(username="TestUser", password="password123")
+        self.client.login(username="TestUser", password="password123")
+
+        # Create a test post
+        self.post = Post.objects.create(
+            user=self.user,
+            title="Test Post",
+            description="Test Description",
+            image="test_image.jpg",
+            created_on=now(),
+        )
+
+        # URL for the create_board view
+        self.url = reverse("create_board")
+
+    def test_create_board_success(self):
+        """Test successfully creating a new board with a valid title and post_id."""
+        response = self.client.post(self.url, {"title": "New Board", "post_id": self.post.id})
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {'success': True, 'message': 'Board created successfully!'})
+
+        # Verify that the board was created
+        self.assertTrue(ImageBoard.objects.filter(user=self.user, title="New Board").exists())
+
+    def test_create_board_missing_title(self):
+        """Test that creating a board fails when the title is missing."""
+        response = self.client.post(self.url, {"post_id": self.post.id})
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {'success': False, 'error': 'Board title is required.'})
+
+    def test_create_board_invalid_post_id(self):
+        """Test that creating a board fails when the post_id is invalid."""
+        response = self.client.post(self.url, {"title": "New Board", "post_id": "invalid-uuid"})
+        self.assertEqual(response.status_code, 404)  # Post not found
+
+    def test_create_board_existing_board_title(self):
+        """Test creating a board with an existing title doesn't duplicate the board."""
+        # Create a board first
+        existing_board = ImageBoard.objects.create(user=self.user, title="Existing Board")
+        response = self.client.post(self.url, {"title": "Existing Board", "post_id": self.post.id})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {'success': True, 'message': 'Board created successfully!'})
+
+        # Verify no duplicate board is created
+        self.assertEqual(ImageBoard.objects.filter(user=self.user, title="Existing Board").count(), 1)
+
+        # Verify the relationship is created
+        self.assertTrue(BoardImageRelationship.objects.filter(post_id=self.post, board_id=existing_board).exists())
+
+    def test_unauthenticated_user_create_board(self):
+        """Test that unauthenticated users cannot create a board."""
+        self.client.logout()  # Simulate unauthenticated user
+        response = self.client.post(self.url, {"title": "New Board", "post_id": self.post.id})
+        self.assertEqual(response.status_code, 302)  # Redirect to login page
+        self.assertTrue(response.url.startswith(reverse("account_login")))  # Confirm redirect to login
+
+    def test_create_board_missing_post_id(self):
+        """
+        Test that creating a board fails when the post_id is missing.
+        """
+        response = self.client.post(self.url, {"title": "New Board"})
+        self.assertEqual(response.status_code, 404)  # Post not found
+
+        # Verify that no board was created
+        self.assertFalse(ImageBoard.objects.filter(user=self.user).exists())

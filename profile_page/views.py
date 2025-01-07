@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage
 from django.dispatch import receiver
@@ -138,6 +139,7 @@ def handle_post_save(sender, instance, **kwargs):
     sync_all_pins_board(user)
 
 
+@login_required
 def save_to_board(request, post_id):
     post = get_object_or_404(Post, id=post_id)
 
@@ -154,22 +156,29 @@ def save_to_board(request, post_id):
     return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)
 
 
+@login_required
 def create_board(request):
     if request.method == 'POST':
-        title = request.POST.get('title', '').strip()
-        post_id = request.POST.get('post_id')
-        print(f"Received title: {title}")  # Debug log
-        print(f"Received post_id: {post_id}")  # Debug log
+        try:
+            title = request.POST.get('title', '').strip()
+            post_id = request.POST.get('post_id')
 
-        if not title:
-            return JsonResponse({'success': False, 'error': 'Board title is required.'})
+            if not title:
+                return JsonResponse({'success': False, 'error': 'Board title is required.'}, status=400)
 
-        post = get_object_or_404(Post, id=post_id)
-        board, created = ImageBoard.objects.get_or_create(user=request.user, title=title)
+            post = get_object_or_404(Post, id=post_id)
 
-        if created:
+            board, created = ImageBoard.objects.get_or_create(user=request.user, title=title)
+            if not created:
+                error_message = f'A board with the title "{title}" already exists.'
+                return JsonResponse({'success': False, 'error': error_message}, status=400)
+
+            # Create the relationship if the board was created successfully
             BoardImageRelationship.objects.create(post_id=post, board_id=board)
+            return JsonResponse({'success': True, 'message': 'Board created successfully!'})
 
-        return JsonResponse({'success': True, 'message': 'Board created successfully!'})
+        except Exception as e:
+            # Handle unexpected errors
+            return JsonResponse({'success': False, 'error': 'An unexpected error occurred.'}, status=500)
 
-    return JsonResponse({'success': False, 'error': 'Invalid request method.'})
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=405)

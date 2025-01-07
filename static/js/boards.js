@@ -77,27 +77,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitCreateBoardBtn = document.getElementById('submit-create-board');
     const boardTitleInput = document.getElementById('board-title-input');
     const postImagePreview = document.getElementById('post-image-preview');
+    const errorMessage = document.getElementById('board-error-message');
 
     // Open Create Board Modal
     openCreateBoardBtn.addEventListener('click', () => {
         saveModal.classList.add('save-modal-hidden');
         createModal.classList.remove('create-modal-hidden');
+        errorMessage.style.display = 'none';
+        errorMessage.textContent = '';
     });
 
     // Close Create Board Modal
     cancelCreateBoardBtn.addEventListener('click', () => {
         createModal.classList.add('create-modal-hidden');
+        errorMessage.style.display = 'none';
+        errorMessage.textContent = '';
     });
 
     // Submit Create Board
     submitCreateBoardBtn.addEventListener('click', () => {
         const boardTitle = boardTitleInput.value.trim();
         if (!boardTitle) {
-            alert('Please enter a board title.');
+            errorMessage.textContent = 'Please enter a board title.';
+            errorMessage.style.display = 'block';
             return;
         }
 
         const postId = postImagePreview.getAttribute('data-post-id'); // Pass the post ID dynamically
+
+        errorMessage.style.display = 'none';
+        errorMessage.textContent = '';
 
         fetch('/profile/create-board/', {
             method: 'POST',
@@ -109,7 +118,9 @@ document.addEventListener('DOMContentLoaded', function() {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Failed to create board.');
+                    return response.json().then(errData => {
+                        throw new Error(errData.error || 'Failed to create board.');
+                    });
                 }
                 return response.json();
             })
@@ -117,11 +128,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     alert(data.message);
                     createModal.classList.add('create-modal-hidden');
+                    boardTitleInput.value = '';
                 } else {
-                    alert(data.error || 'An error occurred.');
+                    errorMessage.textContent = data.error || 'An error occurred.';
+                    errorMessage.style.display = 'block';
                 }
             })
-            .catch(error => console.error('Error creating board:', error));
+            .catch(error => {
+                console.error('Error creating board:', error.message);
+                errorMessage.textContent = error.message || 'An unexpected error occurred. Please try again.';
+                errorMessage.style.display = 'block';
+            });
     });
 
     // Variables specific to the delete post modal
