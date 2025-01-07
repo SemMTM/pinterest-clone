@@ -184,13 +184,13 @@ body {
 
 
 @media screen and (min-width: 426px) {
-    .page-container {
+    .PaLe {
         padding-left: 55px;
     }
 }
 
 
-/* image grid styles */
+/* image grid styles - Masonry layout */
 .image-grid {
     display: grid;
     grid-gap: 10px;
@@ -453,9 +453,13 @@ body {
     margin-top: 15px;
 }
 
+#boards-container {
+    padding: 15px;
+}
+
 /* Post Create Page Styles */
-.pc-main-con {
-    padding: 10px;
+.pc-main-con-inner {
+    padding: 15px;
 }
 
 /* Styling for autocomplete dropdown */
@@ -679,7 +683,7 @@ h4 {
     text-align: center;
     width: 300px;
 }
-
+ 
 .delete-post-modal-actions {
     display: flex;
     justify-content: space-between;

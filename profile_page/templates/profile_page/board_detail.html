@@ -14,12 +14,17 @@
     </button>
     {% endif %}
 
-    <div class="images-grid">
+    <div class="image-grid">
         {% for image in images %}
-        <div class="image-item">
-            <a href="{% url 'post_detail' image.post_id.id %}">
-                <img src="{{ image.post_id.image.url }}" alt="{{ image.post_id.title }}">
-            </a>
+        <div class="grid-item">
+            <div class="item-content">
+                <a class="div-link" href="{% url 'post_detail' image.post_id.id %}">
+                    <img src="{{ image.post_id.image.url }}" alt="{{ image.post_id.title }}">
+                </a>
+                <div class="grid-item-overlay">
+                    <a class="div-link" href="{% url 'post_detail' image.post_id.id %}"></a> 
+                </div>
+            </div>
         </div>
         {% endfor %}
     </div>
@@ -42,4 +47,8 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %} 
+    <script src="{% static 'js/masonry.js' %}"></script>
 {% endblock %}

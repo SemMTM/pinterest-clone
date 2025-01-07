@@ -3,7 +3,7 @@
 {% url 'account_logout' as logout_url %}
 
 {% block content %}
-<div id="profile-page-container">
+<div id="profile-page-container" class="PaLe">
 
     <div class="p-con">
         <div id="profile-user-icon"></div>
@@ -47,7 +47,7 @@
         </div>
     </div>
 
-    <div class="p-con">
+    <div class="p-con" id="boards-container">
         <div class="hidden" id='created-container' data-username="{{ profile.user.username }}">
         </div>
         <div class="" id='saved-container'
@@ -65,5 +65,5 @@
 
 {% block scripts %} 
     <script src="{% static 'js/profile_page_js.js' %}"></script>
-    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/masonry.js' %}"></script>
 {% endblock %}

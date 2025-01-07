@@ -135,7 +135,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .catch(error => {
-                console.error('Error creating board:', error.message);
                 errorMessage.textContent = error.message || 'An unexpected error occurred. Please try again.';
                 errorMessage.style.display = 'block';
             });
