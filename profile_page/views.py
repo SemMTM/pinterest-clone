@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from post.models import Post
 from .models import Profile, ImageBoard, BoardImageRelationship
+from .forms import ProfileForm
 
 
 
@@ -232,3 +233,26 @@ def unpin_post(request, board_id, post_id):
             return JsonResponse({"success": False, "error": str(e)}, status=500)
 
     return JsonResponse({"success": False, "error": "Invalid request method."}, status=405)
+
+
+@login_required
+def edit_profile(request):
+    profile = get_object_or_404(Profile, user=request.user)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({
+                'success': True,
+                'message': 'Profile updated successfully.',
+                'data': {
+                    'about': profile.about,
+                    'first_name': profile.first_name,
+                    'last_name': profile.last_name,
+                    'profile_image': profile.profile_image.url,
+                },
+            })
+        return JsonResponse({'success': False, 'error': 'Invalid data.'})
+    
+    return render(request, 'profile_page/edit_profile_modal.html', {'profile': profile})

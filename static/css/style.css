@@ -457,6 +457,26 @@ body {
     padding: 15px;
 }
 
+/* Edit profile modal styles */
+#edit-profile-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+    display: block;
+}
+
+#edit-profile-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+
 /* Post Create Page Styles */
 .pc-main-con-inner {
     padding: 15px;
