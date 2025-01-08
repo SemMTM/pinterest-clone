@@ -163,7 +163,11 @@ def create_board(request):
 
 @login_required
 def edit_board(request, board_id):
-    board = get_object_or_404(ImageBoard, id=board_id, user=request.user)
+    board = get_object_or_404(ImageBoard, id=board_id)
+
+    # Check if the logged-in user is the creator of the board
+    if board.user != request.user:
+        return HttpResponseForbidden("You are not allowed to edit this board.")
 
     if request.method == "POST":
         action = request.POST.get("action")
@@ -179,6 +183,5 @@ def edit_board(request, board_id):
         elif action == "delete":
             board.delete()
             return redirect('profile_page', username=request.user.username)
-        return JsonResponse({"success": False, "error": "Invalid action."})
 
     return JsonResponse({"success": False, "error": "Invalid request method."}, status=405)

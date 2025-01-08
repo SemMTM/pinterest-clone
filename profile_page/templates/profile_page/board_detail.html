@@ -13,12 +13,10 @@
             {% for image in images %}
             <div class="grid-item">
                 <div class="item-content">
+                    <button class="unpin-btn" data-image-id="{{ image.post_id.id }}">x</button>
                     <a class="div-link" href="{% url 'post_detail' image.post_id.id %}">
                         <img src="{{ image.post_id.image.url }}" alt="{{ image.post_id.title }}">
                     </a>
-                    <div class="grid-item-overlay">
-                        <a class="div-link" href="{% url 'post_detail' image.post_id.id %}"></a> 
-                    </div>
                 </div>
             </div>
             {% endfor %}
@@ -50,6 +48,17 @@
                 <button type="submit" id="confirm-delete-board-btn" class="btn danger">Delete</button>
             </form>
                 <button id="cancel-delete-board-btn" class="btn">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Unpin Confirmation Modal -->
+    <div id="unpin-modal" class="hidden">
+        <div class="modal-content">
+            <p>Are you sure you want to unpin this post from this board?</p>
+            <div class="modal-actions">
+                <button id="unpin-confirm-btn" class="btn danger">Unpin</button>
+                <button id="unpin-cancel-btn" class="btn">Cancel</button>
+            </div>
         </div>
     </div>
 </div>

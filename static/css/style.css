@@ -751,3 +751,40 @@ h4 {
     background-color: red;
     color: white;
 }
+
+/* Unpin modal styles */
+#unpin-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    display: block;
+}
+
+#unpin-modal .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.unpin-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    color: red;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.unpin-btn:hover {
+    color: darkred;
+}
