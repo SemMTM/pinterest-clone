@@ -4,7 +4,7 @@ from django.utils.text import slugify
 from cloudinary.models import CloudinaryField
 from post.models import Post
 
-VISABILITY = ((0, "Public"), (1, "Private"))
+VISIBILITY = ((0, "Public"), (1, "Private"))
 
 class Profile(models.Model):
     """
@@ -25,7 +25,7 @@ class ImageBoard(models.Model):
     title = models.CharField(max_length=150, blank=False)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="board_creator")
-    visablility = models.IntegerField(choices=VISABILITY, default=0)
+    visibility = models.IntegerField(choices=VISIBILITY, default=0)
 
     def is_all_pins(self):
         return self.title == "All Pins"

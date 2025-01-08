@@ -5,6 +5,13 @@
 <div class="board-detail PaLe">
     <div class="board-detail-inner">
         <h1 id="board-title">{{ board.title }}</h1>
+        <p class="board-visibility">
+            {% if board.visibility == 0 %}
+                Public
+            {% else %}
+                Private
+            {% endif %}
+        </p>
         {% if user == board.user %}
         <button id="open-edit-board-modal-btn" class="btn">Edit Board</button>
         {% endif %}
@@ -37,6 +44,13 @@
                 {% csrf_token %}
                 <input type="hidden" name="action" value="update">
                 <label for="edit-board-title">Board Title:</label>
+
+                <label for="visibility">Visibility:</label>
+                <select id="edit-board-visibility" name="visibility">
+                    <option value="0" {% if board.visibility == 0 %}selected{% endif %}>Public</option>
+                    <option value="1" {% if board.visibility == 1 %}selected{% endif %}>Private</option>
+                </select>
+
                 <input type="text" id="edit-board-title" name="title" value="{{ board.title }}" required>
                 <button type="submit" class="btn">Save</button>
                 <button type="button" id="cancel-edit-board-btn" class="btn">Cancel</button>

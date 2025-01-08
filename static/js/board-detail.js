@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editBoardModal = document.getElementById('edit-board-modal');
     const deleteConfirmationModal = document.getElementById('delete-confirmation-modal');
     const editBoardForm = document.getElementById('edit-board-form');
+    const editBoardVisibilitySelect = document.getElementById('edit-board-visibility');
 
     if (openEditBoardModalBtn) {
         openEditBoardModalBtn.addEventListener('click', () => {
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Update Board Title
+    // Update Board Title and Visibility
     if (editBoardForm) {
         editBoardForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -61,11 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: new URLSearchParams({
                     action: 'update',
                     title: formData.get('title'),
+                    visibility: formData.get('visibility'), // Include visibility in the request
                 }),
             })
                 .then((response) => {
                     if (!response.ok) {
-                        throw new Error('Failed to update the board title.');
+                        throw new Error('Failed to update the board.');
                     }
                     return response.json();
                 })
@@ -75,13 +77,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (boardTitleElement) {
                             boardTitleElement.textContent = formData.get('title');
                         }
+
+                        const boardVisibilityElement = document.getElementById('board-visibility');
+                        if (boardVisibilityElement) {
+                            boardVisibilityElement.textContent =
+                                formData.get('visibility') === '0' ? 'Public' : 'Private';
+                        }
+
                         editBoardModal.classList.add('hidden');
                         alert(data.message);
                     } else {
                         alert(data.error || 'An error occurred.');
                     }
                 })
-                .catch((error) => console.error('Error updating board title:', error));
+                .catch((error) => console.error('Error updating board:', error));
         });
     }
 

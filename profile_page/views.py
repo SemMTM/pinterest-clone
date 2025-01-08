@@ -36,6 +36,11 @@ def profile_page(request, username):
                 board_id=all_pins_board
             )
 
+    if request.user == user:
+        boards = ImageBoard.objects.filter(user=user)
+    else:
+        boards = ImageBoard.objects.filter(user=user, visibility=0)
+
     return render(
         request,
         "profile_page/profile_page.html",
@@ -67,10 +72,17 @@ def image_boards(request, username):
 
     sync_all_pins_board(user)
 
-    all_pins_board = ImageBoard.objects.filter(user=user, title="All Pins").first()
-    other_boards = ImageBoard.objects.filter(user=user).exclude(title="All Pins")
+    # Fetch "All Pins" board if it's public or the user owns the profile
+    if request.user == user:
+        all_pins_board = ImageBoard.objects.filter(user=user, title="All Pins").first()
+        other_boards = ImageBoard.objects.filter(user=user).exclude(title="All Pins")
+    else:
+        all_pins_board = ImageBoard.objects.filter(
+            user=user, title="All Pins", visibility=0
+        ).first()
+        other_boards = ImageBoard.objects.filter(user=user, visibility=0).exclude(title="All Pins")
 
-    boards = [all_pins_board] + list(other_boards)
+    boards = [all_pins_board] + list(other_boards) if all_pins_board else list(other_boards)
 
     # Fetch up to 3 images for each board
     boards_with_images = []
@@ -174,11 +186,24 @@ def edit_board(request, board_id):
 
         if action == "update":
             new_title = request.POST.get("title", "").strip()
+            new_visibility = request.POST.get("visibility")
+
             if not new_title:
                 return JsonResponse({"success": False, "error": "Title cannot be empty."})
+
+            if new_visibility not in ["0", "1"]:
+                return JsonResponse({"success": False, "error": "Invalid visibility value."})
+
             board.title = new_title
+            board.visibility = int(new_visibility)
             board.save()
-            return JsonResponse({"success": True, "message": "Board title updated successfully."})
+            
+            return JsonResponse({
+                "success": True,
+                "message": "Board updated successfully.",
+                "title": board.title,
+                "visibility": board.visibility,
+            })
 
         elif action == "delete":
             board.delete()
