@@ -19,6 +19,7 @@ class Post(models.Model):
         User, on_delete=models.CASCADE, related_name="uploader")
     description = models.TextField(blank=True)
     likes = models.IntegerField(default=0)
+    liked_by = models.ManyToManyField(User, related_name="liked_posts", blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
 
 

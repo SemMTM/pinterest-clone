@@ -14,7 +14,11 @@
             <h2>{{ post.title }}</h2>
             <div class="det-container-inner">
                 <div>
-                    <button class="btn">Like</button>
+                    <button 
+                        class="btn {% if user in post.liked_by.all %}active{% endif %}" 
+                        id="like-button"
+                        data-post-id="{{ post.id }}">
+                        {% if user in post.liked_by.all %}Liked{% else %}Like{% endif %}</button>
                 </div>
                 <!-- Comment icon and count outside the modal -->
                 <div>
@@ -35,6 +39,10 @@
                         <button id="delete-post-btn" class="btn delete-post-btn">Delete</button>
                     {% endif %}
                 </div>
+            </div>
+            <div class="det-container-inner">
+                <span>❤️</span>
+                <span id="like-count">{{ post.likes }}</span>
             </div>
             <div class="det-container-inner">
                 <div id="user-icon-container">

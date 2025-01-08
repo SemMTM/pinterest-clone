@@ -177,3 +177,24 @@ def post_delete(request, post_id):
         return redirect('home')  
 
     return redirect('post_detail', id=post_id)
+
+
+@login_required
+def like_post(request, id):
+    if request.method == "POST":
+        post = get_object_or_404(Post, id=id)
+        user = request.user
+
+        if user in post.liked_by.all():
+            post.liked_by.remove(user)  # Unlike the post
+            post.likes -= 1
+            liked = False
+        else:
+            post.liked_by.add(user)  # Like the post
+            post.likes += 1
+            liked = True
+
+        post.save()
+        return JsonResponse({"success": True, "liked": liked, "likes_count": post.likes})
+
+    return JsonResponse({"success": False, "error": "Invalid request method."}, status=405)
