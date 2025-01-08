@@ -5,13 +5,6 @@
 <div class="board-detail PaLe">
     <div class="board-detail-inner">
         <h1 id="board-title">{{ board.title }}</h1>
-        <p class="board-visibility">
-            {% if board.visibility == 0 %}
-                Public
-            {% else %}
-                Private
-            {% endif %}
-        </p>
         {% if user == board.user %}
         <button id="open-edit-board-modal-btn" class="btn">Edit Board</button>
         {% endif %}

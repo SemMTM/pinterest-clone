@@ -148,14 +148,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Open the delete post modal
     if (deletePostBtn) {
         deletePostBtn.addEventListener('click', () => {
-            deletePostModal.classList.add('show');
+            deletePostModal.classList.remove('hidden');
         });
     }
 
     // Close the delete post modal
     if (cancelDeletePostBtn) {
         cancelDeletePostBtn.addEventListener('click', () => {
-            deletePostModal.classList.remove('show');
+            deletePostModal.classList.add('hidden');
         });
     }
 });

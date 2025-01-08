@@ -668,7 +668,7 @@ h4 {
 
 /* Delete Post Modal */
 .modal {
-    display: none; /* Hidden by default */
+    display: flex; 
     position: fixed;
     top: 0;
     left: 0;
