@@ -87,29 +87,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Unpin image functions
     const unpinModal = document.getElementById('unpin-modal');
-        const unpinConfirmBtn = document.getElementById('unpin-confirm-btn');
-        const unpinCancelBtn = document.getElementById('unpin-cancel-btn');
-        let currentImageId = null;
+    const unpinConfirmBtn = document.getElementById('unpin-confirm-btn');
+    const unpinCancelBtn = document.getElementById('unpin-cancel-btn');
+    const csrfToken = getCookie('csrftoken');
+    let currentImageId = null;
+    let currentBoardId = null;
 
-        // Add event listeners to all unpin buttons
-        document.querySelectorAll('.unpin-btn').forEach(button => {
-            button.addEventListener('click', (event) => {
-                currentImageId = event.target.getAttribute('data-image-id');
-                unpinModal.classList.remove('hidden');
+    // Add event listeners to all unpin buttons
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('unpin-btn')) {
+            currentImageId = event.target.getAttribute('data-image-id');
+            currentBoardId = event.target.getAttribute('data-board-id');
+            unpinModal.classList.remove('hidden');
+        }
+    });
+
+    // Close the modal when the cancel button is clicked
+    unpinCancelBtn.addEventListener('click', () => {
+        unpinModal.classList.add('hidden');
+        currentImageId = null; // Clear the current image ID
+        currentBoardId = null; // Clear the current board ID
+    });
+
+    // Handle unpin confirmation
+    unpinConfirmBtn.addEventListener('click', () => {
+        if (!currentImageId || !currentBoardId) {
+            alert("Invalid image or board ID.");
+            return;
+        }
+
+        fetch(`/profile/board/${currentBoardId}/unpin/${currentImageId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to unpin the post.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Remove the unpinned post from the DOM dynamically
+                    const postElement = document.querySelector(`.grid-item[data-post-id="${currentImageId}"]`);
+                    if (postElement) {
+                        postElement.remove(); // Remove the grid item directly from the DOM
+                    }
+    
+                    unpinModal.classList.add('hidden'); // Hide the modal
+                    currentImageId = null; // Clear the current image ID
+                    currentBoardId = null; // Clear the current board ID
+    
+                    // Display a success alert
+                    alert('Post removed successfully!');
+                } else {
+                    alert(data.error || 'An error occurred while unpinning the post.');
+                }
+            })
+            .catch(error => {
+                console.error('Error unpinning the post:', error);
             });
-        });
-
-        // Close the modal when the cancel button is clicked
-        unpinCancelBtn.addEventListener('click', () => {
-            unpinModal.classList.add('hidden');
-            currentImageId = null; // Clear the current image ID
-        });
-
-        // Placeholder for unpin confirmation
-        unpinConfirmBtn.addEventListener('click', () => {
-            alert(`Unpinning image ID: ${currentImageId}`);
-            unpinModal.classList.add('hidden');
-        });
+    });
 });
 
 // Utility function to get CSRF token

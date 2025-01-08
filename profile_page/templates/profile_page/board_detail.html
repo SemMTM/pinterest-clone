@@ -11,9 +11,15 @@
 
         <div class="image-grid">
             {% for image in images %}
-            <div class="grid-item">
+            <div class="grid-item" data-post-id="{{ image.post_id.id }}">
                 <div class="item-content">
-                    <button class="unpin-btn" data-image-id="{{ image.post_id.id }}">x</button>
+                    {% if user == board.user %}
+                        <button 
+                            class="unpin-btn" 
+                            data-image-id="{{ image.post_id.id }}"
+                            data-board-id="{{ board.id }}">&times;
+                        </button>
+                    {% endif %}
                     <a class="div-link" href="{% url 'post_detail' image.post_id.id %}">
                         <img src="{{ image.post_id.image.url }}" alt="{{ image.post_id.title }}">
                     </a>
@@ -22,6 +28,7 @@
             {% endfor %}
         </div>
     </div>
+
     <!-- Edit Board Modal -->
     <div id="edit-board-modal" class="hidden board-modal-overlay">
         <div class="board-modal-content">

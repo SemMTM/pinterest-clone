@@ -185,3 +185,25 @@ def edit_board(request, board_id):
             return redirect('profile_page', username=request.user.username)
 
     return JsonResponse({"success": False, "error": "Invalid request method."}, status=405)
+
+
+@login_required
+def unpin_post(request, board_id, post_id):
+    if request.method == "POST":
+        try:
+            # Ensure the board belongs to the user
+            board = get_object_or_404(ImageBoard, id=board_id, user=request.user)
+
+            # Ensure the post exists in the board
+            relationship = BoardImageRelationship.objects.filter(board_id=board, post_id__id=post_id).first()
+            if not relationship:
+                return JsonResponse({"success": False, "error": "Post not found in this board."}, status=404)
+
+            # Remove the post from the board
+            relationship.delete()
+
+            return JsonResponse({"success": True, "message": "Post successfully unpinned from the board."})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)}, status=500)
+
+    return JsonResponse({"success": False, "error": "Invalid request method."}, status=405)
