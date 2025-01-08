@@ -44,4 +44,37 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteConfirmationModal.classList.add('hidden');
         });
     }
+    
+    const editForm = document.getElementById("edit-board-form");
+    const editModal = document.getElementById("edit-board-modal");
+
+    editForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(editForm);
+        const actionUrl = editForm.action;
+
+        fetch(actionUrl, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRFToken": formData.get("csrfmiddlewaretoken"),
+            },
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to update board.");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.success) {
+                    alert(`Board updated to: ${data.title}`);
+                    editModal.classList.add("hidden");
+                } else {
+                    alert(data.error || "An error occurred.");
+                }
+            })
+            .catch((error) => console.error("Error editing board:", error));
+    });
 });
