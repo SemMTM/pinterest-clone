@@ -165,19 +165,20 @@ def create_board(request):
 def edit_board(request, board_id):
     board = get_object_or_404(ImageBoard, id=board_id, user=request.user)
 
-    if request.method == 'POST':
-        action = request.POST.get('action')
-        
-        if action == 'update':
-            new_title = request.POST.get('title', '').strip()
-            if new_title:
-                board.title = new_title
-                board.save()
-                return JsonResponse({'success': True, 'title': board.title})
-            return JsonResponse({'success': False, 'error': 'Title cannot be empty'}, status=400)
+    if request.method == "POST":
+        action = request.POST.get("action")
 
-        elif action == 'delete':
+        if action == "update":
+            new_title = request.POST.get("title", "").strip()
+            if not new_title:
+                return JsonResponse({"success": False, "error": "Title cannot be empty."})
+            board.title = new_title
+            board.save()
+            return JsonResponse({"success": True, "message": "Board title updated successfully."})
+
+        elif action == "delete":
             board.delete()
             return redirect('profile_page', username=request.user.username)
+        return JsonResponse({"success": False, "error": "Invalid action."})
 
-    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+    return JsonResponse({"success": False, "error": "Invalid request method."}, status=405)

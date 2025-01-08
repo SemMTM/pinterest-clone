@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const openEditBoardModalBtn = document.getElementById('open-edit-board-modal-btn');
     const editBoardModal = document.getElementById('edit-board-modal');
     const deleteConfirmationModal = document.getElementById('delete-confirmation-modal');
+    const editBoardForm = document.getElementById('edit-board-form');
 
     if (openEditBoardModalBtn) {
         openEditBoardModalBtn.addEventListener('click', () => {
@@ -44,37 +45,52 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteConfirmationModal.classList.add('hidden');
         });
     }
-    
-    const editForm = document.getElementById("edit-board-form");
-    const editModal = document.getElementById("edit-board-modal");
 
-    editForm.addEventListener("submit", (event) => {
-        event.preventDefault();
+    // Update Board Title
+    if (editBoardForm) {
+        editBoardForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(editBoardForm);
+            const updateUrl = editBoardForm.getAttribute('action');
 
-        const formData = new FormData(editForm);
-        const actionUrl = editForm.action;
-
-        fetch(actionUrl, {
-            method: "POST",
-            body: formData,
-            headers: {
-                "X-CSRFToken": formData.get("csrfmiddlewaretoken"),
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Failed to update board.");
-                }
-                return response.json();
+            fetch(updateUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: new URLSearchParams({
+                    action: 'update',
+                    title: formData.get('title'),
+                }),
             })
-            .then((data) => {
-                if (data.success) {
-                    alert(`Board updated to: ${data.title}`);
-                    editModal.classList.add("hidden");
-                } else {
-                    alert(data.error || "An error occurred.");
-                }
-            })
-            .catch((error) => console.error("Error editing board:", error));
-    });
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Failed to update the board title.');
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.success) {
+                        const boardTitleElement = document.getElementById('board-title');
+                        if (boardTitleElement) {
+                            boardTitleElement.textContent = formData.get('title');
+                        }
+                        editBoardModal.classList.add('hidden');
+                        alert(data.message);
+                    } else {
+                        alert(data.error || 'An error occurred.');
+                    }
+                })
+                .catch((error) => console.error('Error updating board title:', error));
+        });
+    }
 });
+
+// Utility function to get CSRF token
+function getCookie(name) {
+    const cookieValue = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith(name + '='))
+        ?.split('=')[1];
+    return cookieValue || '';
+}
