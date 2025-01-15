@@ -9,7 +9,7 @@ body {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 /* Button Styles */
@@ -184,13 +184,13 @@ body {
 
 
 @media screen and (min-width: 426px) {
-    .page-container {
+    .PaLe {
         padding-left: 55px;
     }
 }
 
 
-/* image grid styles */
+/* image grid styles - Masonry layout */
 .image-grid {
     display: grid;
     grid-gap: 10px;
@@ -286,7 +286,6 @@ body {
     width: 100%;
     display: flex;
     padding-top: 15px;
-    justify-content: space-between;
 }
 
 @media screen and (min-width: 426px) {
@@ -347,6 +346,78 @@ body {
     width: 20px;
 }
 
+#comment-modal.modal-show {
+    display: flex;
+    opacity: 1; /* Make visible */
+    pointer-events: auto; /* Enable interaction */
+}
+
+#comment-modal {
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5); /* Dim background */
+    justify-content: center;
+    align-items: flex-end;
+    opacity: 0;
+    pointer-events: none; /* Prevent interaction when hidden */
+    transition: opacity 0.4s ease; /* Smooth fade-in */
+}
+
+#comment-modal .modal-content {
+    background: #fff;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px 10px 0 0;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(100%); /* Start off-screen */
+    transition: transform 0.4s ease; /* Smooth slide effect */
+}
+
+#comment-modal.modal-show .modal-content {
+    transform: translateY(0); /* Slide into view */
+}
+
+.close-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+#comments-container {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.comment {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment-btns-container {
+    display: flex;
+    align-items: center;
+}
+
+.comment-btns-container span {
+    margin-right: 7px;
+}
+
+.comment-close-btn {
+    right: 20px;
+    cursor: pointer;
+}
+
 /* USER PROFILE PAGE STYLES */
 .user-icon {
     background: black;
@@ -382,26 +453,312 @@ body {
     margin-top: 15px;
 }
 
+#boards-container {
+    padding: 15px;
+}
+
+/* Edit profile modal styles */
+#edit-profile-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+    display: block;
+}
+
+#edit-profile-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+
 /* Post Create Page Styles */
-.pc-main-con {
+.pc-main-con-inner {
+    padding: 15px;
+}
+
+/* Styling for autocomplete dropdown */
+#tag-autocomplete-container {
+    position: relative;
+    width: 300px;
+}
+
+#tag-suggestions {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+    display: none;
+    z-index: 999;
+}
+
+#tag-suggestions div {
+    padding: 5px;
+    cursor: pointer;
+}
+
+#tag-suggestions div:hover {
+    background: #eee;
+}
+
+#selected-tags {
+    margin: 10px 0;
+}
+
+#selected-tags .tag {
+    display: inline-block;
+    background: #ddd;
+    margin: 2px;
+    padding: 2px 8px;
+    border-radius: 5px;
+}
+
+#selected-tags .tag .remove-tag {
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+.boards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Image boards styles */
+.board-tile {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #f9f9f9;
+}
+
+.tile-images {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tile-image.large {
+    flex: 2 1 100%;
+}
+
+.tile-image.small {
+    flex: 1 1 50%;
+}
+
+.tile-image img {
+    width: 100%;
+    height: auto;
+}
+
+h4 {
+    margin: 10px;
+    text-align: center;
+}
+
+/* Save modal styles */
+/* Hidden state for the modal */
+.save-modal-hidden {
+    display: none !important;
+}
+
+/* Modal overlay */
+#save-to-board-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dimmed background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal box */
+.save-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.save-modal-board-btn {
+    width: 100%;
     padding: 10px;
+    margin: 5px 0;
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.save-modal-board-btn:hover {
+    background: #ddd;
+}
+
+.save-modal-no-boards {
+    color: #666;
+    font-size: 14px;
+}
+
+.save-modal-close-btn {
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.save-modal-close-btn:hover {
+    background: #d32f2f;
+}
+
+
+/* Create Board Modal Styling */
+.create-modal-hidden {
+    display: none !important;
+}
+
+#create-board-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.create-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.create-modal-body {
+    margin-bottom: 20px;
+}
+
+.image-preview img {
+    width: 100%;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.create-modal-actions button {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.create-modal-cancel-btn {
+    background: #f44336;
+    color: white;
+}
+
+.create-modal-create-btn {
+    background: #4CAF50;
+    color: white;
+}
+
+
+/* Board detail page styles */
+.board-detail-inner {
+    padding: 15px;
+}
+
+
+/* Delete Post Modal */
+.modal {
+    display: flex; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.show {
+    display: flex; /* Show the modal */
+}
+
+.delete-post-modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
+ 
+.delete-post-modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.delete-post-confirm-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-post-cancel-btn {
+    background-color: gray;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-post-confirm-btn:hover {
+    background-color: darkred;
+}
+
+.delete-post-cancel-btn:hover {
+    background-color: darkgray;
 }
 
 /* Board Detail Page Styles */
-#edit-board-modal {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    background: rgba(0, 0, 0, 0.5) !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    z-index: 10 !important;
+.board-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
 }
 
-div.board-modal-content {
+.board-modal-content {
     background: white;
     padding: 20px;
     border-radius: 5px;
@@ -415,10 +772,39 @@ div.board-modal-content {
     color: white;
 }
 
-#delete-confirmation-modal {
-    background-color: pink;
+/* Unpin modal styles */
+#unpin-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    display: block;
 }
 
-.test {
-    color: pink
+#unpin-modal .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.unpin-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    color: red;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.unpin-btn:hover {
+    color: darkred;
 }

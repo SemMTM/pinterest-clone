@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const getElement = (id) => document.getElementById(id);
     const addEvent = (element, event, handler) => element?.addEventListener(event, handler);
     const toggleClass = (element, className, action) => element?.classList[action](className);
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
     const resetCommentForm = (commentInput, commentIdInput) => {
         if (commentInput) commentInput.value = '';
@@ -73,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Comment Form Submission
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
     addEvent(commentForm, 'submit', async (e) => {
         e.preventDefault();
 
@@ -116,4 +116,41 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Failed to submit comment.');
         }
     });
+
+    const likeButton = document.getElementById('like-button');
+    const likeCount = document.getElementById('like-count');
+
+    if (likeButton) {
+        likeButton.addEventListener('click', () => {
+            if (!document.body.dataset.isAuthenticated) {
+                alert('You need to log in to like a post.');
+                return;
+            }
+            
+            const postId = likeButton.getAttribute('data-post-id');
+            fetch(`/post/${postId}/like/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to like the post.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        likeCount.textContent = data.likes_count; // Update like count
+                        likeButton.textContent = data.liked ? 'Liked' : 'Like'; // Update button text
+                        likeButton.classList.toggle('active', data.liked); // Toggle active class
+                    } else {
+                        alert('An error occurred while liking the post.');
+                    }
+                })
+                .catch(error => console.error('Error liking the post:', error));
+        });
+    }
 });
