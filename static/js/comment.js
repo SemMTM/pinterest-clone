@@ -117,17 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Like button functions
     const likeButton = document.getElementById('like-button');
     const likeCount = document.getElementById('like-count');
 
     if (likeButton) {
         likeButton.addEventListener('click', () => {
-            if (!document.body.dataset.isAuthenticated) {
-                alert('You need to log in to like a post.');
-                return;
-            }
-            
             const postId = likeButton.getAttribute('data-post-id');
+
             fetch(`/post/${postId}/like/`, {
                 method: 'POST',
                 headers: {
@@ -136,6 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
             })
                 .then(response => {
+                    if (response.status === 401) {
+                        alert('You need to log in to like a post.');
+                        return;
+                    }
                     if (!response.ok) {
                         throw new Error('Failed to like the post.');
                     }
@@ -147,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         likeButton.textContent = data.liked ? 'Liked' : 'Like'; // Update button text
                         likeButton.classList.toggle('active', data.liked); // Toggle active class
                     } else {
-                        alert('An error occurred while liking the post.');
+                        alert(data.error || 'An error occurred while liking the post.');
                     }
                 })
                 .catch(error => console.error('Error liking the post:', error));

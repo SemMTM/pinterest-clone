@@ -167,6 +167,7 @@
     <!-- Save to Board Modal -->
     <div id="save-to-board-modal" class="save-modal-hidden">
         <div class="save-modal-content">
+            {% if user.is_authenticated %}
             <h3>Save Post to a Board</h3>
             <ul id="save-modal-board-list">
                 {% for board in user_boards %}
@@ -181,8 +182,15 @@
                 <li class="save-modal-no-boards">No boards available.</li>
                 {% endfor %}
             </ul>
+            {% else %}
+            <div>
+                <a href="{% url 'account_login' %}"><p>Log in to save a post</p>
+            </div>
+            {% endif %}
             <button id="close-save-modal" class="save-modal-close-btn">Cancel</button>
+            {% if user.is_authenticated %}
             <button id="open-create-board-modal" class="save-modal-create-board-btn">Create Board</button>
+            {% endif %}
         </div>
     </div>
 

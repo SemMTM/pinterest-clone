@@ -3,6 +3,7 @@ from django.views import generic
 from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import AnonymousUser
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
 from profile_page.models import ImageBoard, BoardImageRelationship
@@ -179,10 +180,13 @@ def post_delete(request, post_id):
     return redirect('post_detail', id=post_id)
 
 
-@login_required
 def like_post(request, id):
     if request.method == "POST":
         post = get_object_or_404(Post, id=id)
+
+        if isinstance(request.user, AnonymousUser):
+            return JsonResponse({"success": False, "error": "You need to log in to like this post."}, status=401)
+
         user = request.user
 
         if user in post.liked_by.all():
@@ -195,6 +199,7 @@ def like_post(request, id):
             liked = True
 
         post.save()
+
         return JsonResponse({"success": True, "liked": liked, "likes_count": post.likes})
 
     return JsonResponse({"success": False, "error": "Invalid request method."}, status=405)
