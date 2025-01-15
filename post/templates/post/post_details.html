@@ -13,35 +13,37 @@
         <div class="details-container">
             <h2>{{ post.title }}</h2>
             <div class="det-container-inner">
-                <div>
-                    <button 
-                        class="btn {% if user in post.liked_by.all %}active{% endif %}" 
-                        id="like-button"
-                        data-post-id="{{ post.id }}">
-                        {% if user in post.liked_by.all %}Liked{% else %}Like{% endif %}</button>
+                <div id="social-btns">
+                    <div>
+                        <button 
+                            class="btn {% if user in post.liked_by.all %}active{% endif %}" 
+                            id="like-button"
+                            data-post-id="{{ post.id }}">
+                            {% if user in post.liked_by.all %}Liked{% else %}Like{% endif %}</button>
+                    </div>
+                    <!-- Comment icon and count outside the modal -->
+                    <div>
+                        <span id="comment-icon" style="cursor:pointer;">
+                            <button class="btn">Comment</button>
+                        </span>
+                    </div>
+                    <div>
+                        <button 
+                            class="save-btn btn" 
+                            id="save-btn" 
+                            data-post-id="{{ post.id }}"
+                            data-authenticated="{{ user.is_authenticated }}"
+                            >Save</button>
+                    </div>
                 </div>
-                <!-- Comment icon and count outside the modal -->
-                <div>
-                    <span id="comment-icon" style="cursor:pointer;">
-                        <button class="btn">Comment</button>
-                    </span>
-                </div>
-                <div>
-                    <button 
-                        class="save-btn btn" 
-                        id="save-btn" 
-                        data-post-id="{{ post.id }}"
-                        data-authenticated="{{ user.is_authenticated }}"
-                        >Save</button>
-                </div>
-                <div>
+                <div id="delete-btn-container">
                     {% if user.is_authenticated and post.user == user %}
                         <button id="delete-post-btn" class="btn delete-post-btn">Delete</button>
                     {% endif %}
                 </div>
             </div>
             <div class="det-container-inner">
-                <span>❤️</span>
+                <img id="like-icon" src="/static/icons/heart.svg">
                 <span id="like-count">{{ post.likes }}</span>
             </div>
             <div class="det-container-inner">
@@ -61,9 +63,11 @@
                 <!-- Comment icon and count outside the modal -->
                 <div>
                     {% if comment_count == 0 %}
-                    <h3>No comments yet</h3>
+                    <h3 id="comment-title">No comments yet</h3>
+                    {% elif comment_count == 1 %}
+                    <h3 id="comment-title">1 Comment:</h3>
                     {% else %}
-                    <h3>{{ comment_count }} Comments:</h3>
+                    <h3 id="comment-title">{{ comment_count }} Comments:</h3>
                     {% endif %}
                 </div>
 
@@ -71,14 +75,14 @@
                 <div>
                     {% if comments|length > 0 %}
                     <div class="latest-comment-container">
-                        <p><strong>{{ comments.0.author }}</strong> {{ comments.0.created_on|time_ago }}</p>
-                        <span>{{ comments.0.body }}</span>
+                        <p><strong>{{ comments.0.author }}</strong> {{ comments.0.body }}</p>
                         <div>
-                            <span id="view-all"><strong>View all
+                            <span id="view-all">
+                                View all
                                 {% if comment_count > 0 %}
                                 {{ comment_count }} comments
                                 {% endif %}
-                            </strong></span>
+                            </span>
                         </div>
                     </div>
                     {% endif %}

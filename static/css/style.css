@@ -4,8 +4,20 @@
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: 'microsoft_sans_serifregular';
+    src: url('/static/fonts/micross-webfont.woff2') format('woff2'),
+         url('/static/fonts/micross-webfont.woff') format('woff');
+}
+
 body {
     background-color: #bfbfbf;
+    font-family: 'microsoft_sans_serifregular', Arial, sans-serif;
+    font-size: 15px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'microsoft_sans_serifregular', Arial, sans-serif;
 }
 
 .hidden {
@@ -13,14 +25,16 @@ body {
 }
 
 /* Button Styles */
-
 .btn {
     background-color: #bfbfbf;
     box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
                 inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
     cursor: pointer;
-    padding: 4px 7px;
+    padding: 6px 9px;
     border: 0;
+    font-family: 'microsoft_sans_serifregular', Arial, sans-serif;
+    font-weight: 550;
+    font-size: 13px;
 }
 
 .btn:hover {
@@ -278,14 +292,42 @@ body {
     padding: 10px;
 }
 
+.image-container {
+    display: flex;
+    justify-content: center;
+}
+
 .image-container img {
+    object-fit: contain;
     width: 100%;
+    max-height: 600px;
+}
+
+.details-container {
+    margin-top: 10px;
+    padding: 10px;
 }
 
 .det-container-inner {
     width: 100%;
     display: flex;
     padding-top: 15px;
+}
+
+#like-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 7px;
+    align-self: center;
+}
+
+#social-btns {
+    display: flex;
+}
+
+#delete-btn-container {
+    right: 10px;
+    position: absolute;
 }
 
 @media screen and (min-width: 426px) {
@@ -415,6 +457,16 @@ body {
 
 .comment-close-btn {
     right: 20px;
+    cursor: pointer;
+}
+
+#comment-title {
+    font-size: 15px;
+    margin-bottom: 7px;
+}
+
+#view-all {
+    color: #3b3b3b;
     cursor: pointer;
 }
 
