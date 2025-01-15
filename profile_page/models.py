@@ -15,7 +15,10 @@ class Profile(models.Model):
     about = models.TextField(blank=True)
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
-    profile_image = CloudinaryField('image', default='placeholder', blank=False)
+    profile_image = CloudinaryField(
+        'image', 
+        default='https://res.cloudinary.com/dygztovba/image/upload/v1736352521/wmj7j0gxfg9rch8chlfl.jpg', 
+        blank=False)
     
     def __str__(self):
         return f"Profile for user: {self.user}"
