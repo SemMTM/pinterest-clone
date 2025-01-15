@@ -101,22 +101,26 @@
                             {% endif %}
                         </div>
 
-                        <!-- Only comments are displayed here -->
+                        <!-- Comments are displayed here -->
                         <div id="comments-container" data-post-id="{{ post.id }}">
                             {% for comment in comments %}
                             <div class="comment" data-comment-id="{{ comment.id }}">
                                 <div>
-                                    <p><strong>{{ comment.author }}</strong> {{ comment.created_on|time_ago }}</p>
-                                    <span class="comment-body">{{ comment.body }}</span>
+                                    <p class="comment-username"><strong>{{ comment.author }}</strong> {{ comment.created_on|time_ago }}</p>
+                                    <div>
+                                        <p class="comment-body">{{ comment.body }}</p>
+                                    </div>
                                 </div>
                                 {% if user.is_authenticated and comment.author == user %}
                                 <div class="comment-btns-container">
-                                    <span><button 
-                                        class="edit-comment-btn" 
-                                        data-comment-body="{{ comment.body|escape }}" 
-                                        data-comment-id="{{ comment.id }}">
-                                        Edit
-                                    </button></span>
+                                    <span>
+                                        <button 
+                                            class="edit-comment-btn" 
+                                            data-comment-body="{{ comment.body|escape }}" 
+                                            data-comment-id="{{ comment.id }}">
+                                            Edit
+                                        </button>
+                                    </span>
                                     <span class="comment-close-btn" comment_id="{{ comment.id }}" post_id="{{ post.id }}">&times;</span>
                                 </div>
                                 {% elif user.is_authenticated and post.user == user %}
