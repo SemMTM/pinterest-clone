@@ -377,11 +377,6 @@ h1, h2, h3, h4, h5, h6 {
 
 #commentForm {
     display: flex;
-    justify-content: center;
-}
-
-#commentForm div {
-    display: inline;
 }
 
 #commentForm label {
@@ -390,12 +385,23 @@ h1, h2, h3, h4, h5, h6 {
 
 #commentForm textarea {
     width: 100%;
-    height: 100%;
+    background-color: #c0c0c0;
+    border: 1px solid #858585;
+    resize: vertical;
+    font-size: 16px;
 }
 
 #submitButton {
+    display: flex;
     height: 100%;
-    width: 20px;
+}
+
+#submitButton img {
+    display: flex;
+    width: 15px;
+    height: 15px;
+    align-self: center;
+    margin: 0 5px 0 5px;
 }
 
 #comment-modal.modal-show {
@@ -440,7 +446,6 @@ h1, h2, h3, h4, h5, h6 {
 .close-btn {
     position: absolute;
     right: 20px;
-    top: 20px;
     font-size: 24px;
     cursor: pointer;
 }
@@ -452,17 +457,22 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .comment-username {
-    font-size: 13px;
+    font-size: 15px;
 }
 
 .comment-body {
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .comment {
     padding: 5px 0;
     display: flex;
     justify-content: space-between;
+}
+
+#comment-upload-icon {
+    width: 20px;
+    height: 20px;
 }
 
 .comment-btns-container {
@@ -479,7 +489,7 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
 }
 
-#comment-title {
+.comment-title {
     font-size: 15px;
     margin-bottom: 7px;
 }
@@ -487,6 +497,24 @@ h1, h2, h3, h4, h5, h6 {
 #view-all {
     color: #3b3b3b;
     cursor: pointer;
+}
+
+.commenter-profile-img {
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    margin-right: 7px;
+}
+
+.commenter-profile-img img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-user-container {
+    display: flex;
 }
 
 /* USER PROFILE PAGE STYLES */

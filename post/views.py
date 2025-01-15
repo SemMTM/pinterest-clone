@@ -10,6 +10,7 @@ from profile_page.models import ImageBoard, BoardImageRelationship
 from .models import Post, Comment, ImageTagRelationships, ImageTags
 from .forms import CommentForm, PostForm
 import json
+from profile_page.models import Profile
 
 # Create your views here.
 class PostList(generic.ListView):
@@ -28,7 +29,7 @@ class PostList(generic.ListView):
 def post_detail(request, id):
     queryset = Post.objects.all()
     post = get_object_or_404(queryset, id=id)
-    comments = post.comments.all().order_by("-created_on")
+    comments = post.comments.select_related('author__profile').order_by("-created_on")
     comment_count = post.comments.count()
     user_boards = ImageBoard.objects.filter(user=request.user) if request.user.is_authenticated else []
     comment_form = CommentForm()

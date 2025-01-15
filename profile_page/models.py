@@ -11,7 +11,7 @@ class Profile(models.Model):
     Stores details about a user for their public profile, related to: model:`auth.User`.
     """
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="user")
+        User, on_delete=models.CASCADE, related_name="profile")
     about = models.TextField(blank=True)
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)

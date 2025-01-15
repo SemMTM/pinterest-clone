@@ -63,11 +63,11 @@
                 <!-- Comment icon and count outside the modal -->
                 <div>
                     {% if comment_count == 0 %}
-                    <h3 id="comment-title">No comments yet</h3>
+                    <h3 class="comment-title">No comments yet</h3>
                     {% elif comment_count == 1 %}
-                    <h3 id="comment-title">1 Comment:</h3>
+                    <h3 class="comment-title">1 Comment:</h3>
                     {% else %}
-                    <h3 id="comment-title">{{ comment_count }} Comments:</h3>
+                    <h3 class="comment-title">{{ comment_count }} Comments:</h3>
                     {% endif %}
                 </div>
 
@@ -95,9 +95,9 @@
 
                         <div>
                             {% if comment_count == 0 %}
-                            <h3>No comments yet</h3>
+                            <h3 class="comment-title">No comments yet</h3>
                             {% else %}
-                            <h3>{{ comment_count }} Comments:</h3>
+                            <h3 class="comment-title">{{ comment_count }} Comments:</h3>
                             {% endif %}
                         </div>
 
@@ -105,10 +105,17 @@
                         <div id="comments-container" data-post-id="{{ post.id }}">
                             {% for comment in comments %}
                             <div class="comment" data-comment-id="{{ comment.id }}">
-                                <div>
-                                    <p class="comment-username"><strong>{{ comment.author }}</strong> {{ comment.created_on|time_ago }}</p>
+                                <div class="comment-user-container">
+                                    <div class="commenter-profile-img"
+                                        style="background-image: url('{{ comment.author.profile.profile_image.url }}');
+                                                background-size: cover;
+                                                background-position: center;">
+                                    </div>
                                     <div>
-                                        <p class="comment-body">{{ comment.body }}</p>
+                                        <p class="comment-username"><strong>{{ comment.author }}</strong> {{ comment.created_on|time_ago }}</p>
+                                        <div>
+                                            <p class="comment-body">{{ comment.body }}</p>
+                                        </div>
                                     </div>
                                 </div>
                                 {% if user.is_authenticated and comment.author == user %}
@@ -137,10 +144,12 @@
                             {% if user.is_authenticated %}
                             <form id="commentForm" method="POST">
                                 {% csrf_token %}
-                                {{ comment_form }}
+                                {{ comment_form.body }}
                                 <input type="hidden" id="edit-comment-id" name="comment_id" value="">
                                 <div>
-                                    <button id="submitButton" class="btn" type="submit">></button>
+                                    <button id="submitButton" class="btn" type="submit">
+                                        <img src="/static/icons/up-arrow.svg">
+                                    </button>
                                 </div>
                             </form>
                             {% else %}
