@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage
 from django.dispatch import receiver
+from django.db.models import Count
 from django.db.models.signals import post_save, post_delete
 from django.http import Http404, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -75,13 +76,13 @@ def image_boards(request, username):
 
     # Fetch "All Pins" board if it's public or the user owns the profile
     if request.user == user:
-        all_pins_board = ImageBoard.objects.filter(user=user, title="All Pins").first()
-        other_boards = ImageBoard.objects.filter(user=user).exclude(title="All Pins")
+        all_pins_board = ImageBoard.objects.filter(user=user, title="All Pins").annotate(image_count=Count('image_board_id')).first()
+        other_boards = ImageBoard.objects.filter(user=user).annotate(image_count=Count('image_board_id')).exclude(title="All Pins")
     else:
         all_pins_board = ImageBoard.objects.filter(
             user=user, title="All Pins", visibility=0
-        ).first()
-        other_boards = ImageBoard.objects.filter(user=user, visibility=0).exclude(title="All Pins")
+        ).annotate(image_count=Count('image_board_id')).first()
+        other_boards = ImageBoard.objects.filter(user=user, visibility=0).annotate(image_count=Count('image_board_id')).exclude(title="All Pins")
 
     boards = [all_pins_board] + list(other_boards) if all_pins_board else list(other_boards)
 
@@ -92,6 +93,7 @@ def image_boards(request, username):
         boards_with_images.append({
             'board': board,
             'images': images,
+            'image_count': board.image_count,
         })
 
     return render(request, 'profile_page/image_boards.html', {'boards_with_images': boards_with_images})
