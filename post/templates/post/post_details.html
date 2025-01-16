@@ -17,7 +17,8 @@
                 <p class="post-description text-wrap">{{ post.description }}</p>
             </div>
 
-            <div class="det-container-inner">
+            <div class="det-container-inner"
+                style="justify-content: space-between;">
                 <div id="social-btns">
                     <div>
                         <button 
@@ -53,7 +54,8 @@
                 <span id="like-count">{{ post.likes }}</span>
             </div>
 
-            <div class="det-container-inner">
+            <div class="det-container-inner"
+                style="justify-content: space-between;">
                 <div id="user-icon-container">
                     <a href="{% url 'profile_page' post.user.username  %}">
                         <div class="user-icon"
@@ -65,6 +67,11 @@
                     <div>
                         <a href="{% url 'profile_page' post.user.username %}">{{ post.user }}</a>
                     </div>
+                </div>
+                <div id="image-tags-container">
+                    {% for tag in tags %}
+                    <span class="image-tag">{{ tag.tag_name }}</span>
+                    {% endfor %}
                 </div>
             </div>
 

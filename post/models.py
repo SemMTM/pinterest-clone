@@ -14,7 +14,7 @@ class Post(models.Model):
     image = CloudinaryField('image', blank=False,
             validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp'])]
             )
-    title = models.CharField(max_length=100, blank=True, null=True)
+    title = models.CharField(max_length=100, blank=False, null=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="uploader")
     description = models.TextField(max_length=300, blank=True)

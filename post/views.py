@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
+from django.db.models import Prefetch
 from profile_page.models import ImageBoard, BoardImageRelationship
 from .models import Post, Comment, ImageTagRelationships, ImageTags
 from .forms import CommentForm, PostForm
@@ -33,6 +34,7 @@ def post_detail(request, id):
     comment_count = post.comments.count()
     user_boards = ImageBoard.objects.filter(user=request.user) if request.user.is_authenticated else []
     comment_form = CommentForm()
+    tags = ImageTags.objects.filter(image_tag__post_id=post)
 
     return render(
         request,
@@ -43,6 +45,7 @@ def post_detail(request, id):
             "comment_count": comment_count,
             "comment_form": comment_form,
             "user_boards": user_boards,
+            "tags": tags,
         },
     )
 

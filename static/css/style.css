@@ -359,13 +359,18 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
 }
 
-#delete-btn-container {
-    right: 18px;
-    position: absolute;
-}
-
 .post-description {
     font-size: 15px;
+}
+
+.image-tag {
+    display: inline-block;
+    background-color: #ddd;
+    border-radius: 5px;
+    padding: 2px 8px;
+    margin: 2px;
+    font-size: 14px;
+    color: #333;
 }
 
 @media screen and (min-width: 426px) {
