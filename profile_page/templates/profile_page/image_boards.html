@@ -5,11 +5,32 @@
     <div class="board-tile">
         <a href="{% url 'board_detail' item.board.id %}">
             <div class="tile-images">
-                {% for image in item.images %}
-                <div class="tile-image {% if forloop.first %}large{% else %}small{% endif %}">
-                    <img src="{{ image.post_id.image.url }}" alt="{{ image.post_id.title }}">
+                <!-- Large tile for the first image -->
+                {% if item.images|length > 0 %}
+                <div class="tile-image large">
+                    <img src="{{ item.images.0.post_id.image.url }}" alt="{{ item.images.0.post_id.title }}">
                 </div>
-                {% endfor %}
+                {% else %}
+                <div class="tile-image large"></div>
+                {% endif %}
+
+                <!-- Small tile for the second image -->
+                {% if item.images|length > 1 %}
+                <div class="tile-image small">
+                    <img src="{{ item.images.1.post_id.image.url }}" alt="{{ item.images.1.post_id.title }}">
+                </div>
+                {% else %}
+                <div class="tile-image small"></div>
+                {% endif %}
+
+                <!-- Small tile for the third image -->
+                {% if item.images|length > 2 %}
+                <div class="tile-image small">
+                    <img src="{{ item.images.2.post_id.image.url }}" alt="{{ item.images.2.post_id.title }}">
+                </div>
+                {% else %}
+                <div class="tile-image small"></div>
+                {% endif %}
             </div>
             <h4>{{ item.board.title }}</h4>
             <span class="number-of-pins">{{ item.image_count }} Pins</span>
