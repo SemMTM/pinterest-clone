@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <div class="p-con">
+        <div class="p-con user-profile-info">
             <div>
                 <h3 id="pp-username">{{ profile.user }}</h3>
             </div>
@@ -66,9 +66,12 @@
             </div>
         </div>
 
+        <!-- Created Posts Section -->
         <div class="p-con" id="boards-container">
             <div class="hidden" id='created-container' data-username="{{ profile.user.username }}">
             </div>
+
+            <!-- Saved Posts section -->
             <div class="" id='saved-container'
                 hx-get="{% url 'image_boards' profile.user.username %}"
                 hx-trigger="load"

@@ -563,6 +563,11 @@ h1, h2, h3, h4, h5, h6 {
     padding: 15px;
 }
 
+.user-profile-info {
+    flex-direction: column;
+    align-items: center;
+}
+
 /* Edit profile modal styles */
 #edit-profile-modal {
     position: fixed;
@@ -640,10 +645,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Image boards styles */
 .board-tile {
     position: relative;
-    border: 1px solid #ddd;
-    border-radius: 10px;
     overflow: hidden;
-    background: #f9f9f9;
 }
 
 .tile-images {
@@ -664,7 +666,7 @@ h1, h2, h3, h4, h5, h6 {
     height: auto;
 }
 
-h4 {
+#pp-username {
     margin: 10px;
     text-align: center;
 }
