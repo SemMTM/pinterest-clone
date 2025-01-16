@@ -4,21 +4,25 @@
 {% block content %}
 <div class="board-detail PaLe">
     <div class="board-detail-inner">
-        <h1 id="board-title">{{ board.title }}</h1>
-        {% if user == board.user %}
-        <button id="open-edit-board-modal-btn" class="btn">Edit Board</button>
-        {% endif %}
+        <div id="title-container">
+            <h1 id="board-title">{{ board.title }}</h1>
+            {% if user == board.user %}
+            <button id="open-edit-board-modal-btn" class="btn">Edit Board</button>
+            {% endif %}
+        </div>
 
         <div class="image-grid">
             {% for image in images %}
             <div class="grid-item" data-post-id="{{ image.post_id.id }}">
                 <div class="item-content">
                     {% if user == board.user %}
+                    <div id="unpin-btn-container">
                         <button 
                             class="unpin-btn" 
                             data-image-id="{{ image.post_id.id }}"
                             data-board-id="{{ board.id }}">&times;
                         </button>
+                    </div>
                     {% endif %}
                     <a class="div-link" href="{% url 'post_detail' image.post_id.id %}">
                         <img src="{{ image.post_id.image.url }}" alt="{{ image.post_id.title }}">
