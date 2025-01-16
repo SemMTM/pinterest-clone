@@ -237,7 +237,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-/* image grid styles - Masonry layout */
+/* IMAGE GRID STYLES */
 .image-grid {
     display: grid;
     grid-gap: 10px;
@@ -320,6 +320,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
+/* IMAGE DETAIL PAGE STYLES */
 /* IMAGE DETAIL PAGE STYLES */
 #image-detail-container {
     padding: 10px;
@@ -586,7 +587,115 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
 }
 
+/* Save modal styles */
+/* Hidden state for the modal */
+.save-modal-hidden {
+    display: none !important;
+}
 
+/* Modal overlay */
+#save-to-board-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dimmed background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal box */
+.save-modal-content {
+    background: #d7d7d7;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
+                inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
+}
+
+.save-modal-content h3 {
+    margin-bottom: 10px;
+}
+
+.save-modal-board-btn {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.save-modal-board-btn:hover {
+    background: #ddd;
+}
+
+.save-modal-no-boards {
+    color: #666;
+    font-size: 14px;
+}
+
+#save-modal-board-list {
+    list-style-type: none;
+}
+
+#board-modal-buttons {
+    margin-top: 10px;
+}
+
+/* Create Board Modal Styling */
+.create-modal-hidden {
+    display: none !important;
+}
+
+#create-board-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.create-modal-content {
+    background: #d7d7d7;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
+                inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
+}
+
+.create-modal-content h3 {
+    margin-bottom: 10px;
+}
+
+.create-modal-body {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.create-modal-body label {
+    align-self: flex-start;    
+}
+
+.image-preview img {
+    width: 100%;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+
+/* USER PROFILE PAGE STYLES */
 /* USER PROFILE PAGE STYLES */
 .user-icon {
     border-radius: 50%;
@@ -782,128 +891,10 @@ h1, h2, h3, h4, h5, h6 {
     gap: 20px;
 }
 
-/* Save modal styles */
-/* Hidden state for the modal */
-.save-modal-hidden {
-    display: none !important;
-}
-
-/* Modal overlay */
-#save-to-board-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Dimmed background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-/* Modal box */
-.save-modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.save-modal-board-btn {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    background: #f4f4f4;
-    border: 1px solid #ddd;
-    cursor: pointer;
-}
-
-.save-modal-board-btn:hover {
-    background: #ddd;
-}
-
-.save-modal-no-boards {
-    color: #666;
-    font-size: 14px;
-}
-
-.save-modal-close-btn {
-    background: #f44336;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.save-modal-close-btn:hover {
-    background: #d32f2f;
-}
-
-
-/* Create Board Modal Styling */
-.create-modal-hidden {
-    display: none !important;
-}
-
-#create-board-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.create-modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.create-modal-body {
-    margin-bottom: 20px;
-}
-
-.image-preview img {
-    width: 100%;
-    border-radius: 5px;
-    margin-top: 10px;
-}
-
-.create-modal-actions button {
-    margin: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.create-modal-cancel-btn {
-    background: #f44336;
-    color: white;
-}
-
-.create-modal-create-btn {
-    background: #4CAF50;
-    color: white;
-}
-
-
 /* Board detail page styles */
 .board-detail-inner {
     padding: 15px;
 }
-
 
 /* Board Detail Page Styles */
 .board-modal-overlay {

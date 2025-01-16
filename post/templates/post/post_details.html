@@ -213,10 +213,12 @@
                 <a href="{% url 'account_login' %}"><p>Log in to save a post</p>
             </div>
             {% endif %}
-            <button id="close-save-modal" class="save-modal-close-btn">Cancel</button>
-            {% if user.is_authenticated %}
-            <button id="open-create-board-modal" class="save-modal-create-board-btn">Create Board</button>
-            {% endif %}
+            <div id="board-modal-buttons">
+                <button id="close-save-modal" class="save-modal-close-btn btn">Cancel</button>
+                {% if user.is_authenticated %}
+                <button id="open-create-board-modal" class="btn save-modal-create-board-btn">Create Board</button>
+                {% endif %}
+            </div>
         </div>
     </div>
 
@@ -232,8 +234,8 @@
                 </div>
             </div>
             <div class="create-modal-actions">
-                <button id="cancel-create-board" class="create-modal-cancel-btn">Cancel</button>
-                <button id="submit-create-board" class="create-modal-create-btn">Create</button>
+                <button id="cancel-create-board" class="create-modal-cancel-btn btn">Cancel</button>
+                <button id="submit-create-board" class="create-modal-create-btn btn">Create</button>
             </div>
             <div id="board-error-message" class="error-message" style="color: red; display: none;"></div>
         </div>

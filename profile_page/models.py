@@ -25,7 +25,7 @@ class Profile(models.Model):
 
 
 class ImageBoard(models.Model):
-    title = models.CharField(max_length=150, blank=False)
+    title = models.CharField(max_length=90, blank=False)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="board_creator")
     visibility = models.IntegerField(choices=VISIBILITY, default=0)
