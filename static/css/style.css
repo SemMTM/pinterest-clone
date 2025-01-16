@@ -545,6 +545,14 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
 }
 
+#delete-comment-modal {
+    margin-top: 10px;
+}
+
+.delete-comment-modal-btns {
+    margin-top: 10px;
+}
+
 /* Delete Post Modal */
 .modal {
     display: flex; 
@@ -712,8 +720,8 @@ h1, h2, h3, h4, h5, h6 {
 #profile-user-icon {
     background: black;
     border-radius: 50%;
-    height: 80px;
-    width: 80px;
+    height: 110px;
+    width: 110px;
 }
 
 #profile-page-container {
@@ -745,10 +753,16 @@ h1, h2, h3, h4, h5, h6 {
     flex-direction: column;
 }
 
-#edit-profile-form input, textarea {
+#edit-profile-form input {
     margin-bottom: 10px;
     padding: 3px;
 }
+
+#edit-profile-form textarea {
+    margin-bottom: 10px;
+    padding: 3px;
+}
+
 
 #about {
     height: 130px;
@@ -838,8 +852,36 @@ h1, h2, h3, h4, h5, h6 {
 
 
 /* POST CREATE PAGE STYLES */
+/* POST CREATE PAGE STYLES */
 .pc-main-con-inner {
     padding: 15px;
+}
+
+.post-form-section {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#id_description {
+    height: 100px;
+    padding: 4px;
+}
+
+#id_title {
+    padding: 4px;
+}
+
+#image-preview {
+    max-width: 300px;
+    margin-bottom: 15px;
+    object-fit: contain;
+}
+
+#create-post-btn {
+    margin-top: 15px;
+    font-size: 17px;
 }
 
 /* Styling for autocomplete dropdown */
