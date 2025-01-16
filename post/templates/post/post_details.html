@@ -12,6 +12,11 @@
         </div>
         <div class="details-container">
             <h2>{{ post.title }}</h2>
+
+            <div class="det-container-inner {% if post.description %}{% else %}hidden{% endif %}">
+                <p class="post-description">{{ post.description }}</p>
+            </div>
+
             <div class="det-container-inner">
                 <div id="social-btns">
                     <div>
@@ -42,10 +47,12 @@
                     {% endif %}
                 </div>
             </div>
+
             <div class="det-container-inner">
                 <img id="like-icon" src="/static/icons/heart.svg">
                 <span id="like-count">{{ post.likes }}</span>
             </div>
+
             <div class="det-container-inner">
                 <div id="user-icon-container">
                     <a href="{% url 'profile_page' post.user.username  %}">

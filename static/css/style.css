@@ -310,7 +310,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-/* Image Detail Container Styles */
+/* IMAGE DETAIL PAGE STYLES */
 #image-detail-container {
     padding: 10px;
 }
@@ -351,6 +351,10 @@ h1, h2, h3, h4, h5, h6 {
 #delete-btn-container {
     right: 10px;
     position: absolute;
+}
+
+.post-description {
+    font-size: 15px;
 }
 
 @media screen and (min-width: 426px) {
