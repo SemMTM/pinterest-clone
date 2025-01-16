@@ -83,6 +83,8 @@
 </div>
 
 <!-- Edit Profile Modal -->
+<div id="edit-profile-overlay" class="modal-overlay hidden"></div> 
+
 <div id="edit-profile-modal" class="hidden">
     <div class="modal-content">
         <form id="edit-profile-form" method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' %}">
@@ -96,6 +98,11 @@
 
             <label for="about">About:</label>
             <textarea id="about" name="about">{{ profile.about }}</textarea>
+
+            <!-- Image preview -->
+            <div id="image-preview-container">
+                <img id="profile-image-preview" src="{{ profile.profile_image.url }}" alt="Profile Preview">
+            </div>
 
             <label for="profile_image">Profile Image:</label>
             <input type="file" id="profile_image" name="profile_image">

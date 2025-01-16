@@ -49,18 +49,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const editProfileModal = document.getElementById('edit-profile-modal');
     const cancelEditProfileButton = document.getElementById('cancel-edit-profile-btn');
     const editProfileForm = document.getElementById('edit-profile-form');
+    const editProfileOverlay = document.getElementById('edit-profile-overlay');
+    const profileImageInput = document.getElementById('profile_image');
+    const imagePreview = document.getElementById('profile-image-preview');
 
     if (editProfileButton) {
         editProfileButton.addEventListener('click', () => {
-            editProfileModal.classList.remove('hidden'); // Show the modal
+            editProfileModal.classList.remove('hidden');
+            editProfileOverlay.classList.remove('hidden');
+            editProfileOverlay.classList.add('visible');
         });
     }
 
     if (cancelEditProfileButton) {
         cancelEditProfileButton.addEventListener('click', () => {
-            editProfileModal.classList.add('hidden'); // Hide the modal
+            editProfileModal.classList.add('hidden'); 
+            editProfileOverlay.classList.add('hidden');
+            editProfileOverlay.classList.remove('visible');
         });
     }
+
+    profileImageInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result; // Update the preview image source
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 
     if (editProfileForm) {
         editProfileForm.addEventListener('submit', (e) => {

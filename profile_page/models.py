@@ -12,7 +12,7 @@ class Profile(models.Model):
     """
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="profile")
-    about = models.TextField(blank=True)
+    about = models.TextField(max_length=600, blank=True)
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
     profile_image = CloudinaryField(
