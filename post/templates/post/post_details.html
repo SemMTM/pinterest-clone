@@ -11,10 +11,10 @@
             <img src="{{ post.image.url }}" alt="{{ post.title }}" /></a>
         </div>
         <div class="details-container">
-            <h2>{{ post.title }}</h2>
+            <h2 id="post-title" class="text-wrap">{{ post.title }}</h2>
 
             <div class="det-container-inner {% if post.description %}{% else %}hidden{% endif %}">
-                <p class="post-description">{{ post.description }}</p>
+                <p class="post-description text-wrap">{{ post.description }}</p>
             </div>
 
             <div class="det-container-inner">
