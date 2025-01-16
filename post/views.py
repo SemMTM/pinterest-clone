@@ -27,7 +27,7 @@ class PostList(generic.ListView):
 
 
 def post_detail(request, id):
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().select_related('user__profile')
     post = get_object_or_404(queryset, id=id)
     comments = post.comments.select_related('author__profile').order_by("-created_on")
     comment_count = post.comments.count()

@@ -48,11 +48,13 @@
             </div>
             <div class="det-container-inner">
                 <div id="user-icon-container">
-                    <div class="user-icon">
-                        <div>
-                            <a href="{% url 'profile_page' 'post.user.username'  %}"><img></a>
+                    <a href="{% url 'profile_page' post.user.username  %}">
+                        <div class="user-icon"
+                            style="background-image: url('{{ post.user.profile.profile_image.url }}');
+                                background-size: cover;
+                                background-position: center;">
                         </div>
-                    </div>
+                    </a>
                     <div>
                         <a href="{% url 'profile_page' post.user.username %}">{{ post.user }}</a>
                     </div>

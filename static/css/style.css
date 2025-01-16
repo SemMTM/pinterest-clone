@@ -16,6 +16,13 @@ body {
     font-size: 15px;
 }
 
+a {
+    color: black;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-family: 'microsoft_sans_serifregular', Arial, sans-serif;
 }
@@ -129,6 +136,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 24px;
     height: 35px;
     display: block;
+    object-fit: contain;
 }
 
 .active {
@@ -519,7 +527,6 @@ h1, h2, h3, h4, h5, h6 {
 
 /* USER PROFILE PAGE STYLES */
 .user-icon {
-    background: black;
     border-radius: 50%;
     height: 30px;
     width: 30px;
