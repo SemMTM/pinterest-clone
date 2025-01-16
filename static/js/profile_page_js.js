@@ -53,22 +53,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileImageInput = document.getElementById('profile_image');
     const imagePreview = document.getElementById('profile-image-preview');
 
-    if (editProfileButton) {
-        editProfileButton.addEventListener('click', () => {
-            editProfileModal.classList.remove('hidden');
-            editProfileOverlay.classList.remove('hidden');
-            editProfileOverlay.classList.add('visible');
-        });
+    const showModal = () => {
+        editProfileModal.classList.remove('hidden');
+        editProfileOverlay.classList.remove('hidden');
+        editProfileOverlay.classList.add('visible');
     }
 
-    if (cancelEditProfileButton) {
-        cancelEditProfileButton.addEventListener('click', () => {
-            editProfileModal.classList.add('hidden'); 
-            editProfileOverlay.classList.add('hidden');
-            editProfileOverlay.classList.remove('visible');
-        });
+    const hideModal = () => {
+        editProfileModal.classList.add('hidden'); 
+        editProfileOverlay.classList.add('hidden');
+        editProfileOverlay.classList.remove('visible');
     }
+    
+    editProfileButton.addEventListener('click', showModal);
 
+    cancelEditProfileButton.addEventListener('click', hideModal)
+
+    // Image Preview on profile edit modal
     profileImageInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -80,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Edit profile form submission and dynamic update
     if (editProfileForm) {
         editProfileForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -126,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 })
                 .catch((error) => console.error('Error updating profile:', error));
+            hideModal();
         });
     }
 });

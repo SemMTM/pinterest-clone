@@ -622,15 +622,57 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #profile-image-preview {
-    max-width: 100px;
-    max-height: 100px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     border-radius: 50%;
     display: block;
 }
 
+/* Image boards styles */
+.board-tile {
+    position: relative;
+    overflow: hidden;
+}
 
-/* Post Create Page Styles */
+.tile-images {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: darkgrey;
+}
+
+.tile-image.large {
+    flex: 2 1 100%;
+    border: 1px solid #d5d5d5;
+}
+
+.tile-image.large img {
+    height: 130px;
+}
+
+.tile-image.small {
+    flex: 1 1 50%;
+    border: 1px solid #d5d5d5;
+}
+
+.tile-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+#pp-username {
+    margin: 10px;
+    text-align: center;
+}
+
+.number-of-pins {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+
+/* POST CREATE PAGE STYLES */
 .pc-main-con-inner {
     padding: 15px;
 }
@@ -682,45 +724,6 @@ h1, h2, h3, h4, h5, h6 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-}
-
-/* Image boards styles */
-.board-tile {
-    position: relative;
-    overflow: hidden;
-}
-
-.tile-images {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.tile-image.large {
-    flex: 2 1 100%;
-}
-
-.tile-image.large img {
-    height: 130px;
-}
-
-.tile-image.small {
-    flex: 1 1 50%;
-}
-
-.tile-image img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-}
-
-#pp-username {
-    margin: 10px;
-    text-align: center;
-}
-
-.number-of-pins {
-    font-size: 13px;
-    font-weight: 500;
 }
 
 /* Save modal styles */
