@@ -47,21 +47,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Edit Profile Modal
     const editProfileButton = document.getElementById('edit-profile-btn'); 
     const editProfileModal = document.getElementById('edit-profile-modal');
+    const editProfileModalContent = document.getElementById('edit-profile-modal-content')
     const cancelEditProfileButton = document.getElementById('cancel-edit-profile-btn');
     const editProfileForm = document.getElementById('edit-profile-form');
+    const profileImageInput = document.getElementById('profile_image');
+    const imagePreview = document.getElementById('profile-image-preview');
 
-    if (editProfileButton) {
-        editProfileButton.addEventListener('click', () => {
-            editProfileModal.classList.remove('hidden'); // Show the modal
-        });
+    const showModal = () => {
+        editProfileModal.classList.remove('hidden');
+        editProfileModalContent.classList.add('edit-profile-modal-visible');
     }
 
-    if (cancelEditProfileButton) {
-        cancelEditProfileButton.addEventListener('click', () => {
-            editProfileModal.classList.add('hidden'); // Hide the modal
-        });
+    const hideModal = () => {
+        editProfileModal.classList.add('hidden'); 
+        editProfileModalContent.classList.remove('edit-profile-modal-visible');
     }
+    
+    editProfileButton.addEventListener('click', showModal);
 
+    cancelEditProfileButton.addEventListener('click', hideModal)
+
+    // Image Preview on profile edit modal
+    profileImageInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result; // Update the preview image source
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Edit profile form submission and dynamic update
     if (editProfileForm) {
         editProfileForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -108,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 })
                 .catch((error) => console.error('Error updating profile:', error));
+            hideModal();
         });
     }
 });
