@@ -37,8 +37,8 @@
     <div id="edit-board-modal" class="hidden board-modal-overlay">
         <div class="board-modal-content">
             <h2>Edit Board</h2>
-            <form id="edit-board-form" method="POST" action="{% url 'edit_board' board.id %}">
                 {% if board.title == 'All Pins' %}
+                <form id="edit-board-form" method="POST" action="{% url 'edit_board' board.id %}"></form>
                     {% csrf_token %}
                     <input type="hidden" name="action" value="update">
 
@@ -56,8 +56,12 @@
                             <button type="button" id="cancel-edit-board-btn" class="btn">Cancel</button>
                         </div>
                     </div>
+                </form>
                 {% else %}
+                <form id="edit-board-form" method="POST" action="{% url 'edit_board' board.id %}"></form>
+                    {% csrf_token %}
                     <input type="hidden" name="action" value="update">
+
                     <div class="edit-board-modal-sec">
                         <label for="visibility">Visibility:</label>
                         <select id="edit-board-visibility" name="visibility">
@@ -77,11 +81,11 @@
                             <button type="button" id="cancel-edit-board-btn" class="btn">Cancel</button>
                         </div>
                     </div>
+                </form>
+                <div class="edit-board-modal-sec">
+                    <button id="delete-board-btn" class="btn danger">Delete Board</button>
+                </div>
                 {% endif %}
-            </form>
-            <div class="edit-board-modal-sec">
-                <button id="delete-board-btn" class="btn danger">Delete Board</button>
-            </div>
         </div>
     </div>
 
