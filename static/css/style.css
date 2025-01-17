@@ -46,6 +46,18 @@ h1, h2, h3, h4, h5, h6 {
     overflow: hidden; 
 }
 
+/* Pop in animation */
+@keyframes popIn {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
 /* Button Styles */
 .btn {
     background-color: #c0c0c0;
@@ -465,7 +477,6 @@ h1, h2, h3, h4, h5, h6 {
     padding: 10px;
     background-color: #c0c0c0;
     position: relative;
-    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
     transform: translateY(100%); /* Start off-screen */
     transition: transform 0.4s ease; /* Smooth slide effect */
     box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
@@ -583,6 +594,13 @@ h1, h2, h3, h4, h5, h6 {
     width: 300px;
     box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
                 inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
+    transform: scale(0.3); /* Set initial state */
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Show with animation */
+.delete-post-modal-visible .delete-post-modal-content {
+    animation: popIn 0.2s ease forwards;
 }
  
 .delete-post-modal-actions {
@@ -628,6 +646,13 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
     box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
                 inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
+    transform: scale(0.3); /* Set initial state */
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Show with animation */
+.save-modal-visible .save-modal-content {
+    animation: popIn 0.2s ease forwards;
 }
 
 .save-modal-content h3 {
@@ -707,6 +732,10 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 10px;
 }
 
+#board-error-message {
+    margin-top: 10px;
+}
+
 
 /* USER PROFILE PAGE STYLES */
 /* USER PROFILE PAGE STYLES */
@@ -774,21 +803,35 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #edit-profile-modal {
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    height: 100%;
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #d7d7d7;
-    padding: 20px;
-    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
-                inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
     z-index: 1000;
-    display: block;
+    display: flex;
+}
+
+.edit-profile-modal-visible {
+    animation: popIn 0.2s ease forwards;
 }
 
 #edit-profile-modal .modal-content {
     display: flex;
     flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    background: #d7d7d7;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
+                inset -0.12em -0.12em 0.12em 0 rgba(0, 0, 0, 1);
+    transform: scale(0.3); /* Set initial state */
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 #edit-profile-overlay {
@@ -994,7 +1037,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn.danger {
     background-color: rgb(212, 47, 47);
-    color: white;
+    color: rgb(255, 255, 255);
+}
+
+.btn.danger:hover {
+    background-color: rgb(184, 77, 77);
 }
 
 #title-container {

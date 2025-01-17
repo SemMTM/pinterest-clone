@@ -17,7 +17,7 @@ from profile_page.models import Profile
 class PostList(generic.ListView):
     queryset = Post.objects.all()
     template_name = "post/index.html"
-    paginate_by = 3
+    paginate_by = 10
     context_object_name = "userimages"
 
     def get_template_names(self, *args, **kwargs):

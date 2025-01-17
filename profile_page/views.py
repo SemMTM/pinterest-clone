@@ -59,7 +59,7 @@ def created_pins(request, username):
 
     # Pagination logic
     page_number = request.GET.get('page', 1)
-    paginator = Paginator(created_posts, 6)  # Paginate by 6 items per page
+    paginator = Paginator(created_posts, 10)  # Paginate by 6 items per page
 
     try:
         page = paginator.page(page_number)

@@ -12,12 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("Log in to save posts");
         } else {
             modal.classList.remove('save-modal-hidden');
+            modal.classList.add('save-modal-visible');
         }
     });
 
     // Close modal
     closeModalButton.addEventListener('click', () => {
         modal.classList.add('save-modal-hidden');
+        modal.classList.remove('save-modal-visible');
     });
 
     
@@ -149,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (deletePostBtn) {
         deletePostBtn.addEventListener('click', () => {
             deletePostModal.classList.remove('hidden');
+            deletePostModal.classList.add('delete-post-modal-visible')
         });
     }
 
@@ -156,6 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (cancelDeletePostBtn) {
         cancelDeletePostBtn.addEventListener('click', () => {
             deletePostModal.classList.add('hidden');
+            deletePostModal.classList.remove('delete-post-modal-visible')
         });
     }
 });

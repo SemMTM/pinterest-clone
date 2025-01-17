@@ -47,22 +47,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Edit Profile Modal
     const editProfileButton = document.getElementById('edit-profile-btn'); 
     const editProfileModal = document.getElementById('edit-profile-modal');
+    const editProfileModalContent = document.getElementById('edit-profile-modal-content')
     const cancelEditProfileButton = document.getElementById('cancel-edit-profile-btn');
     const editProfileForm = document.getElementById('edit-profile-form');
-    const editProfileOverlay = document.getElementById('edit-profile-overlay');
     const profileImageInput = document.getElementById('profile_image');
     const imagePreview = document.getElementById('profile-image-preview');
 
     const showModal = () => {
         editProfileModal.classList.remove('hidden');
-        editProfileOverlay.classList.remove('hidden');
-        editProfileOverlay.classList.add('visible');
+        editProfileModalContent.classList.add('edit-profile-modal-visible');
     }
 
     const hideModal = () => {
         editProfileModal.classList.add('hidden'); 
-        editProfileOverlay.classList.add('hidden');
-        editProfileOverlay.classList.remove('visible');
+        editProfileModalContent.classList.remove('edit-profile-modal-visible');
     }
     
     editProfileButton.addEventListener('click', showModal);

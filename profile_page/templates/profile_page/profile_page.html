@@ -83,10 +83,8 @@
 </div>
 
 <!-- Edit Profile Modal -->
-<div id="edit-profile-overlay" class="modal-overlay hidden"></div> 
-
 <div id="edit-profile-modal" class="hidden">
-    <div class="modal-content">
+    <div id="edit-profile-modal-content" class="modal-content">
         <form id="edit-profile-form" method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' %}">
             {% csrf_token %}
             <h3>Edit Profile</h3>
