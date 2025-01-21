@@ -1,3 +1,5 @@
+import { showPopUpMessage } from './pop_up.js'
+
 document.addEventListener('DOMContentLoaded', () => {
     const createdButton = document.getElementById('created-btn');
     const createdContainer = document.getElementById('created-container');
@@ -16,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             createdButton.style.pointerEvents = '';
             createdButton.style.cursor = ''; // Reactivate the saved button when it's not active
         }
-    };
+    }; 
 
     const toggleHidden = (addHidden, removeHidden) => {
         addHidden.classList.add('hidden');
@@ -120,12 +122,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
 
                         editProfileModal.classList.add('hidden'); // Hide modal
-                        alert(data.message); // Success message
+                        showPopUpMessage(data.message);
                     } else {
-                        alert(data.error || 'An error occurred.');
+                        showPopUpMessage(data.error || 'An error occurred.');
                     }
                 })
-                .catch((error) => console.error('Error updating profile:', error));
+                .catch((error) => showPopUpMessage(error.message || 'An unexpected error occurred. Please try again.'));
             hideModal();
         });
     }

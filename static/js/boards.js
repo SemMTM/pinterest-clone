@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': csrfToken, // Ensure the CSRF token is included
+                    'X-CSRFToken': csrfToken,
                 },
                 body: `board_id=${boardId}`,
             })
@@ -48,13 +48,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(data => {
                     if (data.success) {
-                        alert(data.message);
+                        showPopUpMessage(data.message);
                         modal.classList.add('save-modal-hidden');
                     } else {
-                        alert(data.message || 'An error occurred.');
+                        showPopUpMessage(data.message);
                     }
                 })
-                .catch(error => console.error('Error saving post:', error));
+                .catch(error => showPopUpMessage('Error saving post'));
         });
     });
 
