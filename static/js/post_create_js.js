@@ -7,12 +7,12 @@ document.addEventListener('DOMContentLoaded', function() {
         fileInput.addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
-                const allowedExtensions = ['jpg', 'jpeg', 'png'];
+                const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
                 const fileExtension = file.name.split('.').pop().toLowerCase();
                 // Extract the file extension and convert it to lowercase for comparison.
 
                 if (!allowedExtensions.includes(fileExtension)) {
-                    alert('Only JPG/JPEG/PNG files are allowed.');
+                    alert('Only JPG/JPEG/PNG/WEBP files are allowed.');
                     this.value = ''; // Reset the input
                 }
             }

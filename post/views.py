@@ -67,7 +67,7 @@ def create_post(request):
 
             messages.success(request, "Your post has been created successfully!")
 
-            return redirect('create_post')
+            #return redirect('create_post') 
 
     return render(
         request,
