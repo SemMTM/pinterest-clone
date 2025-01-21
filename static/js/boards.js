@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     
-    // Handle board selection
+    // Save post to board function
     boardButtons.forEach(button => {
         button.addEventListener('click', () => {
             const boardId = button.getAttribute('data-board-id');
@@ -66,6 +66,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const postImagePreview = document.getElementById('post-image-preview');
     const errorMessage = document.getElementById('board-error-message');
 
+    const popUpMessageOverlay = document.querySelector('.pop-up-message-overlay');
+    const popUpMessageContent = document.querySelector('.pop-up-message-content')
+    const popUpMessageText = document.querySelector('.pop-up-message-text');
+
+    /**
+     * Display a pop-up message.
+     * @param {string} message - The message to display.
+     */
+    function showPopUpMessage(message) {
+        popUpMessageText.textContent = message;
+        popUpMessageContent.classList.add('pop-up-show-modal')
+
+        //Hide the message after 2 seconds
+        setTimeout(() => {
+            popUpMessageContent.classList.remove('pop-up-show-modal')
+
+            // Clear the message after the animation
+            setTimeout(() => {
+                popUpMessageText.textContent = '';
+            }, 500); // Match the CSS transition duration
+        }, 2000);
+    }
+
     // Open Create Board Modal
     openCreateBoardBtn.addEventListener('click', () => {
         saveModal.classList.add('save-modal-hidden');
@@ -85,15 +108,14 @@ document.addEventListener('DOMContentLoaded', function() {
     submitCreateBoardBtn.addEventListener('click', () => {
         const boardTitle = boardTitleInput.value.trim();
         if (!boardTitle) {
-            errorMessage.textContent = 'Please enter a board title.';
-            errorMessage.style.display = 'block';
+            showPopUpMessage('Please enter a board title.');
             return;
         }
 
         const postId = postImagePreview.getAttribute('data-post-id'); // Pass the post ID dynamically
 
-        errorMessage.style.display = 'none';
-        errorMessage.textContent = '';
+        //errorMessage.style.display = 'none';
+        //errorMessage.textContent = '';
 
         fetch('/profile/create-board/', {
             method: 'POST',
@@ -113,17 +135,15 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(data => {
                 if (data.success) {
-                    alert(data.message);
+                    showPopUpMessage(data.message);
                     createModal.classList.add('create-modal-hidden');
                     boardTitleInput.value = '';
                 } else {
-                    errorMessage.textContent = data.error || 'An error occurred.';
-                    errorMessage.style.display = 'block';
+                    showPopUpMessage(data.error || 'An error occurred.');
                 }
             })
             .catch(error => {
-                errorMessage.textContent = error.message || 'An unexpected error occurred. Please try again.';
-                errorMessage.style.display = 'block';
+                showPopUpMessage(error.message || 'An unexpected error occurred. Please try again.');
             });
     });
 
