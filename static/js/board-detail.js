@@ -1,3 +1,5 @@
+import { showPopUpMessage } from './pop_up.js'
+
 document.addEventListener('DOMContentLoaded', () => {
     // Open Edit Board Modal
     const openEditBoardModalBtn = document.getElementById('open-edit-board-modal-btn');
@@ -41,8 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmDeleteBoardBtn = document.getElementById('confirm-delete-board-btn');
     if (confirmDeleteBoardBtn) {
         confirmDeleteBoardBtn.addEventListener('click', () => {
-            // Action to delete the board can be added here
-            alert('Board deleted!');
+            showPopUpMessage('Board deleted!');
             deleteConfirmationModal.classList.add('hidden');
         });
     }
@@ -85,12 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
 
                         editBoardModal.classList.add('hidden');
-                        alert(data.message);
+                        showPopUpMessage(data.message);
                     } else {
-                        alert(data.error || 'An error occurred.');
+                        showPopUpMessage(data.error || 'An error occurred.');
                     }
                 })
-                .catch((error) => console.error('Error updating board:', error));
+                .catch((error) => showPopUpMessage('Error updating board'));
         });
     }
 
@@ -120,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle unpin confirmation
     unpinConfirmBtn.addEventListener('click', () => {
         if (!currentImageId || !currentBoardId) {
-            alert("Invalid image or board ID.");
+            showPopUpMessage("Invalid image or board ID.");
             return;
         }
 
@@ -150,13 +151,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentBoardId = null; // Clear the current board ID
     
                     // Display a success alert
-                    alert('Post removed successfully!');
+                    showPopUpMessage('Post removed successfully!');
                 } else {
-                    alert(data.error || 'An error occurred while unpinning the post.');
+                    showPopUpMessage('An error occurred while unpinning the post.');
                 }
             })
             .catch(error => {
-                console.error('Error unpinning the post:', error);
+                showPopUpMessage('Error unpinning the post:');
             });
     });
 });

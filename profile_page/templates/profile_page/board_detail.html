@@ -38,7 +38,7 @@
         <div class="board-modal-content">
             <h2>Edit Board</h2>
                 {% if board.title == 'All Pins' %}
-                <form id="edit-board-form" method="POST" action="{% url 'edit_board' board.id %}"></form>
+                <form id="edit-board-form" method="POST" action="{% url 'edit_board' board.id %}">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="update">
 
@@ -58,7 +58,7 @@
                     </div>
                 </form>
                 {% else %}
-                <form id="edit-board-form" method="POST" action="{% url 'edit_board' board.id %}"></form>
+                <form id="edit-board-form" method="POST" action="{% url 'edit_board' board.id %}">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="update">
 
@@ -116,9 +116,19 @@
     </div>
 </div>
 
+<!-- Message pop-up -->
+<div class="pop-up-message-overlay modal">
+    <div class="pop-up-message-content">
+        <p class="pop-up-message-text text-wrap">
+            <!-- Message content -->
+        </p>
+    </div>
+</div>
+
+
 {% endblock %}
 
 {% block scripts %} 
     <script src="{% static 'js/masonry.js' %}"></script>
-    <script src="{% static 'js/board-detail.js' %}"></script>
+    <script type="module" src="{% static 'js/board-detail.js' %}"></script>
 {% endblock %}
