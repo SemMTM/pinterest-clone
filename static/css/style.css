@@ -771,10 +771,6 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 15px;
 }
 
-#boards-container {
-    padding: 15px;
-}
-
 .user-profile-info {
     flex-direction: column;
     align-items: center;
@@ -860,6 +856,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Image boards styles */
+#boards-container {
+    padding: 15px;
+    max-width: 750px;
+    margin: auto;
+}
+
 .board-tile {
     position: relative;
     overflow: hidden;
@@ -905,11 +907,28 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
 }
 
+.boards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+@media screen and (min-width: 426px) {
+    .boards-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
 
 /* POST CREATE PAGE STYLES */
 /* POST CREATE PAGE STYLES */
 .pc-main-con-inner {
     padding: 15px;
+}
+
+#post-create-container {
+    max-width: 600px;
+    margin: auto;
 }
 
 .post-form-section {
@@ -981,13 +1000,6 @@ h1, h2, h3, h4, h5, h6 {
     margin-left: 8px;
     cursor: pointer;
 }
-
-.boards-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-
 
 /* BOARD DETAIL PAGE STYLES */
 /* BOARD DETAIL PAGE STYLES */

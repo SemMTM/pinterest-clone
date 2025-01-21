@@ -24,7 +24,8 @@ def profile_page(request, username):
 
     all_pins_board, created = ImageBoard.objects.get_or_create(
         user=user,
-        title="All Pins"
+        title="All Pins",
+        visibility=1
     )
 
     if created:
