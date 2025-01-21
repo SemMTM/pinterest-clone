@@ -5,6 +5,7 @@
 {% url 'account_signup' as signup_url %}
 {% url 'create_post' as create_post_url %}
 {% url 'profile' as profile_url %}
+{% url 'account_logout' as logout_url %}
 
 
 <!DOCTYPE html>
@@ -65,16 +66,13 @@
 
             <!-- Top Bar -->
             {% if user.is_authenticated %}
-            <div class="top-bar hidden">
+            <div class="top-bar">
                 <div class="btn-container">
-                    <span class="{% if user.is_authenticated %}hidden{% endif %}">
-                        <a href="{% url 'account_login' %}">
-                            <button class="btn login-btn">Log-in</button>
+                    <div>
+                        <a href="{% url 'account_logout' %}">
+                            <button class="btn">Log-out</button>
                         </a>
-                        <a href="{% url 'account_signup' %}">
-                            <button class="btn sign-up-btn">Sign-up</button>
-                        </a>
-                    </span>
+                    </div>
                 </div>
             </div>
             {% else %}
