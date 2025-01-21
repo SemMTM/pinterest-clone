@@ -1,3 +1,5 @@
+import { showPopUpMessage } from './pop_up.js'
+
 document.addEventListener('DOMContentLoaded', function() {
     // Save modal scripts
     const saveButton = document.getElementById('save-btn');
@@ -64,44 +66,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitCreateBoardBtn = document.getElementById('submit-create-board');
     const boardTitleInput = document.getElementById('board-title-input');
     const postImagePreview = document.getElementById('post-image-preview');
-    const errorMessage = document.getElementById('board-error-message');
-
-    const popUpMessageOverlay = document.querySelector('.pop-up-message-overlay');
-    const popUpMessageContent = document.querySelector('.pop-up-message-content')
-    const popUpMessageText = document.querySelector('.pop-up-message-text');
-
-    /**
-     * Display a pop-up message.
-     * @param {string} message - The message to display.
-     */
-    function showPopUpMessage(message) {
-        popUpMessageText.textContent = message;
-        popUpMessageContent.classList.add('pop-up-show-modal')
-
-        //Hide the message after 2 seconds
-        setTimeout(() => {
-            popUpMessageContent.classList.remove('pop-up-show-modal')
-
-            // Clear the message after the animation
-            setTimeout(() => {
-                popUpMessageText.textContent = '';
-            }, 500); // Match the CSS transition duration
-        }, 2000);
-    }
 
     // Open Create Board Modal
     openCreateBoardBtn.addEventListener('click', () => {
         saveModal.classList.add('save-modal-hidden');
         createModal.classList.remove('create-modal-hidden');
-        errorMessage.style.display = 'none';
-        errorMessage.textContent = '';
     });
 
     // Close Create Board Modal
     cancelCreateBoardBtn.addEventListener('click', () => {
         createModal.classList.add('create-modal-hidden');
-        errorMessage.style.display = 'none';
-        errorMessage.textContent = '';
     });
 
     // Submit Create Board
@@ -113,9 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const postId = postImagePreview.getAttribute('data-post-id'); // Pass the post ID dynamically
-
-        //errorMessage.style.display = 'none';
-        //errorMessage.textContent = '';
 
         fetch('/profile/create-board/', {
             method: 'POST',

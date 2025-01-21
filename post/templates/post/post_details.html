@@ -266,7 +266,7 @@
     <div class="pop-up-message-overlay modal">
         <div class="pop-up-message-content">
             <p class="pop-up-message-text text-wrap">
-                
+                <!-- Message content -->
             </p>
         </div>
     </div>
@@ -275,5 +275,5 @@
 
 {% block scripts %}
 <script src="{% static 'js/comment.js' %}"></script>
-<script src="{% static 'js/boards.js' %}"></script>
+<script type="module" src="{% static 'js/boards.js' %}"></script>
 {% endblock %}
