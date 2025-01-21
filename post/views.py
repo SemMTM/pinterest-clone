@@ -51,7 +51,6 @@ def post_detail(request, id):
 
 @login_required
 def create_post(request):
-    post_form = PostForm()
     if request.method == 'POST':
         post_form = PostForm(data=request.POST, files=request.FILES)
         if post_form.is_valid():
@@ -60,15 +59,15 @@ def create_post(request):
             post.save()
 
             selected_tags = post_form.cleaned_data['tags']
-
             for tag in selected_tags:
                 ImageTagRelationships.objects.create(post_id=post, tag_name=tag)
                 # Create relationships for each selected tag
 
-            messages.success(request, "Your post has been created successfully!")
+            return JsonResponse({'success': True, 'message': "Your post has been created successfully!"})
 
-            #return redirect('create_post') 
+        return JsonResponse({'success': False, 'error': post_form.errors.as_json()}, status=400)
 
+    post_form = PostForm()
     return render(
         request,
         "post/post_create.html",

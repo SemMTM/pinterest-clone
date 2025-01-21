@@ -1,8 +1,48 @@
+import { showPopUpMessage } from './pop_up.js';
+
 document.addEventListener('DOMContentLoaded', function() {
-    // ----- Client-Side Validation for File Type on PostForm image -----
-    const fileInput = document.getElementById('id_image');
+    const createPostForm = document.getElementById('post-create-form');
     const preview = document.getElementById('image-preview');
 
+    createPostForm.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevent the page from refreshing
+
+        const formData = new FormData(createPostForm); // Collect form data
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch(createPostForm.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+            body: formData,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    return response.json().then((data) => {
+                        throw new Error(data.error || 'An error occurred.');
+                    });
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.success) {
+                    showPopUpMessage('Your post has been created successfully!');
+                    createPostForm.reset(); // Clear the form fields
+                    preview.style.display = 'none'; // Hide the image preview
+                    preview.src = ''; // Clear the preview image
+                } else {
+                    showPopUpMessage(data.error || 'An error occurred.');
+                }
+            })
+            .catch((error) => {
+                showPopUpMessage(error.message || 'An unexpected error occurred.');
+            });
+    });
+
+
+    // ----- Client-Side Validation for File Type on PostForm image -----
+    const fileInput = document.getElementById('id_image');
     if (fileInput) {
         fileInput.addEventListener('change', function() {
             const file = this.files[0];
