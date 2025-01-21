@@ -32,11 +32,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     preview.style.display = 'none'; // Hide the image preview
                     preview.src = ''; // Clear the preview image
                 } else {
-                    showPopUpMessage(data.error || 'An error occurred.');
+                    showPopUpMessage('An error occurred.');
                 }
             })
             .catch((error) => {
-                showPopUpMessage(error.message || 'An unexpected error occurred.');
+                showPopUpMessage('An unexpected error occurred.');
             });
     });
 

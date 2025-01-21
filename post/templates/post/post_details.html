@@ -91,7 +91,11 @@
                 <div>
                     {% if comments|length > 0 %}
                     <div class="latest-comment-container">
-                        <p><strong>{{ comments.0.author }}</strong> {{ comments.0.body }}</p>
+                        {% for comment in comments|slice:":3" %}
+                        <p style="margin-bottom: 4px;">
+                            <strong>{{ comment.author }}</strong> {{ comment.body }}
+                        </p>
+        {% endfor %}
                         <div>
                             <span id="view-all">
                                 View all
@@ -274,6 +278,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'js/comment.js' %}"></script>
+<script type="module" src="{% static 'js/comment.js' %}"></script>
 <script type="module" src="{% static 'js/boards.js' %}"></script>
 {% endblock %}

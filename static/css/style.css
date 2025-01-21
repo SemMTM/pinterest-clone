@@ -186,7 +186,7 @@ h1, h2, h3, h4, h5, h6 {
 
     .nav-1 {
         flex-direction: column;
-        height: 350px;
+        height: 200px;
         justify-content: space-evenly;
         padding-top: 25px;
     }
@@ -1114,6 +1114,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: flex-end;
     background-color: transparent;
     pointer-events: none;
+    z-index: 20000;
 }
 
 .pop-up-message-content {
