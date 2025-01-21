@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModalButton = document.getElementById('close-save-modal');
     const boardButtons = document.querySelectorAll('.save-modal-board-btn');
     const isAuthenticated = saveButton.getAttribute('data-authenticated');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
     // Open modal
     saveButton.addEventListener('click', () => {
@@ -33,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': getCookie('csrftoken'), // Ensure the CSRF token is included
+                    'X-CSRFToken': csrfToken, // Ensure the CSRF token is included
                 },
                 body: `board_id=${boardId}`,
             })
@@ -54,22 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 .catch(error => console.error('Error saving post:', error));
         });
     });
-
-    // Utility function to get CSRF token
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.startsWith(name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
 
 
     const saveModal = document.getElementById('save-to-board-modal');
@@ -114,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': getCookie('csrftoken'),
+                'X-CSRFToken': csrfToken,
             },
             body: `title=${encodeURIComponent(boardTitle)}&post_id=${postId}`,
         })

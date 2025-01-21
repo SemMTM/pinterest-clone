@@ -12,9 +12,6 @@
         <a class="grid-image" href="{% url 'post_detail' post.id %}">
             <img src="{{ post.image.url }}" alt="{{ post.title }}"/>
         </a>
-        <div class="grid-item-overlay"> 
-            <a class="div-link" href="{% url 'post_detail' post.id %}"></a>
-        </div>
     </div>
 </div> 
 
@@ -24,9 +21,6 @@
         <a class="div-link" href="{% url 'post_detail' post.id %}">
             <img src="{{ post.image.url }}" alt="{{ post.title }}"/>
         </a>
-        <div class="grid-item-overlay">
-            <a class="div-link" href="{% url 'post_detail' post.id %}"></a> 
-        </div>
     </div>
 </div> 
 {% endif %}

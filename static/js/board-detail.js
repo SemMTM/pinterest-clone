@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editBoardModal = document.getElementById('edit-board-modal');
     const deleteConfirmationModal = document.getElementById('delete-confirmation-modal');
     const editBoardForm = document.getElementById('edit-board-form');
-    const editBoardVisibilitySelect = document.getElementById('edit-board-visibility');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
     if (openEditBoardModalBtn) {
         openEditBoardModalBtn.addEventListener('click', () => {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fetch(updateUrl, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),
+                    'X-CSRFToken': csrfToken,
                 },
                 body: new URLSearchParams({
                     action: 'update',
@@ -98,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const unpinModal = document.getElementById('unpin-modal');
     const unpinConfirmBtn = document.getElementById('unpin-confirm-btn');
     const unpinCancelBtn = document.getElementById('unpin-cancel-btn');
-    const csrfToken = getCookie('csrftoken');
     let currentImageId = null;
     let currentBoardId = null;
 
@@ -161,12 +160,3 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     });
 });
-
-// Utility function to get CSRF token
-function getCookie(name) {
-    const cookieValue = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith(name + '='))
-        ?.split('=')[1];
-    return cookieValue || '';
-}
