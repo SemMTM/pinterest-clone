@@ -79,10 +79,10 @@
             <div class="top-bar">
                 <div class="btn-container">
                     <span class="{% if user.is_authenticated %}hidden{% endif %}">
-                        <a href="{% url 'account_login' %}" id="login-link" class="auth-trigger">
+                        <a id="login-link" class="auth-trigger" href="{% url 'custom_accounts:login_modal' %}">
                             <button class="btn login-btn">Log-in</button>
                         </a>
-                        <a href="{% url 'account_signup' %}" id="signup-link" class="auth-trigger">
+                        <a id="signup-link" class="auth-trigger" href="{% url 'custom_accounts:signup_modal' %}">
                             <button class="btn sign-up-btn">Sign-up</button>
                         </a>
                     </span>
@@ -113,7 +113,8 @@
 
     {% block scripts %}
     <!-- Scripts go here -->
-    <script src="{% static 'js/login-modal.js' %}"></script>
     {% endblock %}
+    
+    <script src="{% static 'js/login-modal.js' %}"></script>
 </body>
 </html>
