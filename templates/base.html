@@ -79,10 +79,10 @@
             <div class="top-bar">
                 <div class="btn-container">
                     <span class="{% if user.is_authenticated %}hidden{% endif %}">
-                        <a href="{% url 'account_login' %}">
+                        <a href="{% url 'account_login' %}" id="login-link" class="auth-trigger">
                             <button class="btn login-btn">Log-in</button>
                         </a>
-                        <a href="{% url 'account_signup' %}">
+                        <a href="{% url 'account_signup' %}" id="signup-link" class="auth-trigger">
                             <button class="btn sign-up-btn">Sign-up</button>
                         </a>
                     </span>
@@ -99,6 +99,15 @@
                 {% endblock content %}       
             </div>
             <div id="bottom-bar"></div>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="hidden modal-overlay">
+        <div class="modal-content">
+            <span id="close-auth-modal" class="modal-close">&times;</span>
+            <div id="auth-modal-content">
+                <!-- Login/Signup content will be loaded dynamically -->
+            </div>
         </div>
     </div>
 

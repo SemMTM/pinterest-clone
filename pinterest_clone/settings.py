@@ -38,8 +38,6 @@ ALLOWED_HOSTS = ['8000-semmtm-pinterestclone-yymd39f8mut.ws.codeinstitute-ide.ne
 # Application definition
 
 INSTALLED_APPS = [
-    'post',
-    'profile_page',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,6 +52,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'cloudinary_storage',
     'cloudinary',
+    'post',
+    'profile_page',
+    'accounts',
     'django_extensions', 
 ]
 
