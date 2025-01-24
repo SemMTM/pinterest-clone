@@ -4,13 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Open Edit Board Modal
     const openEditBoardModalBtn = document.getElementById('open-edit-board-modal-btn');
     const editBoardModal = document.getElementById('edit-board-modal');
-    const deleteConfirmationModal = document.getElementById('delete-confirmation-modal');
     const editBoardForm = document.getElementById('edit-board-form');
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+    const editBoardModalContent = document.getElementsByClassName("board-modal-content")[0];
 
     if (openEditBoardModalBtn) {
         openEditBoardModalBtn.addEventListener('click', () => {
-            editBoardModal.classList.remove('hidden');
+            editBoardModal.classList.add('modal-show');
+            editBoardModalContent.classList.add('board-modal-content-visible');
         });
     }
 
@@ -18,16 +19,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelEditBoardBtn = document.getElementById('cancel-edit-board-btn');
     if (cancelEditBoardBtn) {
         cancelEditBoardBtn.addEventListener('click', () => {
-            editBoardModal.classList.add('hidden');
+            editBoardModal.classList.remove('modal-show');
+            editBoardModalContent.classList.remove('board-modal-content-visible');
         });
     }
-
+    
     // Open Delete Confirmation Modal
+    const deleteConfirmationModal = document.getElementById('delete-confirmation-modal');
     const deleteBoardBtn = document.getElementById('delete-board-btn');
+    const deleteBoardModalContent = document.getElementsByClassName('delete-board-modal-content')[0];
+
     if (deleteBoardBtn) {
         deleteBoardBtn.addEventListener('click', () => {
-            editBoardModal.classList.add('hidden'); // Hide edit modal
-            deleteConfirmationModal.classList.remove('hidden'); // Show delete confirmation modal
+            editBoardModal.classList.remove('modal-show');
+            deleteConfirmationModal.classList.remove('hidden'); 
+            deleteConfirmationModal.classList.add('visible');
+            deleteBoardModalContent.classList.add('delete-board-modal-content-visible');
+
         });
     }
 
@@ -35,7 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelDeleteBoardBtn = document.getElementById('cancel-delete-board-btn');
     if (cancelDeleteBoardBtn) {
         cancelDeleteBoardBtn.addEventListener('click', () => {
-            deleteConfirmationModal.classList.add('hidden');
+            deleteConfirmationModal.classList.remove('visible');
+            editBoardModalContent.classList.remove('board-modal-content-visible');
+            deleteBoardModalContent.classList.remove('delete-board-modal-content-visible');
         });
     }
 
