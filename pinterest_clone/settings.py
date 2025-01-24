@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'post',
     'profile_page',
-    'accounts',
+    'custom_auth',
     'django_extensions', 
 ]
 

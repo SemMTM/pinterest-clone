@@ -102,8 +102,8 @@
         </div>
     </div>
 
-    <div id="auth-modal" class="hidden modal-overlay">
-        <div class="modal-content">
+    <div id="auth-modal" class="hidden login-modal-overlay">
+        <div class="auth-modal-content">
             <span id="close-auth-modal" class="modal-close">&times;</span>
             <div id="auth-modal-content">
                 <!-- Login/Signup content will be loaded dynamically -->
@@ -113,6 +113,7 @@
 
     {% block scripts %}
     <!-- Scripts go here -->
+    <script src="{% static 'js/login-modal.js' %}"></script>
     {% endblock %}
 </body>
 </html>
