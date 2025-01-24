@@ -1031,16 +1031,35 @@ h1, h2, h3, h4, h5, h6 {
 /* Unpin modal styles */
 #unpin-modal {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2); /* Dimmed background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 1000;
-    background-color: #c0c0c0;
-    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
-                inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
+    transition: opacity 0.4s ease;
+}
+
+.unpin-modal-hidden {
+    display: none !important;
+}
+
+#unpin-modal .modal-content {
+    background: #d7d7d7;
     padding: 20px;
     width: 300px;
-    display: block;
+    text-align: center;
+    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
+                inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
+    transform: scale(0.3); /* Set initial state */
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.unpin-modal-visible .modal-content {
+    animation: popIn 0.2s ease forwards;
 }
 
 #unpin-modal .modal-actions {

@@ -27,14 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Open Delete Confirmation Modal
     const deleteConfirmationModal = document.getElementById('delete-confirmation-modal');
     const deleteBoardBtn = document.getElementById('delete-board-btn');
-    const deleteBoardModalContent = document.getElementsByClassName('delete-board-modal-content')[0];
-
+    
     if (deleteBoardBtn) {
         deleteBoardBtn.addEventListener('click', () => {
             editBoardModal.classList.remove('modal-show');
             deleteConfirmationModal.classList.remove('hidden'); 
             deleteConfirmationModal.classList.add('visible');
-            deleteBoardModalContent.classList.add('delete-board-modal-content-visible');
 
         });
     }
@@ -45,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cancelDeleteBoardBtn.addEventListener('click', () => {
             deleteConfirmationModal.classList.remove('visible');
             editBoardModalContent.classList.remove('board-modal-content-visible');
-            deleteBoardModalContent.classList.remove('delete-board-modal-content-visible');
         });
     }
 
@@ -117,13 +114,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target.classList.contains('unpin-btn')) {
             currentImageId = event.target.getAttribute('data-image-id');
             currentBoardId = event.target.getAttribute('data-board-id');
-            unpinModal.classList.remove('hidden');
+            unpinModal.classList.remove('unpin-modal-hidden');
+            unpinModal.classList.add('unpin-modal-visible');
         }
     });
 
     // Close the modal when the cancel button is clicked
     unpinCancelBtn.addEventListener('click', () => {
-        unpinModal.classList.add('hidden');
+        unpinModal.classList.add('unpin-modal-hidden');
+        unpinModal.classList.remove('unpin-modal-visible');
         currentImageId = null; // Clear the current image ID
         currentBoardId = null; // Clear the current board ID
     });
