@@ -9,16 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const openAuthModal = async (url) => {
         try {
             const response = await fetch(url, {
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }, // Indicate AJAX request
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }, // AJAX header
             });
-
-            if (!response.ok) {
-                throw new Error(`Failed to load modal content: ${response.status}`);
-            }
-
             const data = await response.json();
-            authModalContent.innerHTML = data.html; // Inject the HTML into the modal
-            authModal.classList.remove('hidden'); // Show the modal
+            authModalContent.innerHTML = data.html;
+            authModal.classList.remove('hidden');
         } catch (error) {
             console.error('Error loading modal content:', error);
         }
@@ -33,8 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add event listeners for login and signup buttons
     if (loginLink) {
         loginLink.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent default navigation
-            openAuthModal(loginLink.getAttribute('href')); // Open login modal
+            try {
+                e.preventDefault(); // Prevent default navigation
+                openAuthModal(loginLink.getAttribute('href'));
+            } catch (error) {
+                console.error('Error opening modal, redirecting:', error);
+                window.location.href = loginLink.getAttribute('href'); // Fallback to dedicated page
+            }
         });
     }
 
