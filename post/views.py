@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect, reverse
 from django.views import generic
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
@@ -19,6 +19,16 @@ class PostList(generic.ListView):
     template_name = "post/index.html"
     paginate_by = 10
     context_object_name = "userimages"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        page = self.request.GET.get("page", 1)
+
+        # Check if the requested page exceeds available pages
+        paginator = self.get_paginator(queryset, self.paginate_by)
+        if int(page) > paginator.num_pages:
+            raise Http404("No more images available.")
+        return queryset
 
     def get_template_names(self, *args, **kwargs):
         if self.request.htmx:

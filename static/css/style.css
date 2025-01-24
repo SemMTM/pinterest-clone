@@ -265,20 +265,6 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
 }
 
-.grid-item-overlay {
-    position: absolute;
-    background: rgba(32, 32, 32, 0.247);
-    bottom: 0;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    border-radius: 10px;
-}
-
-.grid-item-overlay:hover {
-    opacity: 1;
-}
-
 .grid-item img {
     display: block;
     width: 100%;
