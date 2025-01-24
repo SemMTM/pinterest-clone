@@ -92,6 +92,9 @@
 
             <div>
                 {% block content %}
+                {% if debug %}
+                    <p>Loaded template: {{ template_name }}</p>
+                {% endif %}
                 <!-- Content Goes here -->
                 {% endblock content %}       
             </div>
