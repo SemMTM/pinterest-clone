@@ -56,12 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const imagePreview = document.getElementById('profile-image-preview');
 
     const showModal = () => {
-        editProfileModal.classList.remove('hidden');
+        editProfileModal.classList.add('modal-show');
         editProfileModalContent.classList.add('edit-profile-modal-visible');
     }
 
-    const hideModal = () => {
-        editProfileModal.classList.add('hidden'); 
+    const hideModal = () => { 
+        editProfileModal.classList.remove('modal-show'); 
         editProfileModalContent.classList.remove('edit-profile-modal-visible');
     }
     
