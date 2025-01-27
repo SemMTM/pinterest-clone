@@ -60,11 +60,11 @@ def created_pins(request, username):
 
     # Pagination logic
     page_number = request.GET.get('page', 1)
-    paginator = Paginator(created_posts, 10)  # Paginate by 6 items per page
+    paginator = Paginator(created_posts, 10) 
 
     try:
         page = paginator.page(page_number)
-    except EmptyPage:
+    except EmptyPage: 
         return HttpResponse("", status=200) 
 
     return render(request, 'profile_page/created_pins.html', {'created_posts': page, 'profile_user': user})

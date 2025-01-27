@@ -8,11 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Recalculate the grid after new content is swapped in
     document.body.addEventListener("htmx:afterSwap", () => {
-        resizeAllGridItems();
+        resizeGridWithImages();
     });
 
     // Initial grid setup
-    window.onload = resizeAllGridItems();
+    window.onload = resizeGridWithImages();
     window.addEventListener("resize", resizeAllGridItems);
 });
 
@@ -42,6 +42,15 @@ function resizeAllGridItems(){
        resizeGridItem(allItems[x]);
     }
  }
+
+ function resizeGridWithImages() {
+    const grid = document.querySelector(".image-grid");
+    if (grid) {
+        imagesLoaded(grid, () => {
+            resizeAllGridItems(); // Resize grid once all images are loaded
+        });
+    }
+}
 
 function resizeInstance(instance){
         item = instance.elements[0];
