@@ -2,19 +2,17 @@
 {% load i18n %}
 {% load account socialaccount %}
 
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
-
 {% block content %}
 
 <div class="container">
     <div class="row">
         <div class="col-md-8 mt-3 offset-md-2">
-            <h3>{% trans "Sign In" %}</h3>
+            <h3>Sign In</h3>
 
-            <p>{% blocktrans %}Welcome back to the code|star blog. To leave a comment or like a post, please log in. If
+            <p>Welcome back to the code|star blog. To leave a comment or like a post, please log in. If
                 you
-                have not created an account yet, then <a class="link" href="{{ signup_url }}">sign up</a>
-                first.{% endblocktrans %}</p>
+                have not created an account yet, then <a class="link" href="{% url 'custom_accounts:signup_modal' %}">sign up</a>
+                first.</p>
         </div>
     </div>
     <div class="row">

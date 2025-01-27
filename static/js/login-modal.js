@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const authModal = document.getElementById('auth-modal');
     const authModalContent = document.getElementById('auth-modal-content');
-    const loginLink = document.getElementById('login-link');
-    const signupLink = document.getElementById('signup-link');
     const closeAuthModal = document.getElementById('close-auth-modal');
 
     // Function to open the modal and load content dynamically
@@ -25,25 +23,20 @@ document.addEventListener('DOMContentLoaded', () => {
         authModalContent.innerHTML = ''; // Clear the modal content
     };
 
-    // Add event listeners for login and signup buttons
-    if (loginLink) {
-        loginLink.addEventListener('click', (e) => {
-            try {
-                e.preventDefault(); // Prevent default navigation
-                openAuthModal(loginLink.getAttribute('href'));
-            } catch (error) {
-                console.error('Error opening modal, redirecting:', error);
-                window.location.href = loginLink.getAttribute('href'); // Fallback to dedicated page
-            }
-        });
-    }
+    // Attach event listeners to all login/signup links
+    const attachModalListeners = () => {
+        const authLinks = document.querySelectorAll(
+            'a[href$="/custom-accounts/login-modal/"], a[href$="/custom-accounts/signup-modal/"]'
+        );
 
-    if (signupLink) {
-        signupLink.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent default navigation
-            openAuthModal(signupLink.getAttribute('href')); // Open signup modal
+        authLinks.forEach((link) => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent default navigation
+                const url = link.getAttribute('href');
+                openAuthModal(url); // Open the modal with the corresponding content
+            });
         });
-    }
+    };
 
     // Close the modal when the close button is clicked
     if (closeAuthModal) {
@@ -80,4 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error submitting form:', error);
         }
     });
+
+    // Attach modal listeners to links dynamically on page load
+    attachModalListeners();
+
+    // Reattach modal listeners after dynamic content is loaded (if using htmx or similar)
+    document.body.addEventListener('htmx:afterSwap', attachModalListeners);
 });
