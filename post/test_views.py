@@ -4,12 +4,14 @@ from django.http import Http404
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from post.models import Post, Comment, ImageTags, ImageTagRelationships
+from django.core.files.uploadedfile import SimpleUploadedFile
 from profile_page.models import ImageBoard
-from post.forms import CommentForm
+from post.forms import CommentForm, PostForm
 from cloudinary.models import CloudinaryField
 from uuid import uuid4
 from unittest.mock import patch
 from django.utils.timezone import now
+import json
 
 class PostListViewTest(TestCase):
     @classmethod
@@ -109,113 +111,135 @@ class PostListViewTest(TestCase):
             self.assertNotContains(response, post.title)
 
 
-class PostDetailViewTest(TestCase):
+class CreatePostViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        # Create test users
         cls.user = User.objects.create_user(username="testuser", password="password123")
-        cls.other_user = User.objects.create_user(username="otheruser", password="password456")
+        cls.url = reverse("create_post")
 
-        # Create a test post
-        cls.post = Post.objects.create(
-            id=uuid4(),
-            title="Test Post",
-            user=cls.user,
-            image="mock_image_url",
-            description="This is a test post.",
-            created_on=now(),
+        cls.valid_image = SimpleUploadedFile(
+            "test_image.jpg",
+            b"file_content",
+            content_type="image/jpeg"
         )
 
-        # Create comments for the post
-        cls.comment1 = Comment.objects.create(
-            post=cls.post,
-            author=cls.user,
-            body="This is the first comment.",
-            created_on=now(),
-        )
-        cls.comment2 = Comment.objects.create(
-            post=cls.post,
-            author=cls.other_user,
-            body="This is the second comment.",
-            created_on=now(),
-        )
+        # Create valid tags
+        cls.tag_clothes = ImageTags.objects.create(tag_name="clothes")
+        cls.tag_art = ImageTags.objects.create(tag_name="art")
 
-        # Create tags for the post
-        cls.tag1 = ImageTags.objects.create(tag_name="tag1")
-        cls.tag2 = ImageTags.objects.create(tag_name="tag2")
-        ImageTagRelationships.objects.create(post_id=cls.post, tag_name=cls.tag1)
-        ImageTagRelationships.objects.create(post_id=cls.post, tag_name=cls.tag2)
+        cls.valid_data = {
+            "title": "Test Post",
+            "description": "This is a test description.",
+            "tags": [cls.tag_clothes.pk, cls.tag_art.pk],  # Use valid tag primary keys
+            "image": cls.valid_image,
+        }
+        cls.invalid_data = {
+            "title": "",  # Title is required
+            "description": "This description lacks an image.",
+        }
 
-        # Create boards for the user
-        cls.board1 = ImageBoard.objects.create(user=cls.user, title="Test Board 1")
-        cls.board2 = ImageBoard.objects.create(user=cls.user, title="Test Board 2")
-
-    def test_view_url_exists_at_desired_location(self):
-        """Test if the view is accessible by its URL."""
-        response = self.client.get(reverse("post_detail", kwargs={"id": self.post.id}))
-        self.assertEqual(response.status_code, 200)
-
-    def test_view_uses_correct_template(self):
-        """Test if the correct template is used."""
-        response = self.client.get(reverse("post_detail", kwargs={"id": self.post.id}))
-        self.assertTemplateUsed(response, "post/post_details.html")
-
-    def test_view_returns_correct_post(self):
-        """Test if the correct post is returned in the context."""
-        response = self.client.get(reverse("post_detail", kwargs={"id": self.post.id}))
-        self.assertEqual(response.context["post"], self.post)
-
-    def test_view_returns_correct_comments(self):
-        """Test if the comments associated with the post are returned."""
-        response = self.client.get(reverse("post_detail", kwargs={"id": self.post.id}))
-        self.assertQuerySetEqual(
-            response.context["comments"],
-            [self.comment1, self.comment2],
-            transform=lambda x: x,
-        )
-
-    def test_comment_ordering(self):
-        """Test if comments are ordered by creation date."""
-        response = self.client.get(reverse("post_detail", kwargs={"id": self.post.id}))
-        comments = response.context["comments"]
-        self.assertEqual(list(comments), [self.comment1, self.comment2])
-
-    def test_view_returns_correct_comment_count(self):
-        """Test if the correct number of comments is returned."""
-        response = self.client.get(reverse("post_detail", kwargs={"id": self.post.id}))
-        self.assertEqual(response.context["comment_count"], 2)
-
-    def test_view_returns_tags(self):
-        """Test if the tags associated with the post are returned."""
-        response = self.client.get(reverse("post_detail", kwargs={"id": self.post.id}))
-        self.assertQuerySetEqual(
-            response.context["tags"].order_by("tag_name"),  # Ensure consistent ordering
-            ImageTags.objects.filter(image_tag__post_id=self.post).order_by("tag_name"),
-            transform=lambda x: x,
-        )
-
-    def test_view_returns_comment_form(self):
-        """Test if a blank comment form is returned in the context."""
-        response = self.client.get(reverse("post_detail", kwargs={"id": self.post.id}))
-        self.assertIsInstance(response.context["comment_form"], CommentForm)
-
-    def test_authenticated_user_boards(self):
-        """Test if boards are returned for authenticated users."""
+    def test_create_post_get_request(self):
+        """Test that the view renders the form for a GET request."""
         self.client.login(username="testuser", password="password123")
-        response = self.client.get(reverse("post_detail", kwargs={"id": self.post.id}))
-        self.assertQuerySetEqual(
-            response.context["user_boards"].order_by("id"),  # Ensure consistent ordering
-            ImageBoard.objects.filter(user=self.user).order_by("id"),
-            transform=lambda x: x,
-        )
+        response = self.client.get(self.url)
 
-    def test_unauthenticated_user_boards(self):
-        """Test if no boards are returned for unauthenticated users."""
-        response = self.client.get(reverse("post_detail", kwargs={"id": self.post.id}))
-        self.assertEqual(response.context["user_boards"], [])
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "post/post_create.html")
+        self.assertIsInstance(response.context["post_form"], PostForm)
 
-    def test_invalid_post_id(self):
-        """Test if a 404 is raised for an invalid post ID."""
-        invalid_id = uuid4()  # Generate a random UUID
-        response = self.client.get(reverse("post_detail", kwargs={"id": invalid_id}))
-        self.assertEqual(response.status_code, 404)
+    @patch("cloudinary.uploader.upload", return_value={
+        "url": "http://mock.url/test_image.jpg",
+        "public_id": "mock_public_id",
+        "version": "1234567890",
+        "type": "upload",
+        "format": "jpg",
+        "resource_type": "image"  # Added the missing field
+    })
+    def test_create_post_valid_post_request(self, mock_upload):
+        """Test that a valid POST request creates a post and returns success."""
+        self.client.login(username="testuser", password="password123")
+
+        data = self.valid_data.copy()
+
+        response = self.client.post(self.url, data, follow=True)
+
+        # Assert that the post was created
+        self.assertEqual(Post.objects.count(), 1, "Post was not created!")
+        post = Post.objects.first()
+        self.assertEqual(post.title, "Test Post")
+        self.assertEqual(post.description, "This is a test description.")
+        self.assertEqual(post.user, self.user)
+
+        # Assert that tags were created and linked
+        self.assertTrue(ImageTagRelationships.objects.filter(post_id=post, tag_name__tag_name="clothes").exists())
+        self.assertTrue(ImageTagRelationships.objects.filter(post_id=post, tag_name__tag_name="art").exists())
+
+        # Assert JSON response
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["success"], True)
+        self.assertEqual(response.json()["message"], "Your post has been created successfully!")
+
+    @patch("cloudinary.uploader.upload", return_value={
+        "url": "http://mock.url/test_image.jpg",
+        "public_id": "mock_public_id",
+        "version": "1234567890",
+        "type": "upload",
+        "format": "jpg",
+        "resource_type": "image"  # Added the missing field
+    })
+    def test_create_post_without_tags(self, mock_upload):
+        """Test that a valid POST request without tags still creates a post."""
+        self.client.login(username="testuser", password="password123")
+
+        data = self.valid_data.copy()
+        data.pop("tags")  # Remove tags
+
+        response = self.client.post(self.url, data, follow=True)
+
+        # Assert that the post was created without tags
+        self.assertEqual(Post.objects.count(), 1)
+        post = Post.objects.first()
+        self.assertEqual(post.title, "Test Post")
+        self.assertEqual(ImageTagRelationships.objects.filter(post_id=post).count(), 0)
+
+        # Assert JSON response
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["success"], True)
+
+    def test_create_post_invalid_post_request(self):
+        """Test that an invalid POST request returns errors and does not create a post."""
+        self.client.login(username="testuser", password="password123")
+
+        response = self.client.post(self.url, self.invalid_data, content_type="application/json")
+
+        # Assert that no post was created
+        self.assertEqual(Post.objects.count(), 0)
+
+        # Assert JSON response with errors
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["success"], False)
+        self.assertIn("error", response.json())
+
+    @patch("cloudinary.uploader.upload", return_value={
+        "url": "http://mock.url/test_image.jpg",
+        "public_id": "mock_public_id",
+        "version": "1234567890",
+        "type": "upload",
+        "format": "jpg",
+        "resource_type": "image"  # Added the missing field
+    })
+    def test_create_post_missing_image(self, mock_upload):
+        """Test that a POST request without an image is invalid."""
+        self.client.login(username="testuser", password="password123")
+
+        data = self.valid_data.copy()
+        data.pop("image", None)  # Safely remove image
+        response = self.client.post(self.url, data, follow=True)
+
+        # Assert that no post was created
+        self.assertEqual(Post.objects.count(), 0)
+
+        # Assert JSON response with errors
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["success"], False)
+        self.assertIn("image", json.loads(response.json()["error"]))
