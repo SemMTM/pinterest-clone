@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const authModal = document.getElementById('auth-modal');
     const authModalContent = document.getElementById('auth-modal-content');
     const closeAuthModal = document.getElementById('close-auth-modal');
+    const logoutButton = document.getElementById('logout-button');
 
     // Function to open the modal and load content dynamically
     const openAuthModal = async (url) => {

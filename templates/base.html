@@ -78,11 +78,10 @@
             {% if user.is_authenticated %}
             <div class="top-bar">
                 <div class="btn-container">
-                    <div>
-                        <a href="{% url 'account_logout' %}">
-                            <button class="btn">Log-out</button>
-                        </a>
-                    </div>
+                    <form method="POST" action="{% url 'custom_accounts:logout' %}" id="logout-form">
+                        {% csrf_token %}
+                        <button id="logout-button" class="btn">Log out</button>
+                    </form>
                 </div>
             </div>
             {% else %}

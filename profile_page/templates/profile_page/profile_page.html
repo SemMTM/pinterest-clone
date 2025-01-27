@@ -38,9 +38,10 @@
                 <button id="edit-profile-btn" class="btn pp-btn">Edit Profile</button>
             </div>
             <div>
-                <a href="{% url 'account_logout' %}">
-                    <button class="btn pp-btn">Log-out</button>
-                </a>
+                <form method="POST" action="{% url 'custom_accounts:logout' %}" id="logout-form">
+                    {% csrf_token %}
+                    <button id="logout-button" class="btn">Log out</button>
+                </form>
             </div>
         </div>
         {% endif %}
