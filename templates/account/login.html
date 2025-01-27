@@ -8,10 +8,7 @@
     <div class="signin-row">
         <h3>{% trans "Sign In" %}</h3>
 
-        <p>{% blocktrans %}Welcome to the Pinterest 95. If
-            you
-            have not created an account yet, then <a class="link" href="{{ signup_url }}">sign up</a>
-            first.{% endblocktrans %}</p>
+        <p>{% blocktrans %}Welcome to the Pinterest 95. {% endblocktrans %}</p>
     </div>
     <div class="signin-row">
         <form class="login" method="POST" action="{% url 'account_login' %}">

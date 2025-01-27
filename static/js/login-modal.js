@@ -31,13 +31,25 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
         authLinks.forEach((link) => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault(); // Prevent default navigation
-                const url = link.getAttribute('href');
-                openAuthModal(url); // Open the modal with the corresponding content
-            });
+            // Remove existing event listener if it exists
+            link.removeEventListener('click', openAuthModalHandler);
+    
+            // Add a single event listener
+            link.addEventListener('click', openAuthModalHandler);
         });
     };
+    
+    // Define the event handler separately to reuse and prevent duplication
+    const openAuthModalHandler = (e) => {
+        e.preventDefault(); // Prevent default navigation
+        const link = e.target.closest('a'); // Ensure we get the <a> tag
+        if (link && link.getAttribute('href')) {
+            const url = link.getAttribute('href');
+            openAuthModal(url); // Open the modal with the corresponding content
+        } else {
+            console.error('Invalid link or missing href:', link);
+    }
+};
 
     // Close the modal when the close button is clicked
     if (closeAuthModal) {
