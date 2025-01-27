@@ -173,7 +173,7 @@
                                 </div>
                             </form>
                             {% else %}
-                            <a href="{% url 'account_login' %}"><p>Log in to leave a comment</p></div>
+                            <a href="{% url 'custom_accounts:login_modal' %}"><p>Log in to leave a comment</p></a>
                             <form id="commentForm" method="POST" style="display: none;">
                                 {% csrf_token %}
                                 {{ comment_form }}
@@ -221,7 +221,7 @@
             </ul>
             {% else %}
             <div>
-                <a href="{% url 'account_login' %}"><p>Log in to save a post</p>
+                <a href="{% url 'account_login' %}"><p>Log in to save a post</p></a>
             </div>
             {% endif %}
             <div id="board-modal-buttons">
