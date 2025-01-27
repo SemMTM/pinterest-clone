@@ -226,7 +226,7 @@ class CreatePostViewTest(TestCase):
         "version": "1234567890",
         "type": "upload",
         "format": "jpg",
-        "resource_type": "image"  # Added the missing field
+        "resource_type": "image"  
     })
     def test_create_post_missing_image(self, mock_upload):
         """Test that a POST request without an image is invalid."""
@@ -333,3 +333,140 @@ class TagSuggestionsViewTest(TestCase):
         """Test that methods other than GET return an error."""
         response = self.client.post(self.url)
         self.assertEqual(response.status_code, 405)  # Method not allowed
+
+
+class AddCommentViewTest(TestCase):
+    @classmethod
+    @patch("cloudinary.uploader.upload", return_value={
+            "url": "http://mock.url/test_image.jpg", 
+            "public_id": "mock_public_id",
+            "version": "1234567890",
+            "type": "upload",
+            "format": "jpg",
+            "resource_type": "image"
+            })
+    def setUpTestData(cls, mock_upload):
+        # Create a test user
+        cls.user = User.objects.create_user(username="testuser", password="password123")
+        
+        # Create a test post
+        cls.post = Post.objects.create(
+            title="Test Post",
+            description="Test Description",
+            user=cls.user,
+            image=SimpleUploadedFile("test_image.jpg", b"file_content", content_type="image/jpeg"),
+        )
+
+        cls.url = reverse("add_comment", kwargs={"post_id": cls.post.id})
+
+    def setUp(self):
+        self.client.login(username="testuser", password="password123")
+
+    
+    @patch('django.utils.timezone.now', return_value=now())
+    def test_add_valid_comment(self, mock_now):
+        """Test adding a valid comment via AJAX."""
+        data = {"body": "This is a test comment."}
+
+        response = self.client.post(
+            self.url,
+            data,
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',  # Simulate AJAX request
+        )
+
+        # Assert the response
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["success"], True)
+        self.assertEqual(response.json()["body"], "This is a test comment.")
+        self.assertEqual(response.json()["author"], self.user.username)
+
+        # Check the comment in the database
+        self.assertEqual(Comment.objects.count(), 1)
+        comment = Comment.objects.first()
+        self.assertEqual(comment.body, "This is a test comment.")
+        self.assertEqual(comment.author, self.user)
+        self.assertEqual(comment.post, self.post)
+
+    def test_add_invalid_comment(self):
+        """Test adding a comment with invalid form data."""
+        data = {"body": ""}  # Empty body
+
+        response = self.client.post(
+            self.url,
+            data,
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',  # Simulate AJAX request
+        )
+
+        # Assert the response
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error"], "Invalid form data")
+
+        # Assert no comment was created
+        self.assertEqual(Comment.objects.count(), 0)
+
+    def test_non_ajax_request(self):
+        """Test the view returns an error for non-AJAX requests."""
+        data = {"body": "This is a test comment."}
+
+        response = self.client.post(self.url, data)
+
+        # Assert the response
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error"], "Invalid request")
+
+        # Assert no comment was created
+        self.assertEqual(Comment.objects.count(), 0)
+
+    def test_anonymous_user(self):
+        """Test that an anonymous user cannot add a comment."""
+        self.client.logout()  # Log out the authenticated user
+        data = {"body": "This is a test comment."}
+
+        response = self.client.post(
+            self.url,
+            data,
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',  # Simulate AJAX request
+        )
+
+        # Assert the response
+        self.assertEqual(response.status_code, 302)  # Should redirect to login
+        self.assertTrue(response.url.startswith(reverse("login")))
+
+        # Assert no comment was created
+        self.assertEqual(Comment.objects.count(), 0)
+
+    def test_invalid_post_id(self):
+        """Test the view returns an error for an invalid post ID."""
+        invalid_url = reverse("add_comment", kwargs={"post_id": 9999})  # Non-existent post ID
+        data = {"body": "This is a test comment."}
+
+        response = self.client.post(
+            invalid_url,
+            data,
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',  # Simulate AJAX request
+        )
+
+        # Assert the response
+        self.assertEqual(response.status_code, 404)
+
+        # Assert no comment was created
+        self.assertEqual(Comment.objects.count(), 0)
+
+    def test_edge_case_body(self):
+        """Test adding a comment with edge case data."""
+        data = {"body": "A" * 600}  # Maximum length body
+
+        response = self.client.post(
+            self.url,
+            data,
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',  # Simulate AJAX request
+        )
+
+        # Assert the response
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["success"], True)
+
+        # Check the comment in the database
+        self.assertEqual(Comment.objects.count(), 1)
+        comment = Comment.objects.first()
+        self.assertEqual(comment.body, "A" * 600)
