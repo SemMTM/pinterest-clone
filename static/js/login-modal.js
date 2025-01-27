@@ -2,9 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const authModal = document.getElementById('auth-modal');
     const authModalContent = document.getElementById('auth-modal-content');
     const closeAuthModal = document.getElementById('close-auth-modal');
-    const logoutButton = document.getElementById('logout-button');
 
-    // Function to open the modal and load content dynamically
+    // Function to open the signin modal and load content dynamically
     const openAuthModal = async (url) => {
         try {
             const response = await fetch(url, {
@@ -20,8 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to close the modal
     const closeModal = () => {
-        authModal.classList.add('hidden'); // Hide the modal
-        authModalContent.innerHTML = ''; // Clear the modal content
+        authModal.classList.add('hidden'); 
+        authModalContent.innerHTML = ''; 
     };
 
     // Attach event listeners to all login/signup links
@@ -33,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
         authLinks.forEach((link) => {
             // Remove existing event listener if it exists
             link.removeEventListener('click', openAuthModalHandler);
-    
             // Add a single event listener
             link.addEventListener('click', openAuthModalHandler);
         });
@@ -41,15 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Define the event handler separately to reuse and prevent duplication
     const openAuthModalHandler = (e) => {
-        e.preventDefault(); // Prevent default navigation
-        const link = e.target.closest('a'); // Ensure we get the <a> tag
+        e.preventDefault(); 
+        const link = e.target.closest('a'); 
         if (link && link.getAttribute('href')) {
             const url = link.getAttribute('href');
             openAuthModal(url); // Open the modal with the corresponding content
-        } else {
-            console.error('Invalid link or missing href:', link);
-    }
-};
+        } 
+    };
 
     // Close the modal when the close button is clicked
     if (closeAuthModal) {

@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Edit Comment
     const commentsContainer = document.getElementById('comments-container');
+
     if (commentsContainer) {
         commentsContainer.addEventListener('click', (e) => {
             if (e.target.classList.contains('edit-comment-btn')) {
@@ -74,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
 
     // Comment Form Submission
     if (commentForm) {
@@ -102,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const payload = commentId
                 ? JSON.stringify({ body })
                 : new URLSearchParams({ body, csrfmiddlewaretoken: csrfToken }).toString();
-
             try {
                 const response = await fetch(url, { method: 'POST', headers, body: payload });
                 if (!response.ok) {
@@ -127,7 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     showPopUpMessage(data.error || 'An error occurred.');
                 }
             } catch (error) {
-                console.error('Error submitting comment:', error);
                 showPopUpMessage('An unexpected error occurred.');
             }
         });

@@ -4,8 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const createPostForm = document.getElementById('post-create-form');
     const preview = document.getElementById('image-preview');
 
+    // Handles submission of create post form 
     createPostForm.addEventListener('submit', (e) => {
-        e.preventDefault(); // Prevent the page from refreshing
+        e.preventDefault(); 
 
         const formData = new FormData(createPostForm); // Collect form data
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -28,9 +29,9 @@ document.addEventListener('DOMContentLoaded', function() {
             .then((data) => {
                 if (data.success) {
                     showPopUpMessage('Your post has been created successfully!');
-                    createPostForm.reset(); // Clear the form fields
-                    preview.style.display = 'none'; // Hide the image preview
-                    preview.src = ''; // Clear the preview image
+                    createPostForm.reset(); 
+                    preview.style.display = 'none'; 
+                    preview.src = ''; 
                 } else {
                     showPopUpMessage('An error occurred.');
                 }

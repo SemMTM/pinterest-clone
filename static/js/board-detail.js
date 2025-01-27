@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: new URLSearchParams({
                     action: 'update',
                     title: formData.get('title'),
-                    visibility: formData.get('visibility'), // Include visibility in the request
+                    visibility: formData.get('visibility'), 
                 }),
             })
                 .then((response) => {
@@ -123,8 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
     unpinCancelBtn.addEventListener('click', () => {
         unpinModal.classList.add('unpin-modal-hidden');
         unpinModal.classList.remove('unpin-modal-visible');
-        currentImageId = null; // Clear the current image ID
-        currentBoardId = null; // Clear the current board ID
+        currentImageId = null; 
+        currentBoardId = null; 
     });
 
     // Handle unpin confirmation
@@ -155,11 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         postElement.remove(); // Remove the grid item directly from the DOM
                     }
     
-                    unpinModal.classList.add('hidden'); // Hide the modal
-                    currentImageId = null; // Clear the current image ID
-                    currentBoardId = null; // Clear the current board ID
-    
-                    // Display a success alert
+                    unpinModal.classList.add('hidden'); 
+                    currentImageId = null; 
+                    currentBoardId = null; 
                     showPopUpMessage('Post removed successfully!');
                 } else {
                     showPopUpMessage('An error occurred while unpinning the post.');

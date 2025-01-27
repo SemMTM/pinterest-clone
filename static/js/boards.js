@@ -1,22 +1,17 @@
 import { showPopUpMessage } from './pop_up.js'
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Save modal scripts
+    // Save modal function
     const saveButton = document.getElementById('save-btn');
     const modal = document.getElementById('save-to-board-modal');
     const closeModalButton = document.getElementById('close-save-modal');
     const boardButtons = document.querySelectorAll('.save-modal-board-btn');
-    const isAuthenticated = saveButton.getAttribute('data-authenticated');
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
     // Open modal
     saveButton.addEventListener('click', () => {
-        if (!isAuthenticated) {
-            alert("Log in to save posts");
-        } else {
-            modal.classList.remove('save-modal-hidden');
-            modal.classList.add('save-modal-visible');
-        }
+        modal.classList.remove('save-modal-hidden');
+        modal.classList.add('save-modal-visible');
     });
 
     // Close modal
@@ -86,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        const postId = postImagePreview.getAttribute('data-post-id'); // Pass the post ID dynamically
+        const postId = postImagePreview.getAttribute('data-post-id'); 
 
         fetch('/profile/create-board/', {
             method: 'POST',
@@ -118,6 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     });
 
+    
     // Variables specific to the delete post modal
     const deletePostBtn = document.getElementById('delete-post-btn');
     const deletePostModal = document.getElementById('delete-post-modal');

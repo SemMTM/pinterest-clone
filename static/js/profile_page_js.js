@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedButton = document.getElementById('saved-btn');
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
+    // Helper functions for toggling active and pointer events
     const toggleActive = (buttonToActivate, buttonToDeactivate) => {
         buttonToActivate.classList.add('active');
         buttonToDeactivate.classList.remove('active');
@@ -37,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const editBoardButton = document.getElementById('edit-board-btn');
-
+    
     if (editBoardButton) {
         editBoardButton.addEventListener('click', (e) => {
             e.preventDefault();
