@@ -243,3 +243,93 @@ class CreatePostViewTest(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["success"], False)
         self.assertIn("image", json.loads(response.json()["error"]))
+
+
+class TagSuggestionsViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create sample tags
+        ImageTags.objects.create(tag_name="clothes")
+        ImageTags.objects.create(tag_name="art")
+        ImageTags.objects.create(tag_name="artistic")
+        ImageTags.objects.create(tag_name="abstract")
+        ImageTags.objects.create(tag_name="nature")
+        ImageTags.objects.create(tag_name="animals")
+        ImageTags.objects.create(tag_name="fashion")
+        ImageTags.objects.create(tag_name="travel")
+        ImageTags.objects.create(tag_name="architecture")
+        ImageTags.objects.create(tag_name="interior")
+        ImageTags.objects.create(tag_name="food")
+        ImageTags.objects.create(tag_name="photography")
+        ImageTags.objects.create(tag_name="adventure")
+        ImageTags.objects.create(tag_name="assets")
+        ImageTags.objects.create(tag_name="action")
+        ImageTags.objects.create(tag_name="activities") 
+
+        cls.url = reverse("tag_suggestions")  # Update with the correct URL name for the view
+
+    def test_no_query_returns_all_tags(self):
+        """Test that all tags are returned when no query is provided."""
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(len(data), 10)  # Should return 10 tags
+        tag_names = [tag["tag_name"] for tag in data]
+        self.assertIn("clothes", tag_names)
+        self.assertIn("art", tag_names)
+
+    def test_query_matches_tags(self):
+        """Test that the query matches and returns the correct tags."""
+        response = self.client.get(self.url + "?q=art")
+        self.assertEqual(response.status_code, 200)
+
+        data = response.json()
+        tag_names = [tag["tag_name"] for tag in data]
+
+        # Assert that the expected matches are returned
+        expected_matches = ["art", "artistic"]
+        for match in expected_matches:
+            self.assertIn(match, tag_names)
+
+    def test_query_with_partial_match(self):
+        """Test that partial matches are returned correctly."""
+        response = self.client.get(self.url, {"q": "a"})
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(len(data), 10)  # Should return up to 10 matches
+        tag_names = [tag["tag_name"] for tag in data]
+        self.assertIn("art", tag_names)
+        self.assertIn("animals", tag_names)
+        self.assertIn("architecture", tag_names)
+
+    def test_query_no_results(self):
+        """Test that no results are returned when no tags match the query."""
+        response = self.client.get(self.url, {"q": "nonexistent"})
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(len(data), 0)  # No matches should return an empty list
+
+    def test_query_limit_results(self):
+        """Test that the number of results is limited to 10."""
+        response = self.client.get(self.url, {"q": ""})
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(len(data), 10)  # Only 10 results should be returned
+
+    def test_query_is_case_insensitive(self):
+        """Test that the query is case-insensitive."""
+        response = self.client.get(self.url + "?q=ART")
+        self.assertEqual(response.status_code, 200)
+
+        data = response.json()
+        tag_names = [tag["tag_name"] for tag in data]
+
+        # Assert that the results include expected matches
+        expected_matches = ["art", "artistic"]
+        for match in expected_matches:
+            self.assertIn(match, tag_names)
+
+    def test_invalid_method_returns_error(self):
+        """Test that methods other than GET return an error."""
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 405)  # Method not allowed

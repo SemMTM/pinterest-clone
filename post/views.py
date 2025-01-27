@@ -4,7 +4,7 @@ from django.http import JsonResponse, Http404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.core.paginator import Paginator
 from django.db.models import Prefetch
 from profile_page.models import ImageBoard, BoardImageRelationship
@@ -84,6 +84,7 @@ def create_post(request):
     )
 
 
+@require_GET
 def tag_suggestions(request):
     query = request.GET.get('q', '')
     if query:
