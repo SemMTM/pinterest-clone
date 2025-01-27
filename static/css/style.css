@@ -1020,7 +1020,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .delete-board-modal-content {
-    background: #c0c0c0;;
+    background: #c0c0c0;
     padding: 20px;
     width: 300px;
     text-align: center;
@@ -1048,7 +1048,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #unpin-modal .modal-content {
-    background: #d7d7d7;
+    background: #c0c0c0;
     padding: 20px;
     width: 300px;
     text-align: center;
@@ -1211,7 +1211,7 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1219,12 +1219,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .auth-modal-content {
-    background: white;
+    background: #c0c0c0;
     padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
+    max-width: 350px;
     width: 100%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
+                inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
     position: relative;
 }
 
@@ -1234,5 +1234,35 @@ h1, h2, h3, h4, h5, h6 {
     right: 10px;
     font-size: 1.5rem;
     cursor: pointer;
+}
+
+.signin-row {
+    margin-bottom: 10px;
+}
+
+.signin-row .login p {
+    margin-bottom: 5px;
+}
+
+.signin-row .login p input {
+    display: block;
+    width: 100%;
+}
+
+.helptext {
+    display: block;
+}
+
+.signup-container {
+    padding: 8px;
+}
+
+.signup-container form p {
+    margin-bottom: 5px;
+}
+
+.signup-container form p input {
+    display: block;
+    width: 100%;
 }
 
