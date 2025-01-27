@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-#from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage
 from django.dispatch import receiver
@@ -131,7 +131,7 @@ def handle_post_save(sender, instance, **kwargs):
     sync_all_pins_board(user)
 
 
-#@login_required
+@login_required
 def save_to_board(request, post_id):
     post = get_object_or_404(Post, id=post_id)
 
@@ -148,7 +148,7 @@ def save_to_board(request, post_id):
     return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)
 
 
-#@login_required
+@login_required
 def create_board(request):
     if request.method == 'POST':
         try:
@@ -177,7 +177,7 @@ def create_board(request):
 
 
 
-#@login_required
+@login_required
 def edit_board(request, board_id):
     board = get_object_or_404(ImageBoard, id=board_id)
 
@@ -216,7 +216,7 @@ def edit_board(request, board_id):
     return JsonResponse({"success": False, "error": "Invalid request method."}, status=405)
 
 
-#@login_required
+@login_required
 def unpin_post(request, board_id, post_id):
     if request.method == "POST":
         try:
@@ -238,7 +238,7 @@ def unpin_post(request, board_id, post_id):
     return JsonResponse({"success": False, "error": "Invalid request method."}, status=405)
 
 
-#@login_required
+@login_required
 def edit_profile(request):
     profile = get_object_or_404(Profile, user=request.user)
 

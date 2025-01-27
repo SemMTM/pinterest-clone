@@ -43,7 +43,8 @@
                             </a>
                         </div>
                     </div>
-    
+                    
+                    {% if user.is_authenticated %}
                     <div class="nav-2 nav-btn {% if request.path == create_post_url %}active{% endif %}">
                         <div class="nav-3">
                             <a class="nav-a" href="{% url 'create_post' %}">
@@ -51,6 +52,15 @@
                             </a>
                         </div>
                     </div>
+                    {% else %}
+                    <div class="nav-2 nav-btn">
+                        <div class="nav-3">
+                            <a class="nav-a" href="{% url 'custom_accounts:login_modal' %}">
+                                <img class="icon" src="/static/icons/icons8-plus.svg">
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
                     
                     {% if user.is_authenticated %}
                     <div class="nav-2 nav-btn" id="profile-btn">

@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, reverse, redirect, rever
 from django.views import generic
 from django.http import JsonResponse, Http404
 from django.contrib import messages
-#from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
@@ -59,7 +59,6 @@ def post_detail(request, id):
         },
     )
 
-#@login_required
 def create_post(request):
     if request.method == 'POST':
         post_form = PostForm(data=request.POST, files=request.FILES)
@@ -98,7 +97,7 @@ def tag_suggestions(request):
 
 
 @require_POST
-#@login_required
+@login_required
 def add_comment(request, post_id):
     """
     Handles adding a new comment to a post via an AJAX request.
@@ -150,7 +149,7 @@ def comment_delete(request, post_id, comment_id):
     return redirect('post_detail', id=post.id)
 
 
-#@login_required
+@login_required
 def update_comment(request, post_id, comment_id):
     if request.method != 'POST':
         return JsonResponse({'error': 'Invalid request method.'}, status=405)
@@ -182,7 +181,7 @@ def update_comment(request, post_id, comment_id):
         return JsonResponse({'error': 'Internal Server Error'}, status=500)
 
 
-#@login_required
+@login_required
 def post_delete(request, post_id):
     post = get_object_or_404(Post, id=post_id, user=request.user)
 
