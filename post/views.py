@@ -15,7 +15,7 @@ from profile_page.models import Profile
 
 # Create your views here.
 class PostList(generic.ListView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by("-created_on")
     template_name = "post/index.html"
     paginate_by = 10
     context_object_name = "userimages"
