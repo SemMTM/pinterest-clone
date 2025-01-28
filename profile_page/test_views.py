@@ -5,6 +5,7 @@ from profile_page.models import Profile, ImageBoard, BoardImageRelationship
 from post.models import Post
 from django.core.paginator import Page
 from django.db.models import Count
+from .views import sync_all_pins_board
 
 
 class ProfilePageViewTest(TestCase):
@@ -463,3 +464,105 @@ class BoardDetailViewTest(TestCase):
         response = self.client.get(self.board_url)
         self.assertEqual(response.status_code, 200)  # Public board should be accessible
         self.assertContains(response, self.board.title)  # Board title should be rendered
+
+
+class SyncAllPinsBoardTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create a user and their profile
+        cls.user = User.objects.create_user(username="testuser", password="password123")
+        Profile.objects.create(user=cls.user)
+
+        # Create boards
+        cls.board1 = ImageBoard.objects.create(user=cls.user, title="Board 1", visibility=0)
+        cls.board2 = ImageBoard.objects.create(user=cls.user, title="Board 2", visibility=0)
+
+        # Create posts
+        cls.post1 = Post.objects.create(title="Post 1", user=cls.user, description="Description 1")
+        cls.post2 = Post.objects.create(title="Post 2", user=cls.user, description="Description 2")
+        cls.post3 = Post.objects.create(title="Post 3", user=cls.user, description="Description 3")
+
+        # Pin posts to boards
+        BoardImageRelationship.objects.create(post_id=cls.post1, board_id=cls.board1)
+        BoardImageRelationship.objects.create(post_id=cls.post2, board_id=cls.board1)
+        BoardImageRelationship.objects.create(post_id=cls.post3, board_id=cls.board2)
+
+    def test_all_pins_board_is_created_if_not_exists(self):
+        """Test that the 'All Pins' board is created if it doesn't already exist."""
+        ImageBoard.objects.filter(user=self.user, title="All Pins").delete()
+        self.assertFalse(ImageBoard.objects.filter(user=self.user, title="All Pins").exists())
+        sync_all_pins_board(self.user)
+        self.assertTrue(ImageBoard.objects.filter(user=self.user, title="All Pins").exists())
+
+    def test_posts_are_added_to_all_pins_board(self):
+        """Test that posts saved to any board are added to the 'All Pins' board."""
+        sync_all_pins_board(self.user)
+        all_pins_board = ImageBoard.objects.get(user=self.user, title="All Pins")
+
+        # Verify that all posts are added to 'All Pins'
+        self.assertEqual(BoardImageRelationship.objects.filter(board_id=all_pins_board).count(), 3)
+
+    def test_no_duplicates_in_all_pins_board(self):
+        """Test that posts already in the 'All Pins' board are not duplicated."""
+        sync_all_pins_board(self.user)  # Initial sync
+        sync_all_pins_board(self.user)  # Second sync to ensure no duplicates
+        all_pins_board = ImageBoard.objects.get(user=self.user, title="All Pins")
+
+        # Verify there are no duplicates
+        relationships = BoardImageRelationship.objects.filter(board_id=all_pins_board)
+        self.assertEqual(relationships.count(), 3)
+
+    def test_only_user_posts_are_added(self):
+        """Test that only the user's posts are added to the 'All Pins' board."""
+        other_user = User.objects.create_user(username="otheruser", password="password456")
+        Profile.objects.create(user=other_user)
+
+        # Create posts for the other user and pin them to their board
+        other_board = ImageBoard.objects.create(user=other_user, title="Other Board", visibility=0)
+        other_post = Post.objects.create(title="Other User Post", user=other_user, description="Description")
+        BoardImageRelationship.objects.create(post_id=other_post, board_id=other_board)
+
+        # Sync "All Pins" for the test user
+        sync_all_pins_board(self.user)
+        all_pins_board = ImageBoard.objects.get(user=self.user, title="All Pins")
+
+        # Ensure other user's post is not added
+        self.assertNotIn(other_post, Post.objects.filter(pinned_image__board_id=all_pins_board))
+
+    def test_empty_all_pins_board_when_no_saved_posts(self):
+        """Test that the 'All Pins' board is empty if there are no saved posts."""
+        # Create a new user with no saved posts
+        new_user = User.objects.create_user(username="newuser", password="password123")
+        Profile.objects.create(user=new_user)
+
+        sync_all_pins_board(new_user)
+        all_pins_board = ImageBoard.objects.get(user=new_user, title="All Pins")
+
+        # Verify that no posts are in the "All Pins" board
+        self.assertEqual(BoardImageRelationship.objects.filter(board_id=all_pins_board).count(), 0)
+
+    def test_post_already_in_all_pins_board_is_not_readded(self):
+        """Test that a post already in 'All Pins' is not re-added."""
+        sync_all_pins_board(self.user)
+        all_pins_board = ImageBoard.objects.get(user=self.user, title="All Pins")
+
+        # Verify initial count
+        initial_count = BoardImageRelationship.objects.filter(board_id=all_pins_board).count()
+
+        # Re-add the same posts
+        sync_all_pins_board(self.user)
+        final_count = BoardImageRelationship.objects.filter(board_id=all_pins_board).count()
+
+        # Verify that the count remains the same
+        self.assertEqual(initial_count, final_count)
+
+    def test_function_does_not_affect_other_boards(self):
+        """Test that syncing 'All Pins' does not affect other boards."""
+        initial_board1_count = BoardImageRelationship.objects.filter(board_id=self.board1).count()
+        initial_board2_count = BoardImageRelationship.objects.filter(board_id=self.board2).count()
+
+        sync_all_pins_board(self.user)
+
+        # Verify counts for other boards remain unchanged
+        self.assertEqual(BoardImageRelationship.objects.filter(board_id=self.board1).count(), initial_board1_count)
+        self.assertEqual(BoardImageRelationship.objects.filter(board_id=self.board2).count(), initial_board2_count)
