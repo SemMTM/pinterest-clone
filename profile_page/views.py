@@ -102,6 +102,10 @@ def image_boards(request, username):
 
 def board_detail(request, board_id):
     board = get_object_or_404(ImageBoard, id=board_id)
+
+    if board.visibility == 1 and request.user != board.user:
+        raise Http404
+
     images = BoardImageRelationship.objects.filter(board_id=board).select_related('post_id')
 
     return render(request, 'profile_page/board_detail.html', {'board': board, 'images': images})
