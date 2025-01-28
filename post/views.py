@@ -59,6 +59,7 @@ def post_detail(request, id):
         },
     )
 
+
 def create_post(request):
     if request.method == 'POST':
         post_form = PostForm(data=request.POST, files=request.FILES)
@@ -127,6 +128,7 @@ def add_comment(request, post_id):
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
+@login_required
 def comment_delete(request, post_id, comment_id):
     """
     Delete an individual comment.
@@ -143,9 +145,6 @@ def comment_delete(request, post_id, comment_id):
 
     if comment.author == request.user or post.user == request.user:
         comment.delete()
-        messages.success(request, 'Comment deleted!')
-    else:
-        messages.error(request, 'You can only delete your own comments!')
 
     return redirect('post_detail', id=post.id)
 

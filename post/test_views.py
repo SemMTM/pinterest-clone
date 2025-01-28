@@ -21,13 +21,12 @@ class PostListViewTest(TestCase):
         
         # Mock the CloudinaryField's validation during tests
         with patch.object(CloudinaryField, 'validate', return_value=None):
-            # Create 15 test posts
             for i in range(15):
                 Post.objects.create(
                     id=uuid4(),
                     title=f"Post {i+1}",
                     user=cls.user,
-                    image="mock_image_url",  # This bypasses Cloudinary validation during tests
+                    image="mock_image_url",  
                     description="Test description",
                 )
 
@@ -75,7 +74,7 @@ class PostListViewTest(TestCase):
         self.assertEqual(len(response.context["userimages"]), 10)
         self.assertQuerySetEqual(
             response.context["userimages"], 
-            Post.objects.all().order_by("-created_on")[:10],  # Explicitly order by "id"
+            Post.objects.all().order_by("-created_on")[:10],  
             transform=lambda x: x
     )
 
@@ -87,7 +86,7 @@ class PostListViewTest(TestCase):
 
     def test_no_posts(self):
         """Test the view when there are no posts."""
-        Post.objects.all().delete()  # Clear all posts
+        Post.objects.all().delete()  
         response = self.client.get(reverse("home"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context['userimages']), 0)
@@ -123,18 +122,17 @@ class CreatePostViewTest(TestCase):
             content_type="image/jpeg"
         )
 
-        # Create valid tags
         cls.tag_clothes = ImageTags.objects.create(tag_name="clothes")
         cls.tag_art = ImageTags.objects.create(tag_name="art")
 
         cls.valid_data = {
             "title": "Test Post",
             "description": "This is a test description.",
-            "tags": [cls.tag_clothes.pk, cls.tag_art.pk],  # Use valid tag primary keys
+            "tags": [cls.tag_clothes.pk, cls.tag_art.pk],  
             "image": cls.valid_image,
         }
         cls.invalid_data = {
-            "title": "",  # Title is required
+            "title": "",  
             "description": "This description lacks an image.",
         }
 
@@ -153,7 +151,7 @@ class CreatePostViewTest(TestCase):
         "version": "1234567890",
         "type": "upload",
         "format": "jpg",
-        "resource_type": "image"  # Added the missing field
+        "resource_type": "image"  
     })
     def test_create_post_valid_post_request(self, mock_upload):
         """Test that a valid POST request creates a post and returns success."""
@@ -185,7 +183,7 @@ class CreatePostViewTest(TestCase):
         "version": "1234567890",
         "type": "upload",
         "format": "jpg",
-        "resource_type": "image"  # Added the missing field
+        "resource_type": "image" 
     })
     def test_create_post_without_tags(self, mock_upload):
         """Test that a valid POST request without tags still creates a post."""
@@ -233,7 +231,7 @@ class CreatePostViewTest(TestCase):
         self.client.login(username="testuser", password="password123")
 
         data = self.valid_data.copy()
-        data.pop("image", None)  # Safely remove image
+        data.pop("image", None)  
         response = self.client.post(self.url, data, follow=True)
 
         # Assert that no post was created
@@ -248,7 +246,6 @@ class CreatePostViewTest(TestCase):
 class TagSuggestionsViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        # Create sample tags
         ImageTags.objects.create(tag_name="clothes")
         ImageTags.objects.create(tag_name="art")
         ImageTags.objects.create(tag_name="artistic")
@@ -266,7 +263,7 @@ class TagSuggestionsViewTest(TestCase):
         ImageTags.objects.create(tag_name="action")
         ImageTags.objects.create(tag_name="activities") 
 
-        cls.url = reverse("tag_suggestions")  # Update with the correct URL name for the view
+        cls.url = reverse("tag_suggestions")  
 
     def test_no_query_returns_all_tags(self):
         """Test that all tags are returned when no query is provided."""
@@ -346,7 +343,6 @@ class AddCommentViewTest(TestCase):
             "resource_type": "image"
             })
     def setUpTestData(cls, mock_upload):
-        # Create a test user
         cls.user = User.objects.create_user(username="testuser", password="password123")
         
         # Create a test post
@@ -425,8 +421,8 @@ class AddCommentViewTest(TestCase):
             {"body": "Anonymous test comment"},
             HTTP_X_REQUESTED_WITH="XMLHttpRequest",
         )
-        self.assertEqual(response.status_code, 302)  # Redirect status code
-        expected_url = reverse("custom_accounts:login_modal")  # Include namespace
+        self.assertEqual(response.status_code, 302)  
+        expected_url = reverse("custom_accounts:login_modal")  
         self.assertTrue(response.url.startswith(expected_url))
 
         # Assert no comment was created
@@ -434,7 +430,7 @@ class AddCommentViewTest(TestCase):
 
     def test_invalid_post_id(self):
         """Test the view returns an error for an invalid post ID."""
-        invalid_post_id = uuid4()  # Generate a random UUID
+        invalid_post_id = uuid4()  
         response = self.client.post(
             reverse("add_comment", kwargs={"post_id": invalid_post_id}),
             {"body": "Test comment on invalid post"},
@@ -452,7 +448,6 @@ class AddCommentViewTest(TestCase):
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',  # Simulate AJAX request
         )
 
-        # Assert the response
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["success"], True)
 
@@ -460,3 +455,78 @@ class AddCommentViewTest(TestCase):
         self.assertEqual(Comment.objects.count(), 1)
         comment = Comment.objects.first()
         self.assertEqual(comment.body, "A" * 600)
+
+
+class CommentDeleteViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user1 = User.objects.create_user(username="user1", password="password123")
+        cls.user2 = User.objects.create_user(username="user2", password="password123")
+        cls.post = Post.objects.create(
+            title="Test Post",
+            description="Test Description",
+            user=cls.user1,
+        )
+        cls.comment1 = Comment.objects.create(
+            post=cls.post, author=cls.user1, body="Comment by user1"
+        )
+        cls.comment2 = Comment.objects.create(
+            post=cls.post, author=cls.user2, body="Comment by user2"
+        )
+        cls.comment1_url = reverse(
+            "delete_comment", kwargs={"post_id": cls.post.id, "comment_id": cls.comment1.id}
+        )
+        cls.comment2_url = reverse(
+            "delete_comment", kwargs={"post_id": cls.post.id, "comment_id": cls.comment2.id}
+        )
+
+    def test_delete_own_comment(self):
+        """Test that a user can delete their own comment."""
+        self.client.login(username="user1", password="password123")
+        response = self.client.post(self.comment1_url, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Comment.objects.filter(id=self.comment1.id).exists())
+
+    def test_post_owner_deletes_other_user_comment(self):
+        """Test that the post owner can delete another user's comment."""
+        self.client.login(username="user1", password="password123")
+        response = self.client.post(self.comment2_url, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Comment.objects.filter(id=self.comment2.id).exists())
+
+    def test_user_cannot_delete_other_user_comment(self):
+        """Test that a user cannot delete a comment they don't own (and they're not the post owner)."""
+        self.client.login(username="user2", password="password123")
+        response = self.client.post(self.comment1_url, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Comment.objects.filter(id=self.comment1.id).exists())
+
+    def test_anonymous_user_cannot_delete_comment(self):
+        """Test that an anonymous user cannot delete a comment."""
+        response = self.client.post(self.comment1_url)
+        self.assertEqual(response.status_code, 302)  
+        self.assertTrue(
+            response.url.startswith(reverse("custom_accounts:login_modal"))
+        )  
+
+    def test_invalid_post_id(self):
+        """Test that an invalid post ID returns a 404."""
+        invalid_post_id = str(uuid4())
+        invalid_url = reverse(
+            "delete_comment", kwargs={"post_id": invalid_post_id, "comment_id": self.comment1.id}
+        )
+        self.client.login(username="user1", password="password123")
+        response = self.client.post(invalid_url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_invalid_comment_id(self):
+        """Test that an invalid comment ID returns a 404."""
+        invalid_url = reverse(
+            "delete_comment", kwargs={"post_id": self.post.id, "comment_id": 9999}
+        )
+        self.client.login(username="user1", password="password123")
+        response = self.client.post(invalid_url)
+        self.assertEqual(response.status_code, 404)
