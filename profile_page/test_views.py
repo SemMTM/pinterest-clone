@@ -92,7 +92,43 @@ class ProfilePageViewTest(TestCase):
         response = self.client.get(self.profile_url)
         self.assertEqual(response.status_code, 200)
 
+    def test_profile_page_nonexistent_user(self):
+        """Test that the profile page returns a 404 for a nonexistent user."""
+        response = self.client.get(reverse("profile_page", kwargs={"username": "nonexistentuser"}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_authenticated_user_access_own_profile(self):
+        """Test that an authenticated user can access their own profile."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.profile_url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_profile_modal_visible_to_owner(self):
+        """Test that the edit profile modal is visible only to the profile owner."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.profile_url)
+        self.assertContains(response, "Edit Profile")
+
+    def test_edit_profile_button_hidden_from_other_users(self):
+        """Test that the 'Edit Profile' button is hidden from other users."""
+        self.client.login(username="otheruser", password="password456")
+        response = self.client.get(self.profile_url)
+
+        # Check that the 'Edit Profile' button is not visible for other users
+        self.assertNotContains(response, 'id="edit-profile-btn"')  
+
+    def test_logout_functionality(self):
+        self.client.login(username="testuser", password="password123")
+        response = self.client.post(reverse("custom_accounts:logout"))
+
+        self.assertRedirects(response, "/") 
+
+        # Verify the user is logged out
+        response_after = self.client.get(self.profile_url)
+        self.assertFalse(response_after.wsgi_request.user.is_authenticated)  
+        self.assertContains(response_after, "Log-in")  
     
+
 class CreatedPinsViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):

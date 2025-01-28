@@ -83,6 +83,7 @@
 </div>
 
 <!-- Edit Profile Modal -->
+{% if user.is_authenticated and user == profile.user %}
 <div id="edit-profile-modal" class=>
     <div id="edit-profile-modal-content" class="modal-content">
         <form id="edit-profile-form" method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' %}">
@@ -110,6 +111,7 @@
         </form>
     </div>
 </div>
+{% endif %}
 
 <!-- Message pop-up -->
 <div class="pop-up-message-overlay modal">
