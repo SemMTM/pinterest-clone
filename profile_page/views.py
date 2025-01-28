@@ -108,7 +108,10 @@ def board_detail(request, board_id):
 
     images = BoardImageRelationship.objects.filter(board_id=board).select_related('post_id')
 
-    return render(request, 'profile_page/board_detail.html', {'board': board, 'images': images})
+    return render(request, 'profile_page/board_detail.html', {
+        'board': board, 
+        'images': images
+        })
 
 
 def sync_all_pins_board(user):

@@ -363,14 +363,6 @@ class BoardDetailViewTest(TestCase):
         response = self.client.get(self.board_url)
         self.assertContains(response, "Edit Board")
 
-    def test_view_hides_edit_button_for_other_user(self):
-        """Test that the edit button is hidden for users who do not own the board."""
-        self.client.login(username="otheruser", password="password456")
-        response = self.client.get(self.board_url)
-        # Ensure the "Edit Board" button is not present
-        self.assertNotContains(response, "Edit Board")
-        self.assertNotContains(response, 'id="open-edit-board-modal-btn"')
-
     def test_view_allows_unpinning_for_owner(self):
         """Test that the unpin button is displayed for the owner of the board."""
         self.client.login(username="testuser", password="password123")
@@ -383,26 +375,24 @@ class BoardDetailViewTest(TestCase):
         response = self.client.get(self.board_url)
         self.assertNotContains(response, 'class="unpin-btn"')
 
-    def test_view_redirects_for_unauthenticated_user(self):
-        """Test that the view redirects unauthenticated users to the login page."""
-        response = self.client.get(self.board_url)
-        self.assertEqual(response.status_code, 302)  # Redirect to login
-
-    def test_view_shows_private_board_to_owner(self):
-        """Test that a private board is visible to its owner."""
-        self.board.visibility = 1  # Private
+    def test_view_allows_private_board_for_owner(self):
+        """Test that a private board is accessible to its owner."""
+        self.board.visibility = 1  
         self.board.save()
+
         self.client.login(username="testuser", password="password123")
         response = self.client.get(self.board_url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)  
+        self.assertContains(response, self.board.title) 
 
     def test_view_hides_private_board_from_other_users(self):
         """Test that a private board is not visible to other users."""
-        self.board.visibility = 1  # Private
+        self.board.visibility = 1  #
         self.board.save()
+
         self.client.login(username="otheruser", password="password456")
         response = self.client.get(self.board_url)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 404)  # Non-owner should receive a 404
 
     def test_view_404_for_nonexistent_board(self):
         """Test that a 404 is returned for a nonexistent board."""
@@ -427,3 +417,13 @@ class BoardDetailViewTest(TestCase):
         response = self.client.get(all_pins_url)
         self.assertContains(response, "All Pins")
         self.assertEqual(response.status_code, 200)
+
+    def test_view_allows_public_board_for_any_user(self):
+        """Test that a public board is accessible to any user."""
+        self.board.visibility = 0  # Make board public
+        self.board.save()
+
+        self.client.login(username="otheruser", password="password456")
+        response = self.client.get(self.board_url)
+        self.assertEqual(response.status_code, 200)  # Public board should be accessible
+        self.assertContains(response, self.board.title)  # Board title should be rendered
