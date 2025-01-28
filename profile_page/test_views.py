@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from profile_page.models import Profile, ImageBoard, BoardImageRelationship
 from post.models import Post
 from django.core.paginator import Page
+from django.db.models import Count
 
 
 class ProfilePageViewTest(TestCase):
@@ -164,3 +165,149 @@ class CreatedPinsViewTest(TestCase):
 
         # Check if the link for the next page is rendered
         self.assertContains(response, f'?page=2')
+
+
+class ImageBoardsViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create users
+        cls.user = User.objects.create_user(username="testuser", password="password123")
+        cls.other_user = User.objects.create_user(username="otheruser", password="password456")
+        
+        # Create a profile for the users
+        Profile.objects.create(user=cls.user)
+        Profile.objects.create(user=cls.other_user)
+
+        # Create "All Pins" board and other boards for the user
+        cls.all_pins_board = ImageBoard.objects.create(user=cls.user, title="All Pins", visibility=0)
+        cls.board1 = ImageBoard.objects.create(user=cls.user, title="Board 1", visibility=0)
+        cls.board2 = ImageBoard.objects.create(user=cls.user, title="Board 2", visibility=0)
+
+        # Create posts and associate them with boards
+        for i in range(5):
+            post = Post.objects.create(title=f"Post {i + 1}", description=f"Description {i + 1}", user=cls.user)
+            BoardImageRelationship.objects.create(post_id=post, board_id=cls.board1)
+
+        for i in range(3):
+            post = Post.objects.create(title=f"Post {i + 6}", description=f"Description {i + 6}", user=cls.user)
+            BoardImageRelationship.objects.create(post_id=post, board_id=cls.board2)
+
+        for i in range(2):
+            post = Post.objects.create(title=f"Post {i + 9}", description=f"Description {i + 9}", user=cls.user)
+            BoardImageRelationship.objects.create(post_id=post, board_id=cls.all_pins_board)
+
+        cls.image_boards_url = reverse("image_boards", kwargs={"username": cls.user.username})
+
+    def test_view_uses_correct_template(self):
+        """Test that the correct template is used."""
+        response = self.client.get(self.image_boards_url)
+        self.assertTemplateUsed(response, "profile_page/image_boards.html")
+
+    def test_view_displays_boards_with_images(self):
+        """Test that boards and their associated images are displayed."""
+        response = self.client.get(self.image_boards_url)
+        
+        # Check "All Pins" board displays up to 3 images
+        self.assertContains(response, "All Pins")
+        self.assertContains(response, "Post 1")
+        self.assertContains(response, "Post 2")
+        self.assertContains(response, "Post 3")
+        self.assertNotContains(response, "Post 4")  # Should not show more than 3 images
+
+        # Check "Board 1" and its associated posts
+        self.assertContains(response, "Board 1")
+        self.assertContains(response, "Post 1")
+        self.assertContains(response, "Post 2")
+        self.assertContains(response, "Post 3")
+        self.assertNotContains(response, "Post 4")  # Only 3 images per board
+
+        # Check "Board 2" and its associated posts
+        self.assertContains(response, "Board 2")
+        self.assertContains(response, "Post 6")
+        self.assertContains(response, "Post 7")
+        self.assertContains(response, "Post 8")
+        self.assertNotContains(response, "Post 9")  # Should not show more than 3 images
+
+    def test_view_handles_no_boards(self):
+        """Test that the view handles users with no boards gracefully."""
+        # Create a new user with no boards except the default "All Pins"
+        no_boards_user = User.objects.create_user(username="noboardsuser", password="password123")
+        Profile.objects.create(user=no_boards_user)
+
+        no_boards_url = reverse("image_boards", kwargs={"username": no_boards_user.username})
+        response = self.client.get(no_boards_url)
+
+        # Ensure that only the "All Pins" board is displayed and it's empty
+        self.assertContains(response, "All Pins")
+        self.assertContains(response, '<div class="tile-image large"></div>', count=1)
+        self.assertContains(response, '<div class="tile-image small"></div>', count=2)
+        self.assertNotContains(response, "Board 1")  # No additional boards should be rendered
+
+    def test_view_displays_no_images_when_board_is_empty(self):
+        """Test that the view displays boards even if they have no associated images."""
+        BoardImageRelationship.objects.filter(board_id=self.board1).delete()
+        response = self.client.get(self.image_boards_url)
+
+        # Ensure the empty board is still displayed
+        self.assertContains(response, "Board 1")
+        # Check that the placeholders for images are rendered
+        self.assertContains(response, '<div class="tile-image large"></div>', count=1)
+        self.assertContains(response, '<div class="tile-image small"></div>', count=2)
+
+    def test_view_displays_private_all_pins_to_owner(self):
+        """Test that the 'All Pins' board is displayed to the owner even if it's private."""
+        self.all_pins_board.visibility = 1  # Make it private
+        self.all_pins_board.save()
+
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.image_boards_url)
+
+        self.assertContains(response, "All Pins")
+        self.assertContains(response, "Post 1")
+
+    def test_view_hides_private_all_pins_from_other_user(self):
+        """Test that the 'All Pins' board is hidden from other users if it's private."""
+        self.all_pins_board.visibility = 1  # Make it private
+        self.all_pins_board.save()
+
+        self.client.login(username="otheruser", password="password456")
+        response = self.client.get(self.image_boards_url)
+
+        self.assertNotContains(response, "All Pins")
+
+    def test_view_displays_public_boards_to_other_user(self):
+        """Test that public boards are displayed to other users."""
+        self.board1.visibility = 0  # Public
+        self.board1.save()
+
+        self.client.login(username="otheruser", password="password456")
+        response = self.client.get(self.image_boards_url)
+
+        self.assertContains(response, "Board 1")
+        self.assertContains(response, "Post 1")
+
+    def test_view_does_not_display_private_boards_to_other_user(self):
+        """Test that private boards are not displayed to other users."""
+        self.board2.visibility = 1  # Make it private
+        self.board2.save()
+
+        self.client.login(username="otheruser", password="password456")
+        response = self.client.get(self.image_boards_url)
+
+        self.assertNotContains(response, "Board 2")
+
+    def test_view_redirects_for_invalid_user(self):
+        """Test that the view returns a 404 for a non-existent user."""
+        response = self.client.get(reverse("image_boards", kwargs={"username": "nonexistentuser"}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_view_pagination_of_boards(self):
+        """Test that the view handles pagination correctly when there are many boards."""
+        # Create additional boards to test pagination
+        for i in range(10):
+            ImageBoard.objects.create(user=self.user, title=f"Extra Board {i + 1}", visibility=0)
+
+        response = self.client.get(self.image_boards_url)
+        self.assertContains(response, "Board 1")
+        self.assertContains(response, "Extra Board 10")
+        self.assertNotContains(response, "Extra Board 11")  # Should not display more than the allowed number
