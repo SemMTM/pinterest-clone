@@ -196,7 +196,7 @@ class PostFormTest(TestCase):
         self.assertEqual(form.errors["image"][0], "No file selected!")
 
     def test_form_missing_title(self):
-        """Test that the form is valid when the title is missing."""
+        """Test that the form is invalid when the title is missing."""
         image = SimpleUploadedFile("test_image.jpg", b"file_content", content_type="image/jpeg")
         form_data = {
             "description": "This is a post without a title.",
@@ -205,7 +205,9 @@ class PostFormTest(TestCase):
         form_files = {"image": image}
 
         form = PostForm(data=form_data, files=form_files)
-        self.assertTrue(form.is_valid())
+        self.assertFalse(form.is_valid())
+        self.assertIn("title", form.errors)
+        self.assertEqual(form.errors["title"][0], "This field is required.")
 
     def test_form_missing_description(self):
         """Test that the form is valid when the description is missing."""
