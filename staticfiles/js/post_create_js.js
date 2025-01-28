@@ -1,18 +1,59 @@
+import { showPopUpMessage } from './pop_up.js';
+
 document.addEventListener('DOMContentLoaded', function() {
-    // ----- Client-Side Validation for File Type on PostForm image -----
-    const fileInput = document.getElementById('id_image');
+    const createPostForm = document.getElementById('post-create-form');
     const preview = document.getElementById('image-preview');
 
+    // Handles submission of create post form 
+    createPostForm.addEventListener('submit', (e) => {
+        e.preventDefault(); 
+
+        const formData = new FormData(createPostForm); // Collect form data
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch(createPostForm.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+            body: formData,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    return response.json().then((data) => {
+                        throw new Error(data.error || 'An error occurred.');
+                    });
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.success) {
+                    showPopUpMessage('Your post has been created successfully!');
+                    createPostForm.reset(); 
+                    preview.style.display = 'none'; 
+                    preview.src = ''; 
+                } else {
+                    showPopUpMessage('An error occurred.');
+                }
+            })
+            .catch((error) => {
+                showPopUpMessage('An unexpected error occurred.');
+            });
+    });
+
+
+    // ----- Client-Side Validation for File Type on PostForm image -----
+    const fileInput = document.getElementById('id_image');
     if (fileInput) {
         fileInput.addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
-                const allowedExtensions = ['jpg', 'jpeg', 'png'];
+                const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
                 const fileExtension = file.name.split('.').pop().toLowerCase();
                 // Extract the file extension and convert it to lowercase for comparison.
 
                 if (!allowedExtensions.includes(fileExtension)) {
-                    alert('Only JPG/JPEG/PNG files are allowed.');
+                    alert('Only JPG/JPEG/PNG/WEBP files are allowed.');
                     this.value = ''; // Reset the input
                 }
             }

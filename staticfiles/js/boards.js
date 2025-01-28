@@ -1,19 +1,17 @@
+import { showPopUpMessage } from './pop_up.js'
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Save modal scripts
+    // Save modal function
     const saveButton = document.getElementById('save-btn');
     const modal = document.getElementById('save-to-board-modal');
     const closeModalButton = document.getElementById('close-save-modal');
     const boardButtons = document.querySelectorAll('.save-modal-board-btn');
-    const isAuthenticated = saveButton.getAttribute('data-authenticated');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
     // Open modal
     saveButton.addEventListener('click', () => {
-        if (!isAuthenticated) {
-            alert("Log in to save posts");
-        } else {
-            modal.classList.remove('save-modal-hidden');
-            modal.classList.add('save-modal-visible');
-        }
+        modal.classList.remove('save-modal-hidden');
+        modal.classList.add('save-modal-visible');
     });
 
     // Close modal
@@ -23,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     
-    // Handle board selection
+    // Save post to board function
     boardButtons.forEach(button => {
         button.addEventListener('click', () => {
             const boardId = button.getAttribute('data-board-id');
@@ -33,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': getCookie('csrftoken'), // Ensure the CSRF token is included
+                    'X-CSRFToken': csrfToken,
                 },
                 body: `board_id=${boardId}`,
             })
@@ -45,31 +43,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(data => {
                     if (data.success) {
-                        alert(data.message);
+                        showPopUpMessage(data.message);
                         modal.classList.add('save-modal-hidden');
                     } else {
-                        alert(data.message || 'An error occurred.');
+                        showPopUpMessage(data.message);
                     }
                 })
-                .catch(error => console.error('Error saving post:', error));
+                .catch(error => showPopUpMessage('Error saving post'));
         });
     });
-
-    // Utility function to get CSRF token
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.startsWith(name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
 
 
     const saveModal = document.getElementById('save-to-board-modal');
@@ -79,42 +61,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitCreateBoardBtn = document.getElementById('submit-create-board');
     const boardTitleInput = document.getElementById('board-title-input');
     const postImagePreview = document.getElementById('post-image-preview');
-    const errorMessage = document.getElementById('board-error-message');
 
     // Open Create Board Modal
     openCreateBoardBtn.addEventListener('click', () => {
         saveModal.classList.add('save-modal-hidden');
         createModal.classList.remove('create-modal-hidden');
-        errorMessage.style.display = 'none';
-        errorMessage.textContent = '';
     });
 
     // Close Create Board Modal
     cancelCreateBoardBtn.addEventListener('click', () => {
         createModal.classList.add('create-modal-hidden');
-        errorMessage.style.display = 'none';
-        errorMessage.textContent = '';
     });
 
     // Submit Create Board
     submitCreateBoardBtn.addEventListener('click', () => {
         const boardTitle = boardTitleInput.value.trim();
         if (!boardTitle) {
-            errorMessage.textContent = 'Please enter a board title.';
-            errorMessage.style.display = 'block';
+            showPopUpMessage('Please enter a board title.');
             return;
         }
 
-        const postId = postImagePreview.getAttribute('data-post-id'); // Pass the post ID dynamically
-
-        errorMessage.style.display = 'none';
-        errorMessage.textContent = '';
+        const postId = postImagePreview.getAttribute('data-post-id'); 
 
         fetch('/profile/create-board/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': getCookie('csrftoken'),
+                'X-CSRFToken': csrfToken,
             },
             body: `title=${encodeURIComponent(boardTitle)}&post_id=${postId}`,
         })
@@ -128,20 +101,19 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(data => {
                 if (data.success) {
-                    alert(data.message);
+                    showPopUpMessage(data.message);
                     createModal.classList.add('create-modal-hidden');
                     boardTitleInput.value = '';
                 } else {
-                    errorMessage.textContent = data.error || 'An error occurred.';
-                    errorMessage.style.display = 'block';
+                    showPopUpMessage(data.error || 'An error occurred.');
                 }
             })
             .catch(error => {
-                errorMessage.textContent = error.message || 'An unexpected error occurred. Please try again.';
-                errorMessage.style.display = 'block';
+                showPopUpMessage(error.message || 'An unexpected error occurred. Please try again.');
             });
     });
 
+    
     // Variables specific to the delete post modal
     const deletePostBtn = document.getElementById('delete-post-btn');
     const deletePostModal = document.getElementById('delete-post-modal');

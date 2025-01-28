@@ -1,5 +1,20 @@
-window.onload = resizeAllGridItems();
-window.addEventListener("resize", resizeAllGridItems);
+document.addEventListener("DOMContentLoaded", () => {
+    // HTMX: Handle 404 responses to trigger grid resize
+    document.body.addEventListener("htmx:responseError", (event) => {
+        if (event.detail.xhr.status === 404) {
+            resizeAllGridItems(); // Reorganize the grid
+        }
+    });
+
+    // Recalculate the grid after new content is swapped in
+    document.body.addEventListener("htmx:afterSwap", () => {
+        resizeGridWithImages();
+    });
+
+    // Initial grid setup
+    window.onload = resizeGridWithImages();
+    window.addEventListener("resize", resizeAllGridItems);
+});
 
 /* Masonry Grid */
 function resizeGridItem(item) {
@@ -21,7 +36,6 @@ function resizeGridItem(item) {
     // Dynamically sets the CSS property to make the item span the calculated number of rows.
 }
 
-
 function resizeAllGridItems(){
     allItems = document.getElementsByClassName("grid-item");
     for(x=0; x<allItems.length; x++){
@@ -29,13 +43,20 @@ function resizeAllGridItems(){
     }
  }
 
+ function resizeGridWithImages() {
+    const grid = document.querySelector(".image-grid");
+    if (grid) {
+        imagesLoaded(grid, () => {
+            resizeAllGridItems(); // Resize grid once all images are loaded
+        });
+    }
+}
 
 function resizeInstance(instance){
         item = instance.elements[0];
         // Retrieves the first element from the instance's elements array (the item that needs resizing).
     resizeGridItem(item);
 }
-
 
 function waitForImages() {
     allItems = document.getElementsByClassName("item");

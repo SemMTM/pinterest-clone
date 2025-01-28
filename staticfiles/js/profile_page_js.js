@@ -1,3 +1,5 @@
+import { showPopUpMessage } from './pop_up.js'
+
 document.addEventListener('DOMContentLoaded', () => {
     const createdButton = document.getElementById('created-btn');
     const createdContainer = document.getElementById('created-container');
@@ -5,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedButton = document.getElementById('saved-btn');
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
+    // Helper functions for toggling active and pointer events
     const toggleActive = (buttonToActivate, buttonToDeactivate) => {
         buttonToActivate.classList.add('active');
         buttonToDeactivate.classList.remove('active');
@@ -16,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             createdButton.style.pointerEvents = '';
             createdButton.style.cursor = ''; // Reactivate the saved button when it's not active
         }
-    };
+    }; 
 
     const toggleHidden = (addHidden, removeHidden) => {
         addHidden.classList.add('hidden');
@@ -35,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const editBoardButton = document.getElementById('edit-board-btn');
-
+    
     if (editBoardButton) {
         editBoardButton.addEventListener('click', (e) => {
             e.preventDefault();
@@ -54,12 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const imagePreview = document.getElementById('profile-image-preview');
 
     const showModal = () => {
-        editProfileModal.classList.remove('hidden');
+        editProfileModal.classList.add('modal-show');
         editProfileModalContent.classList.add('edit-profile-modal-visible');
     }
 
-    const hideModal = () => {
-        editProfileModal.classList.add('hidden'); 
+    const hideModal = () => { 
+        editProfileModal.classList.remove('modal-show'); 
         editProfileModalContent.classList.remove('edit-profile-modal-visible');
     }
     
@@ -120,12 +123,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
 
                         editProfileModal.classList.add('hidden'); // Hide modal
-                        alert(data.message); // Success message
+                        showPopUpMessage(data.message);
                     } else {
-                        alert(data.error || 'An error occurred.');
+                        showPopUpMessage(data.error || 'An error occurred.');
                     }
                 })
-                .catch((error) => console.error('Error updating profile:', error));
+                .catch((error) => showPopUpMessage(error.message || 'An unexpected error occurred. Please try again.'));
             hideModal();
         });
     }

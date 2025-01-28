@@ -1,157 +1,174 @@
+import { showPopUpMessage } from './pop_up.js';
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Utility Functions
-    const getElement = (id) => document.getElementById(id);
-    const addEvent = (element, event, handler) => element?.addEventListener(event, handler);
-    const toggleClass = (element, className, action) => element?.classList[action](className);
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
-    const resetCommentForm = (commentInput, commentIdInput) => {
+    // Comment Modal Elements
+    const commentModal = document.getElementById('comment-modal');
+    const commentIcon = document.getElementById('comment-icon');
+    const closeModal = document.getElementById('close-modal');
+    const viewAll = document.getElementById('view-all');
+    const commentForm = document.getElementById('commentForm');
+    const commentInput = commentForm?.querySelector('textarea[name="body"]');
+    const commentIdInput = document.getElementById('edit-comment-id');
+
+    // Helper to reset comment form
+    const resetCommentForm = () => {
         if (commentInput) commentInput.value = '';
         if (commentIdInput) commentIdInput.value = '';
     };
 
-    // Modal Handlers
-    const setupModal = (modal, openTriggers, closeTriggers, resetForm = null) => {
-        const openModal = () => {
-            toggleClass(modal, 'modal-show', 'add');
-            if (resetForm) resetForm();
-        };
-        const closeModal = () => toggleClass(modal, 'modal-show', 'remove');
-
-        openTriggers.forEach(trigger => addEvent(trigger, 'click', openModal));
-        closeTriggers.forEach(trigger => addEvent(trigger, 'click', closeModal));
-
-        modal?.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
+    // Show/Hide Comment Modal
+    if (commentIcon) {
+        commentIcon.addEventListener('click', () => {
+            commentModal?.classList.add('modal-show');
+            resetCommentForm();
         });
-    };
+    }
 
-    // Comment Modal Setup
-    const commentModal = getElement('comment-modal');
-    const commentIcon = getElement('comment-icon');
-    const closeModal = getElement('close-modal');
-    const viewAll = getElement('view-all');
-    const commentForm = getElement('commentForm');
-    const commentInput = commentForm?.querySelector('textarea[name="body"]');
-    const commentIdInput = getElement('edit-comment-id');
+    if (closeModal) {
+        closeModal.addEventListener('click', () => {
+            commentModal?.classList.remove('modal-show');
+        });
+    }
 
-    setupModal(
-        commentModal,
-        [commentIcon, viewAll],
-        [closeModal],
-        () => resetCommentForm(commentInput, commentIdInput)
-    );
+    if (viewAll) {
+        viewAll.addEventListener('click', () => {
+            commentModal?.classList.add('modal-show');
+        });
+    }
 
     // Delete Comment Modal
-    const deleteModal = getElement('delete-comment-modal');
-    const confirmDeleteBtn = getElement('confirm-delete-btn');
-    const cancelDeleteBtn = getElement('cancel-delete-btn');
+    const deleteModal = document.getElementById('delete-comment-modal');
+    const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+    const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
     let deleteUrl = null;
 
-    document.querySelectorAll('.comment-close-btn').forEach(button => {
-        addEvent(button, 'click', () => {
+    document.querySelectorAll('.comment-close-btn').forEach((button) => {
+        button.addEventListener('click', () => {
             deleteUrl = `/${button.getAttribute('post_id')}/delete_comment/${button.getAttribute('comment_id')}/`;
-            toggleClass(deleteModal, 'hidden', 'remove');
+            deleteModal?.classList.remove('hidden');
         });
     });
 
-    addEvent(confirmDeleteBtn, 'click', () => {
-        if (deleteUrl) window.location.href = deleteUrl;
-    });
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', () => {
+            if (deleteUrl) window.location.href = deleteUrl;
+        });
+    }
 
-    addEvent(cancelDeleteBtn, 'click', () => {
-        toggleClass(deleteModal, 'hidden', 'add');
-        deleteUrl = null;
-    });
+    if (cancelDeleteBtn) {
+        cancelDeleteBtn.addEventListener('click', () => {
+            deleteModal?.classList.add('hidden');
+            deleteUrl = null;
+        });
+    }
 
     // Edit Comment
-    const commentsContainer = getElement('comments-container');
-    addEvent(commentsContainer, 'click', (e) => {
-        if (e.target.classList.contains('edit-comment-btn')) {
-            commentInput.value = e.target.dataset.commentBody;
-            commentIdInput.value = e.target.dataset.commentId;
-        }
-    });
+    const commentsContainer = document.getElementById('comments-container');
+
+    if (commentsContainer) {
+        commentsContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('edit-comment-btn')) {
+                commentInput.value = e.target.dataset.commentBody;
+                commentIdInput.value = e.target.dataset.commentId;
+            }
+        });
+    }
+
 
     // Comment Form Submission
-    addEvent(commentForm, 'submit', async (e) => {
-        e.preventDefault();
+    if (commentForm) {
+        commentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-        const body = commentInput?.value.trim();
-        const commentId = commentIdInput?.value;
-        const postId = commentsContainer?.dataset.postId;
+            const body = commentInput?.value.trim();
+            const commentId = commentIdInput?.value;
+            const postId = commentsContainer?.dataset.postId;
 
-        if (!body) {
-            alert("Comment body can't be empty.");
-            return;
-        }
-
-        const url = commentId
-            ? `/${postId}/update_comment/${commentId}/`
-            : `/${postId}/add_comment/`;
-        const headers = {
-            'X-CSRFToken': csrfToken,
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': commentId ? 'application/json' : 'application/x-www-form-urlencoded',
-        };
-        const payload = commentId
-            ? JSON.stringify({ body })
-            : new URLSearchParams({ body, csrfmiddlewaretoken: csrfToken }).toString();
-
-        try {
-            const response = await fetch(url, { method: 'POST', headers, body: payload });
-            if (!response.ok) throw new Error(await response.text());
-
-            const data = await response.json();
-            if (commentId) {
-                const commentBodySpan = commentsContainer.querySelector(`[data-comment-id="${commentId}"] .comment-body`);
-                commentBodySpan.textContent = data.body;
-            } else {
-                window.location.href = data.redirect_url;
+            if (!body) {
+                showPopUpMessage('Comment cannot be empty.');
+                return;
             }
 
-            resetCommentForm(commentInput, commentIdInput);
-        } catch (error) {
-            console.error('Error submitting comment:', error);
-            alert('Failed to submit comment.');
-        }
-    });
+            const url = commentId
+                ? `/${postId}/update_comment/${commentId}/`
+                : `/${postId}/add_comment/`;
 
-    // Like button functions
+            const headers = {
+                'X-CSRFToken': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': commentId ? 'application/json' : 'application/x-www-form-urlencoded',
+            };
+
+            const payload = commentId
+                ? JSON.stringify({ body })
+                : new URLSearchParams({ body, csrfmiddlewaretoken: csrfToken }).toString();
+            try {
+                const response = await fetch(url, { method: 'POST', headers, body: payload });
+                if (!response.ok) {
+                    throw new Error('Failed to submit comment.');
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    if (commentId) {
+                        const commentBodySpan = commentsContainer.querySelector(
+                            `[data-comment-id="${commentId}"] .comment-body`
+                        );
+                        if (commentBodySpan) commentBodySpan.textContent = data.body;
+                    } else {
+                        window.location.href = data.redirect_url;
+                    }
+
+                    resetCommentForm();
+                    showPopUpMessage('Your comment was added successfully!');
+                } else {
+                    showPopUpMessage(data.error || 'An error occurred.');
+                }
+            } catch (error) {
+                showPopUpMessage('An unexpected error occurred.');
+            }
+        });
+    }
+
+    // Like Button
     const likeButton = document.getElementById('like-button');
     const likeCount = document.getElementById('like-count');
 
     if (likeButton) {
-        likeButton.addEventListener('click', () => {
+        likeButton.addEventListener('click', async () => {
             const postId = likeButton.getAttribute('data-post-id');
 
-            fetch(`/post/${postId}/like/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken,
-                },
-            })
-                .then(response => {
-                    if (response.status === 401) {
-                        alert('You need to log in to like a post.');
-                        return;
-                    }
-                    if (!response.ok) {
-                        throw new Error('Failed to like the post.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        likeCount.textContent = data.likes_count; // Update like count
-                        likeButton.textContent = data.liked ? 'Liked' : 'Like'; // Update button text
-                        likeButton.classList.toggle('active', data.liked); // Toggle active class
-                    } else {
-                        alert(data.error || 'An error occurred while liking the post.');
-                    }
-                })
-                .catch(error => console.error('Error liking the post:', error));
+            try {
+                const response = await fetch(`/post/${postId}/like/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken,
+                    },
+                });
+
+                if (response.status === 401) {
+                    showPopUpMessage('You need to log in to like a post.');
+                    return;
+                }
+
+                if (!response.ok) throw new Error('Failed to like the post.');
+
+                const data = await response.json();
+
+                if (data.success) {
+                    likeCount.textContent = data.likes_count; // Update like count
+                    likeButton.textContent = data.liked ? 'Liked' : 'Like'; // Update button text
+                    likeButton.classList.toggle('active', data.liked); // Toggle active class
+                } else {
+                    showPopUpMessage(data.error || 'An error occurred while liking the post.');
+                }
+            } catch (error) {
+                console.error('Error liking the post:', error);
+            }
         });
     }
 });

@@ -33,7 +33,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* GENERAL CLASSES */
-
 .hidden {
     display: none !important;
 }
@@ -187,7 +186,7 @@ h1, h2, h3, h4, h5, h6 {
 
     .nav-1 {
         flex-direction: column;
-        height: 350px;
+        height: 200px;
         justify-content: space-evenly;
         padding-top: 25px;
     }
@@ -255,7 +254,7 @@ h1, h2, h3, h4, h5, h6 {
     grid-gap: 10px;
     /* the columns should have minimum width 250px and a flexible maximum width which is the same for each column */
     grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
-    grid-auto-rows: 10px;
+    grid-auto-rows: 1px;
     padding: 10px;
 }
 
@@ -264,20 +263,6 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     border-radius: 0px;
     cursor: pointer;
-}
-
-.grid-item-overlay {
-    position: absolute;
-    background: rgba(32, 32, 32, 0.247);
-    bottom: 0;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    border-radius: 10px;
-}
-
-.grid-item-overlay:hover {
-    opacity: 1;
 }
 
 .grid-item img {
@@ -293,33 +278,24 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Media queries for screensize responsivness from masonry layout */
-/* Mobile */
-@media screen and (max-width: 425px) {
-    .grid-item-overlay {
-        display: none;
-    }
-
-    .grid-item-overlay:hover {
-        display: none;
-    }
-}
-
 /* Tablets */
-@media screen and (min-width: 426px) {
+@media screen and (min-width: 515px) {
     .image-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
-        padding-right: 20px;
-        grid-gap: 20px;
-        grid-auto-rows: 10px;
     }   
 }
 /* Laptop */
 @media screen and (min-width: 769px) {
     .image-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
+        grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
     }   
 } 
 
+@media screen and (min-width: 1025px) {
+    .image-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
+    }   
+} 
 
 #home-search-bar {
     display: none;
@@ -388,7 +364,6 @@ h1, h2, h3, h4, h5, h6 {
 @media screen and (min-width: 426px) {
     #image-detail-container-inner {
         width: 900px;
-        height: 700px;
         background: white;
         margin-top: 30px;
         display: flex;
@@ -577,10 +552,11 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.2);
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    transition: opacity 0.4s ease;
 }
 
 .modal.show {
@@ -631,11 +607,12 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Dimmed background */
+    background: rgba(0, 0, 0, 0.2); /* Dimmed background */
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    transition: opacity 0.4s ease;
 }
 
 /* Modal box */
@@ -696,7 +673,7 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -772,10 +749,6 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 15px;
 }
 
-#boards-container {
-    padding: 15px;
-}
-
 .user-profile-info {
     flex-direction: column;
     align-items: center;
@@ -814,13 +787,21 @@ h1, h2, h3, h4, h5, h6 {
     position: fixed;
     top: 0;
     left: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.2);
     z-index: 1000;
     display: flex;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+#edit-profile-modal.modal-show {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .edit-profile-modal-visible {
-    animation: popIn 0.2s ease forwards;
+    transform: translateY(0) !important; /* Slide into view */
 }
 
 #edit-profile-modal .modal-content {
@@ -834,8 +815,8 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
     box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
                 inset -0.12em -0.12em 0.12em 0 rgba(0, 0, 0, 1);
-    transform: scale(0.3); /* Set initial state */
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateY(130%); /* Start off-screen */
+    transition: transform 0.4s ease; /* Smooth slide effect */
 }
 
 #edit-profile-overlay {
@@ -848,7 +829,7 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 1000; /* Should be below the modal */
 }
 
-#edit-profile-overlayy.visible {
+#edit-profile-overlay.visible {
     display: block;
 }
 
@@ -861,6 +842,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Image boards styles */
+#boards-container {
+    padding: 15px;
+    margin: auto;
+}
+
 .board-tile {
     position: relative;
     overflow: hidden;
@@ -906,11 +892,211 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
 }
 
+.boards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+@media screen and (min-width: 426px) {
+    .boards-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+
+/* BOARD DETAIL PAGE STYLES */
+/* BOARD DETAIL PAGE STYLES */
+.board-detail-inner {
+    padding: 15px;
+}
+
+.board-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.board-modal-content {
+    background: #c0c0c0;;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
+                inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
+    transform: translateY(300%); /* Start off-screen */
+    transition: transform 0.4s ease; /* Smooth slide effect */
+}
+
+.board-modal-content-visible {
+    transform: translateY(0) !important; /* Slide into view */
+}
+
+#edit-board-modal.modal-show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.board-modal-content h2 {
+    margin-bottom: 13px;
+}
+
+.edit-board-modal-sec {
+    margin-bottom: 10px;
+}
+
+#edit-board-btns {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#edit-board-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.btn.danger {
+    background-color: rgb(212, 47, 47);
+    color: rgb(255, 255, 255);
+}
+
+.btn.danger:hover {
+    background-color: rgb(184, 77, 77);
+}
+
+#title-container {
+    padding: 10px;
+}
+
+#board-title {
+    margin-bottom: 10px;
+}
+
+#delete-board-form h3 {
+    margin-bottom: 12px;
+}
+
+#delete-confirmation-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+}
+
+#delete-confirmation-modal.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.delete-board-modal-content {
+    background: #c0c0c0;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
+                inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
+}
+
+/* Unpin modal styles */
+#unpin-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2); /* Dimmed background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.4s ease;
+}
+
+.unpin-modal-hidden {
+    display: none !important;
+}
+
+#unpin-modal .modal-content {
+    background: #c0c0c0;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
+                inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
+    transform: scale(0.3); /* Set initial state */
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.unpin-modal-visible .modal-content {
+    animation: popIn 0.2s ease forwards;
+}
+
+#unpin-modal .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+#unpin-btn-container {
+    height: 22px;
+    width: 22px;
+    background-color: #c0c0c0;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    top: 10px;
+    right: 10px;
+    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
+                inset -0.12em -0.12em 0.12em 0 rgba(0, 0, 0, 1);
+}
+
+#unpin-btn-container:hover {
+    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(0, 0, 0), 
+                    inset -0.12em -0.12em 0.12em 0 rgb(255, 255, 255);
+    background-color: #010281;
+    color: white;
+}
+
+.unpin-btn {
+    background-color: transparent;
+    border: none;
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 
 /* POST CREATE PAGE STYLES */
 /* POST CREATE PAGE STYLES */
 .pc-main-con-inner {
     padding: 15px;
+}
+
+#post-create-container {
+    max-width: 600px;
+    margin: auto;
 }
 
 .post-form-section {
@@ -983,129 +1169,103 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
 }
 
-.boards-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+
+/* POP-UP ALERT STYLES */
+.pop-up-message-overlay {
+    align-items: flex-end;
+    background-color: transparent;
+    pointer-events: none;
+    z-index: 20000;
+}
+
+.pop-up-message-content {
+    background-color: #d7d7d7;
+    padding: 20px;
+    text-align: center;
+    width: 300px;
+    transform: translateY(100%); /* Start off-screen */
+    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
+                inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
+    transition: transform 0.4s ease;
+}
+
+.pop-up-show-modal {
+    transform: translateY(0); /* Slide into view */
 }
 
 
-/* BOARD DETAIL PAGE STYLES */
-/* BOARD DETAIL PAGE STYLES */
-.board-detail-inner {
-    padding: 15px;
-}
-
-.board-modal-overlay {
+/* LOGIN MODAL STYLES */
+.login-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10;
+    z-index: 111000;
 }
 
-.board-modal-content {
-    background: #c0c0c0;;
+.auth-modal-content {
+    background: #c0c0c0;
     padding: 20px;
-    width: 300px;
-    text-align: center;
-    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
-                inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
-}
-
-.board-modal-content h2 {
-    margin-bottom: 13px;
-}
-
-.edit-board-modal-sec {
-    margin-bottom: 10px;
-}
-
-#edit-board-btns {
-    display: flex;
-    justify-content: center;
+    max-width: 350px;
     width: 100%;
-    margin-top: 10px;
+    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
+                inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
+    position: relative;
 }
 
-#edit-board-form {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
-.btn.danger {
-    background-color: rgb(212, 47, 47);
-    color: rgb(255, 255, 255);
-}
-
-.btn.danger:hover {
-    background-color: rgb(184, 77, 77);
-}
-
-#title-container {
-    padding: 10px;
-}
-
-#board-title {
+.signin-row {
     margin-bottom: 10px;
 }
 
-#delete-board-form h3 {
-    margin-bottom: 12px;
+.signin-row .login p {
+    margin-bottom: 5px;
 }
 
-/* Unpin modal styles */
-#unpin-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    background-color: #c0c0c0;
-    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
-                inset -0.12em -0.12em 0.12em 0 rgba(0,0,0,1);
-    padding: 20px;
-    width: 300px;
+.signin-row .login p input {
+    display: block;
+    width: 100%;
+}
+
+.helptext {
     display: block;
 }
 
-#unpin-modal .modal-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+.signup-container {
+    padding: 8px;
 }
 
-#unpin-btn-container {
-    height: 22px;
-    width: 22px;
-    background-color: #c0c0c0;
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    top: 10px;
-    right: 10px;
-    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(255, 255, 255), 
-                inset -0.12em -0.12em 0.12em 0 rgba(0, 0, 0, 1);
+.signup-container form p {
+    margin-bottom: 5px;
 }
 
-#unpin-btn-container:hover {
-    box-shadow: inset 0.12em 0.12em 0.12em 0 rgb(0, 0, 0), 
-                    inset -0.12em -0.12em 0.12em 0 rgb(255, 255, 255);
-    background-color: #010281;
-    color: white;
+.signup-container form p input {
+    display: block;
+    width: 100%;
 }
 
-.unpin-btn {
-    background-color: transparent;
-    border: none;
-    color: rgb(0, 0, 0);
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
+#pass-reset-con {
+    max-width: 600px;
+    margin: auto;
+}
+
+#pass-reset-con p {
+    margin-bottom: 10px;
+}
+
+#pass-reset-con #id_email {
+    display: block;
+    width: 75%;
 }

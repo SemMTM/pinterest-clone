@@ -1,14 +1,17 @@
+import { showPopUpMessage } from './pop_up.js'
+
 document.addEventListener('DOMContentLoaded', () => {
     // Open Edit Board Modal
     const openEditBoardModalBtn = document.getElementById('open-edit-board-modal-btn');
     const editBoardModal = document.getElementById('edit-board-modal');
-    const deleteConfirmationModal = document.getElementById('delete-confirmation-modal');
     const editBoardForm = document.getElementById('edit-board-form');
-    const editBoardVisibilitySelect = document.getElementById('edit-board-visibility');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+    const editBoardModalContent = document.getElementsByClassName("board-modal-content")[0];
 
     if (openEditBoardModalBtn) {
         openEditBoardModalBtn.addEventListener('click', () => {
-            editBoardModal.classList.remove('hidden');
+            editBoardModal.classList.add('modal-show');
+            editBoardModalContent.classList.add('board-modal-content-visible');
         });
     }
 
@@ -16,16 +19,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelEditBoardBtn = document.getElementById('cancel-edit-board-btn');
     if (cancelEditBoardBtn) {
         cancelEditBoardBtn.addEventListener('click', () => {
-            editBoardModal.classList.add('hidden');
+            editBoardModal.classList.remove('modal-show');
+            editBoardModalContent.classList.remove('board-modal-content-visible');
         });
     }
-
+    
     // Open Delete Confirmation Modal
+    const deleteConfirmationModal = document.getElementById('delete-confirmation-modal');
     const deleteBoardBtn = document.getElementById('delete-board-btn');
+    
     if (deleteBoardBtn) {
         deleteBoardBtn.addEventListener('click', () => {
-            editBoardModal.classList.add('hidden'); // Hide edit modal
-            deleteConfirmationModal.classList.remove('hidden'); // Show delete confirmation modal
+            editBoardModal.classList.remove('modal-show');
+            deleteConfirmationModal.classList.remove('hidden'); 
+            deleteConfirmationModal.classList.add('visible');
+
         });
     }
 
@@ -33,7 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelDeleteBoardBtn = document.getElementById('cancel-delete-board-btn');
     if (cancelDeleteBoardBtn) {
         cancelDeleteBoardBtn.addEventListener('click', () => {
-            deleteConfirmationModal.classList.add('hidden');
+            deleteConfirmationModal.classList.remove('visible');
+            editBoardModalContent.classList.remove('board-modal-content-visible');
         });
     }
 
@@ -41,8 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmDeleteBoardBtn = document.getElementById('confirm-delete-board-btn');
     if (confirmDeleteBoardBtn) {
         confirmDeleteBoardBtn.addEventListener('click', () => {
-            // Action to delete the board can be added here
-            alert('Board deleted!');
+            showPopUpMessage('Board deleted!');
             deleteConfirmationModal.classList.add('hidden');
         });
     }
@@ -57,12 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
             fetch(updateUrl, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),
+                    'X-CSRFToken': csrfToken,
                 },
                 body: new URLSearchParams({
                     action: 'update',
                     title: formData.get('title'),
-                    visibility: formData.get('visibility'), // Include visibility in the request
+                    visibility: formData.get('visibility'), 
                 }),
             })
                 .then((response) => {
@@ -85,12 +93,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
 
                         editBoardModal.classList.add('hidden');
-                        alert(data.message);
+                        showPopUpMessage(data.message);
                     } else {
-                        alert(data.error || 'An error occurred.');
+                        showPopUpMessage(data.error || 'An error occurred.');
                     }
                 })
-                .catch((error) => console.error('Error updating board:', error));
+                .catch((error) => showPopUpMessage('Error updating board'));
         });
     }
 
@@ -98,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const unpinModal = document.getElementById('unpin-modal');
     const unpinConfirmBtn = document.getElementById('unpin-confirm-btn');
     const unpinCancelBtn = document.getElementById('unpin-cancel-btn');
-    const csrfToken = getCookie('csrftoken');
     let currentImageId = null;
     let currentBoardId = null;
 
@@ -107,21 +114,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target.classList.contains('unpin-btn')) {
             currentImageId = event.target.getAttribute('data-image-id');
             currentBoardId = event.target.getAttribute('data-board-id');
-            unpinModal.classList.remove('hidden');
+            unpinModal.classList.remove('unpin-modal-hidden');
+            unpinModal.classList.add('unpin-modal-visible');
         }
     });
 
     // Close the modal when the cancel button is clicked
     unpinCancelBtn.addEventListener('click', () => {
-        unpinModal.classList.add('hidden');
-        currentImageId = null; // Clear the current image ID
-        currentBoardId = null; // Clear the current board ID
+        unpinModal.classList.add('unpin-modal-hidden');
+        unpinModal.classList.remove('unpin-modal-visible');
+        currentImageId = null; 
+        currentBoardId = null; 
     });
 
     // Handle unpin confirmation
     unpinConfirmBtn.addEventListener('click', () => {
         if (!currentImageId || !currentBoardId) {
-            alert("Invalid image or board ID.");
+            showPopUpMessage("Invalid image or board ID.");
             return;
         }
 
@@ -146,27 +155,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         postElement.remove(); // Remove the grid item directly from the DOM
                     }
     
-                    unpinModal.classList.add('hidden'); // Hide the modal
-                    currentImageId = null; // Clear the current image ID
-                    currentBoardId = null; // Clear the current board ID
-    
-                    // Display a success alert
-                    alert('Post removed successfully!');
+                    unpinModal.classList.add('hidden'); 
+                    currentImageId = null; 
+                    currentBoardId = null; 
+                    showPopUpMessage('Post removed successfully!');
                 } else {
-                    alert(data.error || 'An error occurred while unpinning the post.');
+                    showPopUpMessage('An error occurred while unpinning the post.');
                 }
             })
             .catch(error => {
-                console.error('Error unpinning the post:', error);
+                showPopUpMessage('Error unpinning the post:');
             });
     });
 });
-
-// Utility function to get CSRF token
-function getCookie(name) {
-    const cookieValue = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith(name + '='))
-        ?.split('=')[1];
-    return cookieValue || '';
-}
