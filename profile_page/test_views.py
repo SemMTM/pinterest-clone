@@ -311,3 +311,119 @@ class ImageBoardsViewTest(TestCase):
         self.assertContains(response, "Board 1")
         self.assertContains(response, "Extra Board 10")
         self.assertNotContains(response, "Extra Board 11")  # Should not display more than the allowed number
+
+
+class BoardDetailViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create a user and their profile
+        cls.user = User.objects.create_user(username="testuser", password="password123")
+        cls.other_user = User.objects.create_user(username="otheruser", password="password456")
+        Profile.objects.create(user=cls.user)
+        Profile.objects.create(user=cls.other_user)
+
+        # Create boards
+        cls.board = ImageBoard.objects.create(user=cls.user, title="Board 1", visibility=0)
+        cls.all_pins_board = ImageBoard.objects.create(user=cls.user, title="All Pins", visibility=0)
+
+        # Create posts and associate them with the board
+        cls.post1 = Post.objects.create(title="Post 1", description="Description 1", user=cls.user)
+        cls.post2 = Post.objects.create(title="Post 2", description="Description 2", user=cls.user)
+        cls.post3 = Post.objects.create(title="Post 3", description="Description 3", user=cls.user)
+
+        BoardImageRelationship.objects.create(post_id=cls.post1, board_id=cls.board)
+        BoardImageRelationship.objects.create(post_id=cls.post2, board_id=cls.board)
+        BoardImageRelationship.objects.create(post_id=cls.post3, board_id=cls.board)
+
+        cls.board_url = reverse("board_detail", kwargs={"board_id": cls.board.id})
+
+    def test_view_uses_correct_template(self):
+        """Test that the correct template is used."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.board_url)
+        self.assertTemplateUsed(response, "profile_page/board_detail.html")
+
+    def test_view_displays_board_title(self):
+        """Test that the board's title is displayed."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.board_url)
+        self.assertContains(response, "Board 1")
+
+    def test_view_displays_board_images(self):
+        """Test that the board's associated images are displayed."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.board_url)
+        self.assertContains(response, "Post 1")
+        self.assertContains(response, "Post 2")
+        self.assertContains(response, "Post 3")
+
+    def test_view_shows_edit_button_for_owner(self):
+        """Test that the edit button is shown for the owner of the board."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.board_url)
+        self.assertContains(response, "Edit Board")
+
+    def test_view_hides_edit_button_for_other_user(self):
+        """Test that the edit button is hidden for users who do not own the board."""
+        self.client.login(username="otheruser", password="password456")
+        response = self.client.get(self.board_url)
+        # Ensure the "Edit Board" button is not present
+        self.assertNotContains(response, "Edit Board")
+        self.assertNotContains(response, 'id="open-edit-board-modal-btn"')
+
+    def test_view_allows_unpinning_for_owner(self):
+        """Test that the unpin button is displayed for the owner of the board."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.board_url)
+        self.assertContains(response, 'class="unpin-btn"')
+
+    def test_view_hides_unpinning_for_other_users(self):
+        """Test that the unpin button is hidden for users who do not own the board."""
+        self.client.login(username="otheruser", password="password456")
+        response = self.client.get(self.board_url)
+        self.assertNotContains(response, 'class="unpin-btn"')
+
+    def test_view_redirects_for_unauthenticated_user(self):
+        """Test that the view redirects unauthenticated users to the login page."""
+        response = self.client.get(self.board_url)
+        self.assertEqual(response.status_code, 302)  # Redirect to login
+
+    def test_view_shows_private_board_to_owner(self):
+        """Test that a private board is visible to its owner."""
+        self.board.visibility = 1  # Private
+        self.board.save()
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.board_url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_hides_private_board_from_other_users(self):
+        """Test that a private board is not visible to other users."""
+        self.board.visibility = 1  # Private
+        self.board.save()
+        self.client.login(username="otheruser", password="password456")
+        response = self.client.get(self.board_url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_view_404_for_nonexistent_board(self):
+        """Test that a 404 is returned for a nonexistent board."""
+        nonexistent_board_url = reverse("board_detail", kwargs={"board_id": 9999})
+        response = self.client.get(nonexistent_board_url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_view_handles_empty_board_gracefully(self):
+        """Test that the view handles boards with no images gracefully."""
+        empty_board = ImageBoard.objects.create(user=self.user, title="Empty Board", visibility=0)
+        empty_board_url = reverse("board_detail", kwargs={"board_id": empty_board.id})
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(empty_board_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Empty Board")
+        self.assertNotContains(response, '<div class="grid-item"')
+
+    def test_view_displays_all_pins_board(self):
+        """Test that the All Pins board is displayed correctly."""
+        self.client.login(username="testuser", password="password123")
+        all_pins_url = reverse("board_detail", kwargs={"board_id": self.all_pins_board.id})
+        response = self.client.get(all_pins_url)
+        self.assertContains(response, "All Pins")
+        self.assertEqual(response.status_code, 200)
