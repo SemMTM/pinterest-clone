@@ -728,3 +728,106 @@ class PostDeleteViewTest(TestCase):
 
         # Assert that the post still exists
         self.assertTrue(Post.objects.filter(id=self.post.id).exists())
+
+
+class LikePostViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(username="testuser", password="password123")
+        cls.another_user = User.objects.create_user(username="otheruser", password="password456")
+
+        cls.post = Post.objects.create(
+            title="Test Post",
+            description="This is a test description.",
+            user=cls.user,
+            likes=0,
+        )
+
+        cls.like_post_url = reverse("like_post", kwargs={"id": cls.post.id})
+
+    def test_like_post_anonymous_user(self):
+        """Test that an anonymous user cannot like a post."""
+        response = self.client.post(self.like_post_url)
+
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json()["success"], False)
+        self.assertEqual(response.json()["error"], "You need to log in to like this post.")
+        self.assertEqual(self.post.liked_by.count(), 0)
+        self.assertEqual(self.post.likes, 0)
+
+    def test_like_post_authenticated_user(self):
+        """Test that an authenticated user can like a post."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.post(self.like_post_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["success"], True)
+        self.assertEqual(response.json()["liked"], True)
+        self.assertEqual(response.json()["likes_count"], 1)
+
+        # Check that the user is added to the liked_by field
+        self.post.refresh_from_db()
+        self.assertEqual(self.post.liked_by.count(), 1)
+        self.assertTrue(self.user in self.post.liked_by.all())
+        self.assertEqual(self.post.likes, 1)
+
+    def test_unlike_post_authenticated_user(self):
+        """Test that an authenticated user can unlike a post they previously liked."""
+        self.client.login(username="testuser", password="password123")
+
+        # Like the post first
+        self.client.post(self.like_post_url)
+
+        # Unlike the post
+        response = self.client.post(self.like_post_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["success"], True)
+        self.assertEqual(response.json()["liked"], False)
+        self.assertEqual(response.json()["likes_count"], 0)
+
+        # Check that the user is removed from the liked_by field
+        self.post.refresh_from_db()
+        self.assertEqual(self.post.liked_by.count(), 0)
+        self.assertFalse(self.user in self.post.liked_by.all())
+        self.assertEqual(self.post.likes, 0)
+
+    def test_like_post_multiple_users(self):
+        """Test that multiple users can like a post."""
+        self.client.login(username="testuser", password="password123")
+        self.client.post(self.like_post_url)  # User 1 likes the post
+
+        self.client.logout()
+        self.client.login(username="otheruser", password="password456")
+        response = self.client.post(self.like_post_url)  # User 2 likes the post
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["success"], True)
+        self.assertEqual(response.json()["liked"], True)
+        self.assertEqual(response.json()["likes_count"], 2)
+
+        # Check that both users are in the liked_by field
+        self.post.refresh_from_db()
+        self.assertEqual(self.post.liked_by.count(), 2)
+        self.assertTrue(self.user in self.post.liked_by.all())
+        self.assertTrue(self.another_user in self.post.liked_by.all())
+        self.assertEqual(self.post.likes, 2)
+
+    def test_invalid_request_method(self):
+        """Test that a non-POST request method returns a 405 error."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.like_post_url)
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json()["success"], False)
+        self.assertEqual(response.json()["error"], "Invalid request method.")
+        self.assertEqual(self.post.liked_by.count(), 0)
+        self.assertEqual(self.post.likes, 0)
+
+    def test_like_nonexistent_post(self):
+        """Test that liking a nonexistent post returns a 404 error."""
+        self.client.login(username="testuser", password="password123")
+        invalid_url = reverse("like_post", kwargs={"id": uuid4()})
+        response = self.client.post(invalid_url)
+
+        self.assertEqual(response.status_code, 404)
