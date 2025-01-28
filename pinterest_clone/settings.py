@@ -26,7 +26,7 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 SECRET_KEY = {
-    'default': dj_database_url.parse(os.environ.get("SECRET_KEY"))
+    'default': os.environ.get("SECRET_KEY")
 }
 
 

@@ -690,13 +690,13 @@ class PostDeleteViewTest(TestCase):
 
     def test_post_delete_unauthorized_user(self):
         """Test that a user cannot delete a post they do not own."""
-        self.client.login(username="otheruser", password="password456")
-        response = self.client.post(self.post_delete_url)
+        self.client.login(username="otheruser", password="password456")  
+        response = self.client.post(self.post_delete_url)  
 
-        # Assert redirection to the post detail page
-        self.assertRedirects(response, reverse("post_detail", kwargs={"id": self.post.id}))
+        # Assert that the response is a 404 because the user does not own the post
+        self.assertEqual(response.status_code, 404)
 
-        # Assert that the post still exists
+        # Assert that the post still exists in the database
         self.assertTrue(Post.objects.filter(id=self.post.id).exists())
 
     def test_post_delete_anonymous_user(self):
