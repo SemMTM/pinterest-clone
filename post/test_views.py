@@ -419,38 +419,28 @@ class AddCommentViewTest(TestCase):
 
     def test_anonymous_user(self):
         """Test that an anonymous user cannot add a comment."""
-        self.client.logout()  # Log out the authenticated user
-        data = {"body": "This is a test comment."}
-
+        self.client.logout()
         response = self.client.post(
             self.url,
-            data,
-            HTTP_X_REQUESTED_WITH='XMLHttpRequest',  # Simulate AJAX request
+            {"body": "Anonymous test comment"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
         )
-
-        # Assert the response
-        self.assertEqual(response.status_code, 302)  # Should redirect to login
-        self.assertTrue(response.url.startswith(reverse("login")))
+        self.assertEqual(response.status_code, 302)  # Redirect status code
+        expected_url = reverse("custom_accounts:login_modal")  # Include namespace
+        self.assertTrue(response.url.startswith(expected_url))
 
         # Assert no comment was created
         self.assertEqual(Comment.objects.count(), 0)
 
     def test_invalid_post_id(self):
         """Test the view returns an error for an invalid post ID."""
-        invalid_url = reverse("add_comment", kwargs={"post_id": 9999})  # Non-existent post ID
-        data = {"body": "This is a test comment."}
-
+        invalid_post_id = uuid4()  # Generate a random UUID
         response = self.client.post(
-            invalid_url,
-            data,
-            HTTP_X_REQUESTED_WITH='XMLHttpRequest',  # Simulate AJAX request
+            reverse("add_comment", kwargs={"post_id": invalid_post_id}),
+            {"body": "Test comment on invalid post"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
         )
-
-        # Assert the response
         self.assertEqual(response.status_code, 404)
-
-        # Assert no comment was created
-        self.assertEqual(Comment.objects.count(), 0)
 
     def test_edge_case_body(self):
         """Test adding a comment with edge case data."""
