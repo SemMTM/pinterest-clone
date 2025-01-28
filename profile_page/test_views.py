@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from profile_page.models import Profile, ImageBoard, BoardImageRelationship
 from post.models import Post
+from django.core.paginator import Page
 
 
 class ProfilePageViewTest(TestCase):
@@ -89,3 +90,77 @@ class ProfilePageViewTest(TestCase):
         self.client.login(username="otheruser", password="password456")
         response = self.client.get(self.profile_url)
         self.assertEqual(response.status_code, 200)
+
+    
+class CreatedPinsViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(username="testuser", password="password123")
+        cls.other_user = User.objects.create_user(username="otheruser", password="password456")
+
+        for i in range(25):
+            Post.objects.create(title=f"Post {i + 1}", description=f"Description {i + 1}", user=cls.user)
+
+        cls.created_pins_url = reverse("created_pins", kwargs={"username": cls.user.username})
+
+    def test_view_url_exists_at_desired_location(self):
+        """Test that the view returns a 200 status code."""
+        response = self.client.get(self.created_pins_url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        """Test that the correct template is used."""
+        response = self.client.get(self.created_pins_url)
+        self.assertTemplateUsed(response, "profile_page/created_pins.html")
+
+    def test_view_renders_user_posts(self):
+        """Test that the created posts are displayed for the user."""
+        response = self.client.get(self.created_pins_url)
+
+        # Check if the first page of posts is displayed
+        for i in range(25, 15, -1):  # Posts 25 to 16
+            self.assertContains(response, f"Post {i}")
+
+    def test_pagination_renders_correctly(self):
+        """Test that the pagination shows the correct number of posts per page."""
+        response = self.client.get(self.created_pins_url)
+        self.assertEqual(len(response.context['created_posts']), 10)
+
+    def test_pagination_second_page(self):
+        """Test that the second page contains the correct posts."""
+        response = self.client.get(self.created_pins_url + "?page=2")
+
+        # Check if the second page renders posts 15 to 6
+        for i in range(15, 5, -1):
+            self.assertContains(response, f"Post {i}")
+        self.assertNotContains(response, "Post 25")  # Ensure first-page content is not shown
+
+    def test_pagination_empty_page(self):
+        """Test that an empty page returns an empty response."""
+        response = self.client.get(self.created_pins_url + "?page=999")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.decode().strip(), "")  # Expect empty response for out-of-range pages
+
+    def test_view_for_case_insensitive_username(self):
+        """Test that the view works with a case-insensitive username."""
+        url_with_uppercase_username = reverse("created_pins", kwargs={"username": self.user.username.upper()})
+        response = self.client.get(url_with_uppercase_username)
+
+        # Check if the first page of posts is displayed
+        for i in range(25, 15, -1):  # Posts 25 to 16
+            self.assertContains(response, f"Post {i}")
+
+    def test_view_no_posts(self):
+        """Test that the view handles users with no posts gracefully."""
+        no_posts_url = reverse("created_pins", kwargs={"username": self.other_user.username})
+        response = self.client.get(no_posts_url)
+
+        # Ensure no posts are rendered
+        self.assertNotContains(response, '<div class="grid-item">')
+
+    def test_next_page_link_renders_correctly(self):
+        """Test that the next page link is rendered for paginated content."""
+        response = self.client.get(self.created_pins_url)
+
+        # Check if the link for the next page is rendered
+        self.assertContains(response, f'?page=2')
