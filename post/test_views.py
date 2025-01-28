@@ -650,3 +650,81 @@ class UpdateCommentViewTest(TestCase):
 
             self.assertEqual(response.status_code, 500)
             self.assertEqual(response.json().get("error"), "Internal Server Error")
+
+
+class PostDeleteViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(username="testuser", password="password123")
+        cls.other_user = User.objects.create_user(username="otheruser", password="password456")
+
+        cls.post = Post.objects.create(
+            title="Test Post",
+            description="Test Description",
+            user=cls.user
+        )
+
+        cls.post_delete_url = reverse("post_delete", kwargs={"post_id": cls.post.id})
+
+    def test_post_delete_valid_request(self):
+        """Test that a valid POST request from the owner deletes the post."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.post(self.post_delete_url)
+
+        # Assert redirection to home page
+        self.assertRedirects(response, reverse("home"))
+
+        # Assert that the post is deleted
+        self.assertFalse(Post.objects.filter(id=self.post.id).exists())
+
+    def test_post_delete_get_request(self):
+        """Test that a GET request redirects to the post detail page."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.post_delete_url)
+
+        # Assert redirection to the post detail page
+        self.assertRedirects(response, reverse("post_detail", kwargs={"id": self.post.id}))
+
+        # Assert that the post still exists
+        self.assertTrue(Post.objects.filter(id=self.post.id).exists())
+
+    def test_post_delete_unauthorized_user(self):
+        """Test that a user cannot delete a post they do not own."""
+        self.client.login(username="otheruser", password="password456")
+        response = self.client.post(self.post_delete_url)
+
+        # Assert redirection to the post detail page
+        self.assertRedirects(response, reverse("post_detail", kwargs={"id": self.post.id}))
+
+        # Assert that the post still exists
+        self.assertTrue(Post.objects.filter(id=self.post.id).exists())
+
+    def test_post_delete_anonymous_user(self):
+        """Test that an anonymous user cannot delete a post."""
+        response = self.client.post(self.post_delete_url)
+
+        # Assert redirection to the login page
+        self.assertRedirects(response, f"{reverse('custom_accounts:login_modal')}?next={self.post_delete_url}")
+
+        # Assert that the post still exists
+        self.assertTrue(Post.objects.filter(id=self.post.id).exists())
+
+    def test_post_delete_nonexistent_post(self):
+        """Test that attempting to delete a nonexistent post returns a 404."""
+        self.client.login(username="testuser", password="password123")
+        invalid_url = reverse("post_delete", kwargs={"post_id": uuid4()})
+        response = self.client.post(invalid_url)
+
+        # Assert that the response is a 404
+        self.assertEqual(response.status_code, 404)
+
+    def test_post_delete_invalid_request_method(self):
+        """Test that a non-POST request redirects to the post detail page."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.post_delete_url)
+
+        # Assert redirection to the post detail page
+        self.assertRedirects(response, reverse("post_detail", kwargs={"id": self.post.id}))
+
+        # Assert that the post still exists
+        self.assertTrue(Post.objects.filter(id=self.post.id).exists())
