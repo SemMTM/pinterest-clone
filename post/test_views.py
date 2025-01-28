@@ -530,3 +530,123 @@ class CommentDeleteViewTest(TestCase):
         self.client.login(username="user1", password="password123")
         response = self.client.post(invalid_url)
         self.assertEqual(response.status_code, 404)
+
+
+class UpdateCommentViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(username="testuser", password="password123")
+        cls.other_user = User.objects.create_user(username="otheruser", password="password456")
+        
+        cls.post = Post.objects.create(
+            title="Test Post",
+            description="Test Description",
+            user=cls.user
+        )
+        
+        cls.comment = Comment.objects.create(
+            body="Original Comment",
+            author=cls.user,
+            post=cls.post
+        )
+
+        cls.update_url = reverse("edit_comment", kwargs={"post_id": cls.post.id, "comment_id": cls.comment.id})
+
+    def test_update_comment_valid_request(self):
+        """Test that a user can successfully update their comment."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.post(
+            self.update_url,
+            data=json.dumps({"body": "Updated Comment"}),
+            content_type="application/json"
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json().get("success"))
+        self.assertEqual(response.json().get("body"), "Updated Comment")
+
+        # Check that the comment body was updated
+        self.comment.refresh_from_db()
+        self.assertEqual(self.comment.body, "Updated Comment")
+
+    def test_update_comment_invalid_json(self):
+        """Test that invalid JSON returns a 400 error."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.post(
+            self.update_url,
+            data="Invalid JSON",
+            content_type="application/json"
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json().get("error"), "Invalid JSON data.")
+
+    def test_update_comment_empty_body(self):
+        """Test that an empty comment body returns a 400 error."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.post(
+            self.update_url,
+            data=json.dumps({"body": ""}),
+            content_type="application/json"
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json().get("error"), "Comment body cannot be empty.")
+
+    def test_update_comment_unauthorized_user(self):
+        """Test that a user cannot update someone else's comment."""
+        self.client.login(username="otheruser", password="password456")
+        response = self.client.post(
+            self.update_url,
+            data=json.dumps({"body": "Malicious Update"}),
+            content_type="application/json"
+        )
+
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json().get("error"), "You are not authorized to edit this comment.")
+
+    def test_update_comment_nonexistent_post(self):
+        """Test that updating a comment on a nonexistent post returns a 404 error."""
+        self.client.login(username="testuser", password="password123")
+        invalid_url = reverse("edit_comment", kwargs={"post_id": uuid4(), "comment_id": self.comment.id})
+        response = self.client.post(
+            invalid_url,
+            data=json.dumps({"body": "Updated Comment"}),
+            content_type="application/json"
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_update_comment_nonexistent_comment(self):
+        """Test that updating a nonexistent comment returns a 404 error."""
+        self.client.login(username="testuser", password="password123")
+        invalid_url = reverse("edit_comment", kwargs={"post_id": self.post.id, "comment_id": 9999})
+        response = self.client.post(
+            invalid_url,
+            data=json.dumps({"body": "Updated Comment"}),
+            content_type="application/json"
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_update_comment_invalid_request_method(self):
+        """Test that a non-POST request returns a 405 error."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.update_url)
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json().get("error"), "Invalid request method.")
+
+    def test_update_comment_internal_server_error(self):
+        """Test that unexpected exceptions are handled gracefully."""
+        self.client.login(username="testuser", password="password123")
+
+        with patch("post.views.Comment.save", side_effect=Exception("Unexpected Error")):
+            response = self.client.post(
+                self.update_url,
+                data=json.dumps({"body": "Updated Comment"}),
+                content_type="application/json"
+            )
+
+            self.assertEqual(response.status_code, 500)
+            self.assertEqual(response.json().get("error"), "Internal Server Error")
