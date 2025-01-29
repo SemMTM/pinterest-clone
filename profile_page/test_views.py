@@ -7,6 +7,7 @@ from post.models import Post
 from unittest.mock import patch
 from django.core.paginator import Page
 from django.db.models import Count
+from uuid import uuid4
 from .views import sync_all_pins_board, handle_post_save
 
 
@@ -723,3 +724,89 @@ class SaveToBoardViewTest(TestCase):
 
         self.assertEqual(response.status_code, 405)
         self.assertJSONEqual(response.content, {"success": False, "message": "Invalid request method."})
+
+
+class CreateBoardViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create test users
+        cls.user = User.objects.create_user(username="testuser", password="password123")
+        cls.other_user = User.objects.create_user(username="otheruser", password="password456")
+
+        # Create a test post
+        cls.post = Post.objects.create(title="Test Post", user=cls.user, description="Test Description")
+
+        # Create a board for the user
+        cls.existing_board = ImageBoard.objects.create(user=cls.user, title="Existing Board")
+
+        cls.client = Client()
+
+    def test_authentication_required(self):
+        """Test that unauthenticated users are redirected to login."""
+        url = reverse("create_board")
+        response = self.client.post(url, {"title": "New Board", "post_id": self.post.id})
+        self.assertEqual(response.status_code, 302)  # Redirect to login page
+
+    def test_successful_board_creation(self):
+        """Test that a new board is successfully created along with a board-image relationship."""
+        self.client.login(username="testuser", password="password123")
+        url = reverse("create_board")
+        response = self.client.post(url, {"title": "New Board", "post_id": self.post.id})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"success": True, "message": "Board created successfully!"})
+        
+        # Verify that the board was created
+        self.assertTrue(ImageBoard.objects.filter(user=self.user, title="New Board").exists())
+
+        # Verify that the post was added to the board
+        board = ImageBoard.objects.get(user=self.user, title="New Board")
+        self.assertTrue(BoardImageRelationship.objects.filter(post_id=self.post, board_id=board).exists())
+
+    def test_board_creation_fails_with_existing_title(self):
+        """Test that a board with an existing title cannot be created."""
+        self.client.login(username="testuser", password="password123")
+        url = reverse("create_board")
+        response = self.client.post(url, {"title": "Existing Board", "post_id": self.post.id})
+
+        self.assertEqual(response.status_code, 400)
+        expected_error = {"success": False, "error": 'A board with the title "Existing Board" already exists.'}
+        self.assertJSONEqual(response.content, expected_error)
+
+    def test_error_on_missing_title(self):
+        """Test that missing board title in request returns a 400 error."""
+        self.client.login(username="testuser", password="password123")
+        url = reverse("create_board")
+        response = self.client.post(url, {"title": "", "post_id": self.post.id})
+
+        self.assertEqual(response.status_code, 400)
+        self.assertJSONEqual(response.content, {"success": False, "error": "Board title is required."})
+
+    def test_error_on_invalid_post_id(self):
+        """Test that an invalid post_id returns a 500 error due to unhandled exception."""
+        self.client.login(username="testuser", password="password123")
+        url = reverse("create_board")
+
+        # Non-existent post_id 
+        response = self.client.post(url, {"title": "Test Board", "post_id": 99999})
+        self.assertEqual(response.status_code, 500)
+
+    def test_invalid_request_method(self):
+        """Test that a GET request returns a 405 error."""
+        self.client.login(username="testuser", password="password123")
+        url = reverse("create_board")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 405)
+        self.assertJSONEqual(response.content, {"success": False, "error": "Invalid request method."})
+
+    def test_unexpected_error_handling(self):
+        """Test that unexpected errors return a 500 response."""
+        self.client.login(username="testuser", password="password123")
+        url = reverse("create_board")
+
+        # Simulate an unexpected error by passing an invalid data type
+        response = self.client.post(url, {"title": "Valid Title", "post_id": "invalid"})
+
+        self.assertEqual(response.status_code, 500)
+        self.assertJSONEqual(response.content, {"success": False, "error": "An unexpected error occurred."})
