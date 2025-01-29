@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, EmptyPage
 from django.dispatch import receiver
 from django.db.models import Count
 from django.db.models.signals import post_save, post_delete
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from post.models import Post
@@ -155,7 +155,7 @@ def save_to_board(request, post_id):
     return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)
 
 
-@login_required
+@login_required 
 def create_board(request):
     if request.method == 'POST':
         try:

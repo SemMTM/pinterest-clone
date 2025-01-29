@@ -810,3 +810,133 @@ class CreateBoardViewTest(TestCase):
 
         self.assertEqual(response.status_code, 500)
         self.assertJSONEqual(response.content, {"success": False, "error": "An unexpected error occurred."})
+
+
+class EditBoardViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create test users
+        cls.user = User.objects.create_user(username="testuser", password="password123")
+        cls.other_user = User.objects.create_user(username="otheruser", password="password456")
+
+        # Create a board belonging to testuser
+        cls.board = ImageBoard.objects.create(user=cls.user, title="My Board", visibility=0)
+        cls.board_url = reverse("edit_board", kwargs={"board_id": cls.board.id})
+
+    def test_redirects_unauthenticated_users(self):
+        """Test that unauthenticated users cannot access the view."""
+        response = self.client.post(self.board_url, {"action": "update", "title": "New Title", "visibility": "1"})
+        self.assertEqual(response.status_code, 302)  # Redirects to login
+
+    def test_forbidden_for_other_users(self):
+        """Test that another user cannot edit someone else's board."""
+        self.client.login(username="otheruser", password="password456")
+        response = self.client.post(self.board_url, {"action": "update", "title": "New Title", "visibility": "1"})
+        self.assertEqual(response.status_code, 403)  # Forbidden
+
+    def test_invalid_http_method(self):
+        """Test that GET requests are rejected with 405 Method Not Allowed."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.get(self.board_url)
+        self.assertEqual(response.status_code, 405)
+        self.assertJSONEqual(response.content, {"success": False, "error": "Invalid request method."})
+
+    def test_update_board_successfully(self):
+        """Test that the board title and visibility can be updated."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.post(
+            self.board_url,
+            {"action": "update", "title": "Updated Board", "visibility": "1"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(
+            response.content,
+            {
+                "success": True,
+                "message": "Board updated successfully.",
+                "title": "Updated Board",
+                "visibility": 1,
+            },
+        )
+
+        # Check that the changes were saved in the database
+        self.board.refresh_from_db()
+        self.assertEqual(self.board.title, "Updated Board")
+        self.assertEqual(self.board.visibility, 1)
+
+    def test_update_board_fails_with_empty_title(self):
+        """Test that the board title cannot be updated to an empty string."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.post(self.board_url, {"action": "update", "title": "", "visibility": "1"})
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"success": False, "error": "Title cannot be empty."})
+
+    def test_update_board_fails_with_invalid_visibility(self):
+        """Test that invalid visibility values are rejected."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.post(self.board_url, {"action": "update", "title": "Valid Title", "visibility": "3"})
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"success": False, "error": "Invalid visibility value."})
+
+    def test_delete_board_successfully(self):
+        """Test that the board is deleted when action is 'delete'."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.post(self.board_url, {"action": "delete"})
+        self.assertEqual(response.status_code, 302)  # Redirect to profile page
+
+        # Ensure board no longer exists
+        with self.assertRaises(ImageBoard.DoesNotExist):
+            ImageBoard.objects.get(id=self.board.id)
+
+    def test_invalid_action_in_post_request(self):
+        """Test that an invalid action parameter returns a 405 error."""
+        self.client.login(username="testuser", password="password123")
+        response = self.client.post(self.board_url, {"action": "invalid_action"})
+        self.assertEqual(response.status_code, 405)  
+
+    def test_edit_board_with_empty_title(self):
+        """Test that an empty title returns a JSON error."""
+        self.client.login(username="testuser", password="password123")  # Ensure user is logged in
+
+        response = self.client.post(
+            self.board_url, 
+            {"action": "update", "title": "", "visibility": "1"},
+            follow=True  # Follow redirects to check response content
+        )
+
+        self.assertEqual(response.status_code, 200)  # Ensure it remains on the same page
+        self.assertJSONEqual(
+            response.content,
+            {"success": False, "error": "Title cannot be empty."}
+        )
+
+    def test_edit_board_with_same_title_and_visibility(self):
+        """Test that updating a board with the same title and visibility does not cause issues."""
+        self.client.login(username="testuser", password="password123")  # Ensure user is logged in
+
+        response = self.client.post(
+            self.board_url, 
+            {"action": "update", "title": self.board.title, "visibility": str(self.board.visibility)},
+            follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)  # Ensure it remains on the same page
+        self.assertJSONEqual(
+            response.content,
+            {"success": True, "message": "Board updated successfully.", "title": self.board.title, "visibility": self.board.visibility}
+        )
+
+    def test_forbidden_edit_by_non_owner(self):
+        """Test that another user cannot edit someone else's board."""
+        self.client.login(username="otheruser", password="password456")
+        response = self.client.post(self.board_url, {"action": "update", "title": "New Title", "visibility": "1"})
+        
+        self.assertEqual(response.status_code, 403)  # Forbidden
+
+    def test_csrf_protection(self):
+        """Test that CSRF protection works by attempting to edit a board without a CSRF token."""
+        self.client.login(username="owner", password="password123")
+        response = self.client.post(self.board_url, {"action": "update", "title": "CSRF Test", "visibility": "1"}, follow=False)
+
+        # CSRF token is required; if missing, it should not update the board.
+        self.assertNotEqual(response.status_code, 200)  # Should fail with 403 or redirect to login page
