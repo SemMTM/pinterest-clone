@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from .models import Comment, Post, ImageTags
 
 # Comment Form
@@ -14,12 +15,11 @@ class CommentForm(forms.ModelForm):
         self.fields['body'].widget.attrs['rows'] = '2'
 
 
-# Create a new post form
 class PostForm(forms.ModelForm):
     tags = forms.ModelMultipleChoiceField(
         queryset=ImageTags.objects.all(),
         required=False,
-        widget=forms.MultipleHiddenInput,  # or a custom widget later
+        widget=forms.MultipleHiddenInput, 
         help_text="Select up to 3 tags."
     )
 
@@ -33,3 +33,10 @@ class PostForm(forms.ModelForm):
         if len(selected_tags) > 3:
             raise forms.ValidationError("You can select a maximum of 3 tags.")
         return selected_tags
+    
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        max_size = 20 * 1024 * 1024  # 20MB in bytes
+
+        if image and image.size > max_size:
+            raise ValidationError("The uploaded image exceeds the maximum file size of 20MB.")
