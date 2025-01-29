@@ -32,6 +32,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     createPostForm.reset(); 
                     preview.style.display = 'none'; 
                     preview.src = ''; 
+
+                    // Clear selected tags
+                    selectedTags = []; 
+                    selectedTagsContainer.innerHTML = '';  
+                    hiddenTagsContainer.innerHTML = ''; 
                 } else {
                     showPopUpMessage('An error occurred.');
                 }
