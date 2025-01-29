@@ -82,6 +82,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Submit on enter
+    if (editProfileForm) {
+        editProfileForm.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && !event.shiftKey) { // Prevents new line on Enter + Shift
+                event.preventDefault(); // Prevents default newline behavior
+                editProfileForm?.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+            }
+        });
+    }
+
     // Edit profile form submission and dynamic update
     if (editProfileForm) {
         editProfileForm.addEventListener('submit', (e) => {

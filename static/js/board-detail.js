@@ -55,6 +55,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Submit on enter
+    if (editBoardForm) {
+        editBoardForm.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && !event.shiftKey) { // Prevents new line on Enter + Shift
+                event.preventDefault(); // Prevents default newline behavior
+                editBoardForm?.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+            }
+        });
+    }
+
     // Update Board Title and Visibility
     if (editBoardForm) {
         editBoardForm.addEventListener('submit', (e) => {
