@@ -7,6 +7,7 @@ from post.models import Post
 from unittest.mock import patch
 from django.core.paginator import Page
 from django.db.models import Count
+from django.core.files.uploadedfile import SimpleUploadedFile
 from uuid import uuid4
 from .views import sync_all_pins_board, handle_post_save
 
