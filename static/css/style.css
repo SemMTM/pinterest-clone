@@ -1186,7 +1186,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pop-up-message-content {
-    background-color: #d7d7d7;
+    background-color: #010281;
+    color: white;
     padding: 20px;
     text-align: center;
     width: 300px;

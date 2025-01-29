@@ -3,7 +3,7 @@ import { showPopUpMessage } from './pop_up.js';
 document.addEventListener('DOMContentLoaded', () => {
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
-    // Comment Modal Elements
+    // Comment Modal Elements 
     const commentModal = document.getElementById('comment-modal');
     const commentIcon = document.getElementById('comment-icon');
     const closeModal = document.getElementById('close-modal');
@@ -23,6 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
         commentIcon.addEventListener('click', () => {
             commentModal?.classList.add('modal-show');
             resetCommentForm();
+
+            if (commentInput) {
+                setTimeout(() => commentInput.focus(), 0);
+            }
         });
     }
 
@@ -35,8 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (viewAll) {
         viewAll.addEventListener('click', () => {
             commentModal?.classList.add('modal-show');
+
+            if (commentInput) {
+                setTimeout(() => commentInput.focus(), 0);
+            }
         });
     }
+
 
     // Delete Comment Modal
     const deleteModal = document.getElementById('delete-comment-modal');
@@ -64,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
     // Edit Comment
     const commentsContainer = document.getElementById('comments-container');
 
@@ -72,6 +82,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target.classList.contains('edit-comment-btn')) {
                 commentInput.value = e.target.dataset.commentBody;
                 commentIdInput.value = e.target.dataset.commentId;
+            }
+        });
+    }
+
+    if (commentInput) {
+        commentInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && !event.shiftKey) { // Prevents new line on Enter + Shift
+                event.preventDefault(); // Prevents default newline behavior
+                commentForm?.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
             }
         });
     }
@@ -118,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             `[data-comment-id="${commentId}"] .comment-body`
                         );
                         if (commentBodySpan) commentBodySpan.textContent = data.body;
+                            window.location.href = data.redirect_url;
                     } else {
                         window.location.href = data.redirect_url;
                     }
@@ -132,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
 
     // Like Button
     const likeButton = document.getElementById('like-button');
