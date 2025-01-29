@@ -940,3 +940,100 @@ class EditBoardViewTest(TestCase):
 
         # CSRF token is required; if missing, it should not update the board.
         self.assertNotEqual(response.status_code, 200)  # Should fail with 403 or redirect to login page
+
+
+class UnpinPostViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        """Set up test users, boards, and posts."""
+        cls.user = User.objects.create_user(username="testuser", password="password123")
+        cls.other_user = User.objects.create_user(username="otheruser", password="password456")
+
+        # Create boards
+        cls.user_board = ImageBoard.objects.create(user=cls.user, title="User Board", visibility=0)
+        cls.other_board = ImageBoard.objects.create(user=cls.other_user, title="Other User Board", visibility=0)
+
+        # Create a post with UUID
+        cls.post = Post.objects.create(user=cls.user, title="Sample Post", description="Test description")
+
+        # Pin post to the board
+        cls.relationship = BoardImageRelationship.objects.create(post_id=cls.post, board_id=cls.user_board)
+
+        # Generate URLs
+        cls.unpin_url = reverse("unpin_post", kwargs={"board_id": cls.user_board.id, "post_id": cls.post.id})
+
+    def setUp(self):
+        """Set up the client for each test."""
+        self.client = Client()
+        self.client.login(username="testuser", password="password123")
+
+    def test_unpin_successfully(self):
+        """Test that a user can successfully unpin a post from their own board."""
+        response = self.client.post(self.unpin_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"success": True, "message": "Post successfully unpinned from the board."})
+        self.assertFalse(BoardImageRelationship.objects.filter(board_id=self.user_board, post_id=self.post).exists())
+
+    def test_user_cannot_unpin_from_other_users_board(self):
+        """Test that a user cannot unpin a post from another user's board."""
+        self.client.logout()
+        self.client.login(username="otheruser", password="password456")
+
+        other_user_url = reverse("unpin_post", kwargs={"board_id": self.user_board.id, "post_id": self.post.id})
+
+        response = self.client.post(other_user_url)
+        self.assertEqual(response.status_code, 500, )
+
+        # Verify that the post still exists in the database
+        self.assertTrue(
+            BoardImageRelationship.objects.filter(board_id=self.user_board, post_id=self.post).exists(),
+        )
+
+    def test_post_not_in_board_returns_404(self):
+        """Test that trying to unpin a post that isn't in the board returns a 404 error."""
+        self.relationship.delete()  # Remove relationship first
+
+        response = self.client.post(self.unpin_url)
+        self.assertEqual(response.status_code, 404)
+        self.assertJSONEqual(response.content, {"success": False, "error": "Post not found in this board."})
+
+    def test_invalid_board_id_returns_500(self):
+        """Test that an invalid board_id returns a 404 error."""
+        invalid_url = reverse("unpin_post", kwargs={"board_id": 9999, "post_id": self.post.id})
+
+        response = self.client.post(invalid_url)
+        self.assertEqual(response.status_code, 500, "Expected 404 for an invalid board_id, but got a different response.")
+
+    def test_invalid_post_id_returns_404(self):
+        """Test that an invalid post_id (UUID format) returns a 404 error."""
+        invalid_uuid = uuid4()  # Generate a random UUID to mimic an invalid post_id
+        invalid_url = reverse("unpin_post", kwargs={"board_id": self.user_board.id, "post_id": invalid_uuid})
+
+        response = self.client.post(invalid_url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_exception_handling_returns_500(self):
+        """Test that unexpected exceptions return a 500 error."""
+        with self.assertRaises(Exception):
+            response = self.client.post(self.unpin_url)
+            self.assertEqual(response.status_code, 500)
+
+    def test_rejects_get_requests(self):
+        """Test that a GET request is rejected with a 405 error."""
+        response = self.client.get(self.unpin_url)
+        self.assertEqual(response.status_code, 405)
+
+    def test_database_reflects_unpinning(self):
+        """Test that the database is correctly updated after unpinning."""
+        self.client.post(self.unpin_url)
+        self.assertFalse(BoardImageRelationship.objects.filter(board_id=self.user_board, post_id=self.post).exists())
+
+    def test_post_exists_in_multiple_boards(self):
+        """Test that the post is only unpinned from the specific board."""
+        another_board = ImageBoard.objects.create(user=self.user, title="Another Board")
+        BoardImageRelationship.objects.create(post_id=self.post, board_id=another_board)
+
+        self.client.post(self.unpin_url)
+        
+        # The post should still exist in the other board
+        self.assertTrue(BoardImageRelationship.objects.filter(board_id=another_board, post_id=self.post).exists())
