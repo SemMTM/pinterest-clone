@@ -1,11 +1,13 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 from profile_page.models import Profile, ImageBoard, BoardImageRelationship
 from post.models import Post
+from unittest.mock import patch
 from django.core.paginator import Page
 from django.db.models import Count
-from .views import sync_all_pins_board
+from .views import sync_all_pins_board, handle_post_save
 
 
 class ProfilePageViewTest(TestCase):
@@ -566,3 +568,78 @@ class SyncAllPinsBoardTest(TestCase):
         # Verify counts for other boards remain unchanged
         self.assertEqual(BoardImageRelationship.objects.filter(board_id=self.board1).count(), initial_board1_count)
         self.assertEqual(BoardImageRelationship.objects.filter(board_id=self.board2).count(), initial_board2_count)
+
+
+class HandlePostSaveSignalTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        """Set up test data before each test."""
+        cls.user = User.objects.create_user(username="testuser", password="password123")
+        cls.profile = Profile.objects.create(user=cls.user)
+
+        # Create boards
+        cls.board = ImageBoard.objects.create(user=cls.user, title="Board 1", visibility=0)  # Public board
+        cls.all_pins_board, _ = ImageBoard.objects.get_or_create(user=cls.user, title="All Pins", visibility=1)
+
+        # Create posts
+        cls.post = Post.objects.create(title="Test Post", description="Test description", user=cls.user)
+
+    def test_signal_triggers_on_boardimage_relationship_creation(self):
+        """Test that the signal is triggered when a BoardImageRelationship is created."""
+        with patch("profile_page.views.sync_all_pins_board") as mock_sync:
+            BoardImageRelationship.objects.create(post_id=self.post, board_id=self.board)
+
+            # Assert that the sync_all_pins_board function was called once
+            mock_sync.assert_called_once_with(self.user)
+
+    def test_post_is_added_to_all_pins_when_saved_to_any_board(self):
+        """Test that a post added to any board is also added to the 'All Pins' board."""
+        BoardImageRelationship.objects.create(post_id=self.post, board_id=self.board)
+
+        # Ensure the post appears in "All Pins"
+        self.assertTrue(
+            BoardImageRelationship.objects.filter(post_id=self.post, board_id=self.all_pins_board).exists()
+        )
+
+    def test_signal_does_not_duplicate_entries_in_all_pins(self):
+        """Test that the signal does not duplicate posts in 'All Pins' if they already exist."""
+        # Add the post to "All Pins" manually
+        BoardImageRelationship.objects.create(post_id=self.post, board_id=self.all_pins_board)
+
+        # Add the same post to another board
+        BoardImageRelationship.objects.create(post_id=self.post, board_id=self.board)
+
+        # Count occurrences in "All Pins"
+        count = BoardImageRelationship.objects.filter(post_id=self.post, board_id=self.all_pins_board).count()
+        self.assertEqual(count, 1)  # Should not be duplicated
+
+    def test_signal_does_not_create_duplicate_all_pins_boards(self):
+        """Test that the signal does not create a new 'All Pins' board if it already exists."""
+        # Ensure there's only one "All Pins" board before saving
+        initial_count = ImageBoard.objects.filter(user=self.user, title="All Pins").count()
+
+        # Save a new BoardImageRelationship
+        BoardImageRelationship.objects.create(post_id=self.post, board_id=self.board)
+
+        # Ensure "All Pins" board count remains 1
+        final_count = ImageBoard.objects.filter(user=self.user, title="All Pins").count()
+        self.assertEqual(initial_count, final_count)
+
+    def test_signal_does_not_modify_all_pins_visibility(self):
+        """Test that the signal does not change the visibility of the 'All Pins' board."""
+        BoardImageRelationship.objects.create(post_id=self.post, board_id=self.board)
+
+        # Reload "All Pins" board from the database
+        self.all_pins_board.refresh_from_db()
+
+        # Visibility should still be 1 (private)
+        self.assertEqual(self.all_pins_board.visibility, 1)
+
+    def test_signal_does_not_trigger_if_no_boardimage_relationship_created(self):
+        """Test that the signal does not run when no BoardImageRelationship is created."""
+        with patch("profile_page.views.handle_post_save") as mock_signal:
+            # Simply creating a post should not trigger the signal
+            Post.objects.create(title="New Post", user=self.user, description="A test post")
+
+            # Assert that the signal was never called
+            mock_signal.assert_not_called()

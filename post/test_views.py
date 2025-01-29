@@ -74,9 +74,8 @@ class PostListViewTest(TestCase):
         self.assertEqual(len(response.context["userimages"]), 10)
         self.assertQuerySetEqual(
             response.context["userimages"], 
-            Post.objects.all().order_by("-created_on")[:10],  
-            transform=lambda x: x
-    )
+            Post.objects.all().order_by("-created_on")[:10],
+            transform=lambda x: x)
 
     def test_paginator_object_in_context(self):
         """Test if the paginator object is included in the context."""
