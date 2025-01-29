@@ -46,29 +46,40 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     });
 
+    const max_file_size = 20 * 1024 * 1024;
 
-    // ----- Client-Side Validation for File Type on PostForm image -----
+    // ----- Client-Side Validation for PostForm image -----
     const fileInput = document.getElementById('id_image');
+
     if (fileInput) {
-        fileInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
-                const fileExtension = file.name.split('.').pop().toLowerCase();
-                // Extract the file extension and convert it to lowercase for comparison.
-
-                if (!allowedExtensions.includes(fileExtension)) {
-                    alert('Only JPG/JPEG/PNG/WEBP files are allowed.');
-                    this.value = ''; // Reset the input
-                }
-            }
-        });
-
-        // Loads preview of selected image on PostForm
         fileInput.addEventListener('change', function(event) {
             const file = event.target.files[0];
+
             if (file) {
-                const reader = new FileReader(); // A FileReader allows reading file contents.
+                const fileSize = file.size; // Get file size in bytes
+                const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+                const fileExtension = file.name.split('.').pop().toLowerCase(); // Get file extension
+
+                // Validate file type
+                if (!allowedExtensions.includes(fileExtension)) {
+                    showPopUpMessage('Only JPG, JPEG, PNG, and WEBP files are allowed.');
+                    this.value = ''; // Reset the input
+                    preview.style.display = 'none';
+                    preview.src = '';
+                    return;
+                }
+
+                // Validate file size
+                if (fileSize > max_file_size) {
+                    showPopUpMessage('The uploaded image exceeds the maximum file size of 20MB.');
+                    this.value = ''; // Reset the input
+                    preview.style.display = 'none';
+                    preview.src = '';
+                    return;
+                }
+
+                // Loads preview of selected image if valid
+                const reader = new FileReader();
                 reader.onload = function(e) {
                     if (preview) {
                         preview.src = e.target.result;
@@ -76,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 };
                 reader.readAsDataURL(file);
-            } else if (preview) {
+            } else {
                 // If no file is selected, hide the preview
                 preview.style.display = 'none';
                 preview.src = '';

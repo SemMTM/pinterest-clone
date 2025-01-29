@@ -2,8 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.core.validators import RegexValidator, FileExtensionValidator
+from django.core.exceptions import ValidationError
 from cloudinary.models import CloudinaryField
 import uuid
+
+def validate_image_size(image):
+    max_size = 20 * 1024 * 1024  # 20MB in bytes
+    if image.size > max_size:
+        raise ValidationError("The uploaded image exceeds the maximum file size of 20MB.")
 
 # Create your models here.
 class Post(models.Model):
@@ -12,7 +18,10 @@ class Post(models.Model):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     image = CloudinaryField('image', blank=False,
-            validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp'])]
+            validators=[
+                FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp']),
+                validate_image_size
+                ]
             )
     title = models.CharField(max_length=100, blank=False, null=True)
     user = models.ForeignKey(
