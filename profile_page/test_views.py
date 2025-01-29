@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -643,3 +643,83 @@ class HandlePostSaveSignalTest(TestCase):
 
             # Assert that the signal was never called
             mock_signal.assert_not_called()
+
+
+class SaveToBoardViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create test users
+        cls.user = User.objects.create_user(username="testuser", password="password123")
+        cls.other_user = User.objects.create_user(username="otheruser", password="password456")
+
+        # Create test post
+        cls.post = Post.objects.create(title="Test Post", user=cls.user, description="Test Description")
+
+        # Create boards for the user
+        cls.board = ImageBoard.objects.create(user=cls.user, title="Test Board")
+        cls.other_user_board = ImageBoard.objects.create(user=cls.other_user, title="Other User's Board")
+
+        cls.client = Client()
+
+    def test_authentication_required(self):
+        """Test that unauthenticated users are redirected to login."""
+        url = reverse("save_to_board", kwargs={"post_id": self.post.id})
+        response = self.client.post(url, {"board_id": self.board.id})
+        self.assertEqual(response.status_code, 302)  # Redirect to login page
+
+    def test_successful_save_to_board(self):
+        """Test that a post can be successfully saved to a board."""
+        self.client.login(username="testuser", password="password123")
+        url = reverse("save_to_board", kwargs={"post_id": self.post.id})
+        response = self.client.post(url, {"board_id": self.board.id})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"success": True, "message": "Post Saved!"})
+        self.assertTrue(BoardImageRelationship.objects.filter(post_id=self.post, board_id=self.board).exists())
+
+    def test_cannot_save_to_other_users_board(self):
+        """Test that a user cannot save a post to another user's board."""
+        self.client.login(username="testuser", password="password123")
+        url = reverse("save_to_board", kwargs={"post_id": self.post.id})
+        response = self.client.post(url, {"board_id": self.other_user_board.id})
+
+        self.assertEqual(response.status_code, 404)
+        self.assertFalse(BoardImageRelationship.objects.filter(post_id=self.post, board_id=self.other_user_board).exists())
+
+    def test_error_on_missing_board_id(self):
+        """Test that missing board_id in request returns a 400 error."""
+        self.client.login(username="testuser", password="password123")
+        url = reverse("save_to_board", kwargs={"post_id": self.post.id})
+        response = self.client.post(url, {})
+
+        self.assertEqual(response.status_code, 400)
+        self.assertJSONEqual(response.content, {"success": False, "message": "No board selected."})
+
+    def test_error_on_invalid_board_id(self):
+        """Test that an invalid board_id returns a 404 error."""
+        self.client.login(username="testuser", password="password123")
+        url = reverse("save_to_board", kwargs={"post_id": self.post.id})
+        response = self.client.post(url, {"board_id": 99999})
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_prevent_duplicate_saves(self):
+        """Test that a post cannot be saved multiple times to the same board."""
+        self.client.login(username="testuser", password="password123")
+        BoardImageRelationship.objects.create(post_id=self.post, board_id=self.board)  # Pre-existing save
+
+        url = reverse("save_to_board", kwargs={"post_id": self.post.id})
+        response = self.client.post(url, {"board_id": self.board.id})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"success": True, "message": "Post Saved!"})
+        self.assertEqual(BoardImageRelationship.objects.filter(post_id=self.post, board_id=self.board).count(), 1)  # Still only 1 record
+
+    def test_invalid_request_method(self):
+        """Test that a GET request returns a 405 error."""
+        self.client.login(username="testuser", password="password123")
+        url = reverse("save_to_board", kwargs={"post_id": self.post.id})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 405)
+        self.assertJSONEqual(response.content, {"success": False, "message": "Invalid request method."})
