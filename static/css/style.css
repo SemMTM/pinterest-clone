@@ -576,7 +576,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Show with animation */
 .delete-post-modal-visible .delete-post-modal-content {
-    animation: popIn 0.2s ease forwards;
+    animation: popIn 0.25s ease forwards;
 }
  
 .delete-post-modal-actions {
@@ -629,7 +629,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Show with animation */
 .save-modal-visible .save-modal-content {
-    animation: popIn 0.2s ease forwards;
+    animation: popIn 0.25s ease forwards;
 }
 
 .save-modal-content h3 {
@@ -858,9 +858,15 @@ h1, h2, h3, h4, h5, h6 {
     background-color: darkgrey;
 }
 
+.empty-fill {
+    width: 100%;
+    height: 100%;
+}
+
 .tile-image.large {
     flex: 2 1 100%;
     border: 1px solid #d5d5d5;
+    height: 131px;
 }
 
 .tile-image.large img {
@@ -870,6 +876,7 @@ h1, h2, h3, h4, h5, h6 {
 .tile-image.small {
     flex: 1 1 50%;
     border: 1px solid #d5d5d5;
+    height: 80px;
 }
 
 .tile-image.small img {
@@ -1049,7 +1056,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .unpin-modal-visible .modal-content {
-    animation: popIn 0.2s ease forwards;
+    animation: popIn 0.25s ease forwards;
 }
 
 #unpin-modal .modal-actions {

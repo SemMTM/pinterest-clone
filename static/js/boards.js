@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     showPopUpMessage(data.message);
                     createModal.classList.add('create-modal-hidden');
                     boardTitleInput.value = '';
+                    setTimeout(() => location.reload(), 2500);
                 } else {
                     showPopUpMessage(data.error || 'An error occurred.');
                 }

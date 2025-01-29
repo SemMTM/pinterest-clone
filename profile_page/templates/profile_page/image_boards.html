@@ -20,7 +20,9 @@
                     <img src="{{ item.images.1.post_id.image.url }}" alt="{{ item.images.1.post_id.title }}">
                 </div>
                 {% else %}
-                <div class="tile-image small"></div>
+                <div class="tile-image small">
+                    <div class="empty-fill"></div>
+                </div>
                 {% endif %}
 
                 <!-- Small tile for the third image -->
@@ -28,8 +30,10 @@
                 <div class="tile-image small">
                     <img src="{{ item.images.2.post_id.image.url }}" alt="{{ item.images.2.post_id.title }}">
                 </div>
-                {% else %}
-                <div class="tile-image small"></div>
+                {% else %} 
+                <div class="tile-image small">
+                    <div class="empty-fill"></div>
+                </div>
                 {% endif %}
             </div>
             <h4>{{ item.board.title }}</h4>

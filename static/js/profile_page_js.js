@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             createdButton.style.cursor = 'not-allowed';
         } else {
             createdButton.style.pointerEvents = '';
-            createdButton.style.cursor = ''; // Reactivate the saved button when it's not active
+            createdButton.style.cursor = '';
         }
     }; 
 
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const url = editProfileForm.getAttribute('action');
 
             fetch(url, {
-                method: 'POST',
+                method: 'POST', 
                 headers: {
                     'X-CSRFToken': csrfToken,
                 },
@@ -121,8 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         if(userAboutElement) {
                             userAboutElement.textContent = `${data.data.about}`.trim() || userAboutElement.textContent;
                         }
-
-                        editProfileModal.classList.add('hidden'); // Hide modal
                         showPopUpMessage(data.message);
                     } else {
                         showPopUpMessage(data.error || 'An error occurred.');
