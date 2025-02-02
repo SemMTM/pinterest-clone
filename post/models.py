@@ -1,40 +1,46 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.text import slugify
 from django.core.validators import RegexValidator, FileExtensionValidator
 from django.core.exceptions import ValidationError
 from cloudinary.models import CloudinaryField
 import uuid
 
+
 def validate_image_size(image):
+    """
+    Validator for max file size on image uploaded to: model:`post.Post`
+    """
     max_size = 20 * 1024 * 1024  # 20MB in bytes
     if image.size > max_size:
-        raise ValidationError("The uploaded image exceeds the maximum file size of 20MB.")
+        raise ValidationError("The uploaded image exceeds the maximum "
+                              "file size of 20MB.")
 
-# Create your models here.
+
 class Post(models.Model):
     """
     Stores a single image post related to: model:`auth.User`.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     image = CloudinaryField('image', blank=False,
-            validators=[
-                FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp']),
-                validate_image_size
-                ]
-            )
+                            validators=[
+                                        FileExtensionValidator
+                                        (allowed_extensions=[
+                                            'jpg', 'jpeg', 'png', 'webp']),
+                                        validate_image_size])
     title = models.CharField(max_length=100, blank=False, null=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="uploader")
     description = models.TextField(max_length=300, blank=True)
     likes = models.IntegerField(default=0)
-    liked_by = models.ManyToManyField(User, related_name="liked_posts", blank=True)
+    liked_by = models.ManyToManyField(User, related_name="liked_posts",
+                                      blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
 
 
 class Comment(models.Model):
     """
-    Store a single comment on a post related to: model:`blog.Post` and model:`auth.User`
+    Store a single comment on a post related to: model:`post.Post`
+    and model:`auth.User`
     """
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name="comments"
@@ -54,15 +60,16 @@ class Comment(models.Model):
 
 class ImageTags(models.Model):
     """
-    Stores a single image tag related to: model: `blog.Post`
+    Stores a single image tag related to: model: `post.Post`
     """
     tag_name = models.CharField(
-        primary_key=True, 
+        primary_key=True,
         max_length=200,
         validators=[
             RegexValidator(
                 regex=r'^[a-zA-Z0-9 \-]+$',
-                message="Tag name must contain only letters, digits, spaces, and hyphens.",
+                message="Tag name must contain only letters, "
+                        "digits, spaces, and hyphens.",
                 code='invalid_tag_name'
             )
         ])
@@ -78,7 +85,8 @@ class ImageTags(models.Model):
 
 class ImageTagRelationships(models.Model):
     """
-    Stores an entry of the tag and which post it is paired with, related to: model: `blog.Post` and model: `blog.ImageTags`
+    Stores an entry of the tag and which post it is paired with, related to:
+    model: `post.Post` and model: `post.ImageTags`
     """
     post_id = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name="post_id")

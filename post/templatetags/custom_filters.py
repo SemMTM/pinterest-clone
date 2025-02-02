@@ -13,7 +13,6 @@ def time_ago(value):
     # Ensure `value` is timezone-aware
     if is_naive(value):
         value = make_aware(value)
-    
     current_time = now()
     diff = current_time - value
 

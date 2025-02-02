@@ -2,6 +2,8 @@ from django import forms
 from .models import Comment, Post, ImageTags
 
 # Comment Form
+
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment

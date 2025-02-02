@@ -1,16 +1,17 @@
 from unittest.mock import patch
 from django.test import TestCase
-from post.forms import CommentForm, PostForm
-from post.models import Comment, Post, ImageTags
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
+from post.forms import CommentForm, PostForm
+from post.models import Comment, Post, ImageTags
 
 
 class CommentFormTest(TestCase):
 
     def setUp(self):
         # Create a user
-        self.user = User.objects.create_user(username="testuser", password="password123")
+        self.user = User.objects.create_user(username="testuser", 
+                                             password="password123")
         # Create a post
         self.post = Post.objects.create(
             title="Test Post",
@@ -20,9 +21,11 @@ class CommentFormTest(TestCase):
         )
 
     def test_form_initialization(self):
-        """Test that the form initializes with the correct widget attributes."""
+        """Test that the form initializes with the correct
+        widget attributes."""
         form = CommentForm()
-        self.assertEqual(form.fields['body'].widget.attrs['placeholder'], 'Add a comment')
+        self.assertEqual(form.fields['body'].widget.attrs['placeholder'],
+                         'Add a comment')
         self.assertEqual(form.fields['body'].widget.attrs['rows'], '2')
 
     def test_form_valid_data(self):
@@ -57,12 +60,14 @@ class CommentFormTest(TestCase):
             self.assertEqual(comment.body, long_body)
 
     def test_form_body_exceeds_max_length(self):
-        """Test that the form is invalid when the comment exceeds 600 characters."""
+        """Test that the form is invalid when the comment
+        exceeds 600 characters."""
         long_body = "a" * 601  # 601 characters
         form = CommentForm(data={"body": long_body})
         self.assertFalse(form.is_valid())
         self.assertIn("body", form.errors)
-        self.assertEqual(form.errors["body"][0], "Ensure this value has at most 600 characters (it has 601).")
+        self.assertEqual(form.errors["body"][0], "Ensure this value has at"
+                         " most 600 characters (it has 601).")
 
     def test_form_empty_body(self):
         """Test that the form is invalid when the body is empty."""
@@ -75,7 +80,8 @@ class CommentFormTest(TestCase):
 class PostFormTest(TestCase):
     def setUp(self):
         # Create a user
-        self.user = User.objects.create_user(username="testuser", password="password123")
+        self.user = User.objects.create_user(username="testuser",
+                                             password="password123")
         # Create sample tags
         self.tag1 = ImageTags.objects.create(tag_name="nature")
         self.tag2 = ImageTags.objects.create(tag_name="travel")
@@ -95,7 +101,8 @@ class PostFormTest(TestCase):
             "resource_type": "image",
         }
 
-        image = SimpleUploadedFile("test_image.jpg", b"fake_image_content", content_type="image/jpeg")
+        image = SimpleUploadedFile("test_image.jpg", b"fake_image_content",
+                                   content_type="image/jpeg")
         form_data = {
             "title": "A test post",
             "description": "This is a description.",
@@ -126,7 +133,8 @@ class PostFormTest(TestCase):
             "resource_type": "image",
         }
 
-        image = SimpleUploadedFile("test_image.jpg", b"fake_image_content", content_type="image/jpeg")
+        image = SimpleUploadedFile("test_image.jpg", b"fake_image_content",
+                                   content_type="image/jpeg")
         form_data = {
             "title": "A post without tags",
             "description": "No tags for this post.",
@@ -145,7 +153,8 @@ class PostFormTest(TestCase):
 
     def test_form_with_max_tags(self):
         """Test that the form is valid when selecting exactly 3 tags."""
-        image = SimpleUploadedFile("test_image.jpg", b"file_content", content_type="image/jpeg")
+        image = SimpleUploadedFile("test_image.jpg", b"file_content",
+                                   content_type="image/jpeg")
         form_data = {
             "title": "A test post with max tags",
             "description": "This is a post with exactly 3 tags.",
@@ -169,7 +178,8 @@ class PostFormTest(TestCase):
             "resource_type": "image",
         }
 
-        image = SimpleUploadedFile("test_image.jpg", b"fake_image_content", content_type="image/jpeg")
+        image = SimpleUploadedFile("test_image.jpg", b"fake_image_content",
+                                   content_type="image/jpeg")
         form_data = {
             "title": "A post with too many tags",
             "description": "Trying to select 4 tags.",
@@ -180,7 +190,8 @@ class PostFormTest(TestCase):
         form = PostForm(data=form_data, files=form_files)
         self.assertFalse(form.is_valid())
         self.assertIn("tags", form.errors)
-        self.assertEqual(form.errors["tags"][0], "You can select a maximum of 3 tags.")
+        self.assertEqual(form.errors["tags"][0], "You can select a maximum"
+                         " of 3 tags.")
 
     def test_form_missing_image(self):
         """Test that the form is invalid when the image is missing."""
@@ -197,7 +208,8 @@ class PostFormTest(TestCase):
 
     def test_form_missing_title(self):
         """Test that the form is invalid when the title is missing."""
-        image = SimpleUploadedFile("test_image.jpg", b"file_content", content_type="image/jpeg")
+        image = SimpleUploadedFile("test_image.jpg", b"file_content",
+                                   content_type="image/jpeg")
         form_data = {
             "description": "This is a post without a title.",
             "tags": [self.tag1.pk],
@@ -211,7 +223,8 @@ class PostFormTest(TestCase):
 
     def test_form_missing_description(self):
         """Test that the form is valid when the description is missing."""
-        image = SimpleUploadedFile("test_image.jpg", b"file_content", content_type="image/jpeg")
+        image = SimpleUploadedFile("test_image.jpg", b"file_content",
+                                   content_type="image/jpeg")
         form_data = {
             "title": "A post without description",
             "tags": [self.tag1.pk],
