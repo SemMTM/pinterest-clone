@@ -28,6 +28,8 @@
 | TC021 |  | Login modal opened if non-authenticated user tries to open post upload page |  |  |  |  |
 | TC022 |  | Unauthenticated users are taken to a login page of they try to access the image upload page via URL |  |  |  |  |
 | TC023 |  | Only alloed file types can be uploaded as posts |  |  |  |  |
+| TC096 |  | Image tags can be deleted |  |  |  |  |
+| TC097 |  | Post form is cleared after image is uploaded |  |  |  |  |
 | **Profile Page** |  |  |  |  |  |  |
 | TC024 |  | Profile is auto-created for user on sign-up |  |  |  |  |
 | TC025 |  | 'All Pin' board is auto-created for user on sign up  |  |  |  |  |
@@ -73,6 +75,34 @@
 | TC064 |  | An image saved to anyboard is automatically added to the 'All Pins' board |  |  |  |  |
 | TC065 |  | The correct posts are displated when clicking into a board |  |  |  |  |
 | **Post Detail Page** |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |
+| TC066 |  | The correct image is opened on post click |  |  |  |  |
+| TC067 |  | A logged in user can like a post |  |  |  |  |
+| TC068 |  | The number of likes a post has can be seen by all users |  |  |  |  |
+| TC069 |  | After clicking on a post uploaders profile, you are taken to their profile page |  |  |  |  |
+| TC070 |  | A user can remove their like from a post |  |  |  |  |
+| TC071 |  | A user can delete their own post |  |  |  |  |
+| TC072 |  | Any logged in user can comment on a post |  |  |  |  |
+| TC073 |  | Comments on a post can be seen by all users |  |  |  |  |
+| TC074 |  | The post owner can delete any comments on their posts |  |  |  |  |
+| TC075 |  | You can see the amount of time ago a comment was made |  |  |  |  |
+| TC076 |  | The total number of comments on a post can be seen |  |  |  |  |
+| TC077 |  | A user can delete their own comment |  |  |  |  |
+| TC078 |  | A user can edit their own comment |  |  |  |  |
+| TC079 |  | Comment edit can be seen by other users after publishing |  |  |  |  |
+| TC080 |  | The edit comment button is only displayed for the comment creator  |  |  |  |  |
+| TC081 |  | The delete comment button is only displayed for the post owner or the commeter |  |  |  |  |
+| TC082 |  | The delete post button is only visisble for the post owner |  |  |  |  |
+| TC083 |  | A user can save a post to a board |  |  |  |  |
+| TC084 |  | A user can create a new board from the save post modal |  |  |  |  |
 | **Authentication** |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |
+| TC085 |  | Clicking the logout button, logs a user out |  |  |  |  |
+| TC086 |  | When registering, usernames must be unique |  |  |  |  |
+| TC087 |  | Usernames cannot have URL unsafe characters |  |  |  |  |
+| TC088 |  | A user must validate their password correctly to create an account |  |  |  |  |
+| TC089 |  | After account creation a user can sign in with their credentials |  |  |  |  |
+| TC090 |  | A user can change their password |  |  |  |  |
+| TC091 |  | When creating an account, usernames cannot be blank |  |  |  |  |
+| TC092 |  | A user must be logged in to access the post upload page |  |  |  |  |
+| TC093 |  | A user must be logged in to comment |  |  |  |  |
+| TC094 |  | A user must be logged in to save a post/create a board |  |  |  |  |
+| TC095 |  | The sign-up/log-in page is a pop-up modal |  |  |  |  |
