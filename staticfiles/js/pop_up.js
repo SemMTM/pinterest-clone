@@ -16,6 +16,6 @@ export function showPopUpMessage(message) {
         // Clear the message after the animation
         setTimeout(() => {
             popUpMessageText.textContent = '';
-        }, 500); // Match the CSS transition duration
-    }, 2000);
+        }, 2500); // Match the CSS transition duration
+    }, 2500);
 }
