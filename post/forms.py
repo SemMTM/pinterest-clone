@@ -18,7 +18,7 @@ class PostForm(forms.ModelForm):
     tags = forms.ModelMultipleChoiceField(
         queryset=ImageTags.objects.all(),
         required=False,
-        widget=forms.MultipleHiddenInput, 
+        widget=forms.MultipleHiddenInput,
         help_text="Select up to 3 tags."
     )
 

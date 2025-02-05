@@ -31,10 +31,11 @@ SECRET_KEY = {
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['8000-semmtm-pinterestclone-yymd39f8mut.ws.codeinstitute-ide.net',
-                 '.herokuapp.com',
-                 "127.0.0.1",
-                 ]
+ALLOWED_HOSTS = [
+    '8000-semmtm-pinterestclone-yymd39f8mut.ws.codeinstitute-ide.net',
+    '.herokuapp.com',
+    "127.0.0.1",
+    ]
 
 
 # Application definition
@@ -57,7 +58,7 @@ INSTALLED_APPS = [
     'post',
     'profile_page',
     'custom_auth',
-    'django_extensions', 
+    'django_extensions',
 ]
 
 SITE_ID = 1

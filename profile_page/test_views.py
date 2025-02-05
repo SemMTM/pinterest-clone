@@ -228,7 +228,7 @@ class CreatedPinsViewTest(TestCase):
 
         # Check if the link for the next page is rendered
         self.assertContains(response,
-                            f'?page=2') # noqa
+                            f'?page=2')  # noqa
 
 
 class ImageBoardsViewTest(TestCase):

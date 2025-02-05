@@ -92,7 +92,7 @@ def custom_logout(request):
     - Redirects the user to the `'home'` page after logout.
 
     **Use Case:**
-    - Provides a custom logout functionality that ensures users are redirected 
+    - Provides a custom logout functionality that ensures users are redirected
       to the home page.
     """
     logout(request)

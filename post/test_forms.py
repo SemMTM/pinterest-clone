@@ -10,7 +10,7 @@ class CommentFormTest(TestCase):
 
     def setUp(self):
         # Create a user
-        self.user = User.objects.create_user(username="testuser", 
+        self.user = User.objects.create_user(username="testuser",
                                              password="password123")
         # Create a post
         self.post = Post.objects.create(

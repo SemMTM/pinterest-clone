@@ -18,7 +18,7 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=200, blank=True)
     profile_image = CloudinaryField(
         'image',
-        default='https://res.cloudinary.com/dygztovba/image/upload/v1736352521/wmj7j0gxfg9rch8chlfl.jpg', # noqa
+        default='https://res.cloudinary.com/dygztovba/image/upload/v1736352521/wmj7j0gxfg9rch8chlfl.jpg',  # noqa
         blank=False)
 
     def __str__(self):

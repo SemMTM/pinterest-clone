@@ -361,12 +361,6 @@ def update_comment(request, post_id, comment_id):
 
     **Expected Request:**
     - A `POST` request containing JSON data.
-    - The JSON payload must include:
-      ```json
-      {
-          "body": "Updated comment text"
-      }
-      ```
     - The user must be the author of the comment.
 
     **Returned Data (JSON Response):**
