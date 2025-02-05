@@ -26,9 +26,9 @@
             </div>
             {% endif %}
             {% if profile.about %}
-                <div">
-                    <p id="pp-about">{{ profile.about }}</p>
-                </div>
+            <div>
+                <p id="pp-about">{{ profile.about }}</p>
+            </div>
             {% endif %} 
         </div>
 
@@ -108,6 +108,8 @@
 
             <button type="submit" class="btn">Save</button>
             <button type="button" id="cancel-edit-profile-btn" class="btn">Cancel</button>
+            <br>
+            <a class="btn" href="{% url 'account_change_password' %}">Change Password</a>
         </form>
     </div>
 </div>

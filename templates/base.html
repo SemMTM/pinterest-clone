@@ -19,16 +19,22 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
     <!-- HTMX Script -->
-    <script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.3" 
+        integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
+        crossorigin="anonymous">
+    </script>
 
     <!-- ImagesLoaded Scrpit -->
     <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
 
     <!-- Font Awesome Script -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    
+    <link rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" 
+        integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" 
+        crossorigin="anonymous" 
+        referrerpolicy="no-referrer">
 </head>
+
 <body data-is-authenticated="{{ user.is_authenticated }}">
     <div>
         <div class="main-container">
@@ -39,7 +45,7 @@
                     <div class="nav-2 nav-btn {% if request.path == home_url %}active{% endif %}">
                         <div class="nav-3">
                             <a class="nav-a" href="{% url 'home' %}">
-                                <img class="icon" src="/static/icons/icons8-home.svg">
+                                <img class="icon" src="/static/icons/icons8-home.svg" alt="home button">
                             </a>
                         </div>
                     </div>
@@ -48,15 +54,16 @@
                     <div class="nav-2 nav-btn {% if request.path == create_post_url %}active{% endif %}">
                         <div class="nav-3">
                             <a class="nav-a" href="{% url 'create_post' %}">
-                                <img class="icon" src="/static/icons/icons8-plus.svg">
+                                <img class="icon" src="/static/icons/icons8-plus.svg" alt="create post button">
                             </a>
                         </div>
                     </div>
+
                     {% else %}
                     <div class="nav-2 nav-btn">
                         <div class="nav-3">
                             <a class="nav-a" href="{% url 'custom_accounts:login_modal' %}">
-                                <img class="icon" src="/static/icons/icons8-plus.svg">
+                                <img class="icon" src="/static/icons/icons8-plus.svg" alt="create post button">
                             </a>
                         </div>
                     </div>
@@ -66,7 +73,7 @@
                     <div class="nav-2 nav-btn" id="profile-btn">
                         <div class="nav-3">
                             <a class="nav-a" href="{% url 'profile_page' username=user.username %}">
-                                <img class="icon" src="/static/icons/user.svg">
+                                <img class="icon" src="/static/icons/user.svg" alt="profile page button">
                             </a>
                         </div>
                     </div>
@@ -84,15 +91,20 @@
                     </form>
                 </div>
             </div>
+
             {% else %}
             <div class="top-bar">
                 <div class="btn-container">
                     <span class="{% if user.is_authenticated %}hidden{% endif %}">
-                        <a id="login-link" class="auth-trigger" href="{% url 'custom_accounts:login_modal' %}">
-                            <button class="btn login-btn">Log-in</button>
+                        <a id="login-link" 
+                            class="auth-trigger btn login-btn" 
+                            href="{% url 'custom_accounts:login_modal' %}">
+                            Log-in
                         </a>
-                        <a id="signup-link" class="auth-trigger" href="{% url 'custom_accounts:signup_modal' %}">
-                            <button class="btn sign-up-btn">Sign-up</button>
+                        <a id="signup-link" 
+                            class="btn sign-up-btn auth-trigger" 
+                            href="{% url 'custom_accounts:signup_modal' %}">
+                            Sign-up
                         </a>
                     </span>
                 </div>
@@ -101,9 +113,6 @@
 
             <div>
                 {% block content %}
-                {% if debug %}
-                    <p>Loaded template: {{ template_name }}</p>
-                {% endif %}
                 <!-- Content Goes here -->
                 {% endblock content %}       
             </div>
