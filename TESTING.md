@@ -1,119 +1,117 @@
 # **Testing**
 ## **Integration Testing**
 
-| **Test #** | **User Story** | **Description** | **Steps** | **Expected Outcome** | **Actual Outcome** | **Result** |
-|--|--|--|--|--|--|--|
+| **Test #** | **User Story** | **Description** | **How we test it** | **Expected Outcome** | **Result** |
+|--|--|--|--|--|--|
 | **Home Page** |  |  |  |  |  |  |
-| TC001 | [User Story Link - List of all posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87967364&issue=SemMTM%7Cpinterest-clone%7C1) | Post list returns all posts |  |  |  |  |
-| TC002 | [User Story - Masonry grid](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95975414&issue=SemMTM%7Cpinterest-clone%7C22) | Masonry grid loads images from left to right |  |  |  |  |
-| TC003 | [User Story - Masonry grid](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95975414&issue=SemMTM%7Cpinterest-clone%7C22) | Masonry grid calculates image dimensions and adjusts layout to compensate |  |  |  |  |
-| TC004 | [User Story Link - List of all posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87967364&issue=SemMTM%7Cpinterest-clone%7C1) | Images are paginated as you scroll |  |  |  |  |
-| TC005 | [User Story - Masonry grid](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95975414&issue=SemMTM%7Cpinterest-clone%7C22) | Masonry grid adjusts for newly paginated images after pagination |  |  |  |  |
-| **Post Upload** |  |  |  |  |  |  |
-| TC006 | [User Story Link]() | Login modal opened if non-authenticated user tries to open post upload page |  |  |  |  |
-| TC007 | [User Story - Image upload](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986375&issue=SemMTM%7Cpinterest-clone%7C17) | Images can be uploaded to the webiste |  |  |  |  |
-| TC008 | [User Story Link]() | Can't upload a post without a title |  |  |  |  |
-| TC009 | [User Story Link]() | Can't upload a post without an image |  |  |  |  |
-| TC010 | [User Story Link]() | Can't upload an image that exceeds max file size |  |  |  |  |
-| TC011 | [User Story Link]() | Post title cannot be over character limit |  |  |  |  |
-| TC012 | [User Story Link]() | Post description cannot be over character limit |  |  |  |  |
-| TC013 | [User Story Link]() | Preview of image to be uploaded shown after image is selected |  |  |  |  |
-| TC014 | [User Story Link]() | Tag suggestions are shown as user types each letter |  |  |  |  |
-| TC015 | [User Story Link]() | Login modal opened if non-authenticated user tries to open post upload page |  |  |  |  |
-| TC016 | [User Story Link]() | Tags appear on form after selection |  |  |  |  |
-| TC017 | [User Story - Image tags](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95978372&issue=SemMTM%7Cpinterest-clone%7C27) | 3 tags can be selected at maximum |  |  |  |  |
-| TC018 | [User Story - Image tags](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95978372&issue=SemMTM%7Cpinterest-clone%7C27) | Tags appear on post detail page after selection and upload |  |  |  |  |
-| TC019 | [User Story - Create a post](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986375&issue=SemMTM%7Cpinterest-clone%7C17) | Title appears on image after upload |  |  |  |  |
-| TC020 | [User Story - Create a post](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986375&issue=SemMTM%7Cpinterest-clone%7C17) | Description appears on image after upload |  |  |  |  |
-| TC021 | [User Story Link]() | Login modal opened if non-authenticated user tries to open post upload page |  |  |  |  |
-| TC022 | [User Story Link]() | Unauthenticated users are taken to a login page of they try to access the image upload page via URL |  |  |  |  |
-| TC023 | [User Story Link]() | Only alloed file types can be uploaded as posts |  |  |  |  |
-|  | [User Story Link]() | Image tags can be deleted |  |  |  |  |
-|  | [User Story Link]() | Post form is cleared after image is uploaded |  |  |  |  |
-| **Profile Page** |  |  |  |  |  |  |
-|  | [User Story - View created image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87981322&issue=SemMTM%7Cpinterest-clone%7C11) | A list of created image boards can be seen on the profile page |  |  |  |  |
-|  | [User Story - Another users image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982835&issue=SemMTM%7Cpinterest-clone%7C15) | A users image boards are visisble on their profile |  |  |  |  |
-| TC024 | [User Story - Profile creation](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95979352&issue=SemMTM%7Cpinterest-clone%7C29) | Profile is auto-created for user on sign-up |  |  |  |  |
-| TC025 | [User Story - All pins board](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95979980&issue=SemMTM%7Cpinterest-clone%7C30) | 'All Pin' board is auto-created for user on sign up  |  |  |  |  |
-| TC026 | [User Story - Logout](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981777&issue=SemMTM%7Cpinterest-clone%7C34) | 'Log-out', 'Edit Profile', 'Created' and 'Saved' button all appear on the profile page for the profile owner |  |  |  |  |
-| TC027 | [User Story - View created posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87981681&issue=SemMTM%7Cpinterest-clone%7C12) | 'Created' section shows all of the users uploaded posts |  |  |  |  |
-| TC028 | [User Story - Create image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87972960&issue=SemMTM%7Cpinterest-clone%7C10) | New boards appear in the 'Saved' section after creation |  |  |  |  |
-| TC029 | [User Story - Log out](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981777&issue=SemMTM%7Cpinterest-clone%7C34) | Profile page log out button logs the user out |  |  |  |  |
-| TC030 | [User Story Link]() | 'Edit Profile' button opens the edit profile modal |  |  |  |  |
-| TC031 | [User Story - Manage profile](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982051&issue=SemMTM%7Cpinterest-clone%7C13) | Submitted changes in the edit profile modal are publicly displayed on the users profile page |  |  |  |  |
-| TC032 | [User Story - Manage profile](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982051&issue=SemMTM%7Cpinterest-clone%7C13) | Other users can see a users profile and their public information |  |  |  |  |
-| TC033 | [User Story Link]() | 'Created' sections pagination works on page scroll |  |  |  |  |
-| TC034 | [User Story Link]() | Profile image is displayed in all relevant places after upload |  |  |  |  |
-| TC035 | [User Story Link]() | Can't exceed character limits on edit profile modal inputs |  |  |  |  |
-| TC036 | [User Story Link]() | Can't upload a profile image that exceeds the maximum file size |  |  |  |  |
-| TC037 | [User Story Link]() | Can only upload allowed file types as profile image |  |  |  |  |
-| TC038 | [User Story Link]() | Profile image preview is displayed after image is selected |  |  |  |  |
-| TC039 | [User Story - Profile creation](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95979352&issue=SemMTM%7Cpinterest-clone%7C29) | Newly created profiles have a default profile image |  |  |  |  |
-| TC040 | [User Story Link]() | Image boards show the number of posts saved to it |  |  |  |  |
-| TC041 | [User Story Link]() | Image boards preview images are shown from images pinned to the board |  |  |  |  |
-| TC042 | [User Story - Manage profile](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982051&issue=SemMTM%7Cpinterest-clone%7C13) | When edit profile changes are submitted, the profile page is updated dynamically |  |  |  |  |
-| TC043 | [User Story - Logged in](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981314&issue=SemMTM%7Cpinterest-clone%7C32) | Profile page button on nav bar only accessible for logged in users |  |  |  |  |
-| TC044 | [User Story Link]() | A non-existant profile cannot be accessed by URL |  |  |  |  |
-| TC045 | [User Story Link]() | 'All Pins' board only accessible by the profile owner |  |  |  |  |
-| TC045 | [User Story - See all pinned posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986915&issue=SemMTM%7Cpinterest-clone%7C19) | 'All Pins' board shows a list of all posts a user has created |  |  |  |  |
-| TC046 | [User Story Link]() | Boards set to private are only visisble and accessible by the board owner |  |  |  |  |
-| TC047 | [User Story Link - Username](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95983218&issue=SemMTM%7Cpinterest-clone%7C31) | You can navigate to a users profile via URL (case-insensetive) |  |  |  |  |
-| **Board Detail Page** |  |  |  |  |  |  |
-| TC048 | [User Story - Another users image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982835&issue=SemMTM%7Cpinterest-clone%7C15) | Boards can be opened to view pinned posts |  |  |  |  |
-| TC049 | [User Story - Open image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986034&issue=SemMTM%7Cpinterest-clone%7C16) | Masonry grid works as expected on board detail page |  |  |  |  |
-| TC050 | [User Story - Manage image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982570&issue=SemMTM%7Cpinterest-clone%7C14) | Edit board button only appears for board owner |  |  |  |  |
-| TC051 | [User Story - Manage image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982570&issue=SemMTM%7Cpinterest-clone%7C14) | Only board owner can edit a board |  |  |  |  |
-| TC052 | [User Story Link]() | Unpin button only appears for board owner |  |  |  |  |
-| TC053 | [User Story - Manage image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982570&issue=SemMTM%7Cpinterest-clone%7C14) | Unpinned image is removed from board |  |  |  |  |
-| TC054 | [User Story - All pins board](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95979980&issue=SemMTM%7Cpinterest-clone%7C30) | 'All Pins' board cannot be edited by any user |  |  |  |  |
-| TC055 | [User Story - All pins board](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95979980&issue=SemMTM%7Cpinterest-clone%7C30) | Edit board button not visisble on 'All Pins' board for any user |  |  |  |  |
-| TC056 | [User Story Link]() | Deleteing a board removed it from a users profile page |  |  |  |  |
-|  | [User Story - Edit image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95976065&issue=SemMTM%7Cpinterest-clone%7C23) | Board owner can change a boards visibility |  |  |  |  |
-|  | [User Story - Edit image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95976065&issue=SemMTM%7Cpinterest-clone%7C23) | Board owner can change a boards title |  |  |  |  |
-| TC057 | [User Story Link]() | A deleted board cannot be accessed by URL |  |  |  |  |
-| TC058 | [User Story Link]() | A private board can only be seen by the board owner |  |  |  |  |
-| TC059 | [User Story Link]() | A user cannot access a private board by URL |  |  |  |  |
-| TC060 | [User Story - Edit image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95976065&issue=SemMTM%7Cpinterest-clone%7C23) | Board title changes can be seen by all users |  |  |  |  |
-| TC061 | [User Story - Manage image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982570&issue=SemMTM%7Cpinterest-clone%7C14) | After a board title is changed, it is updated dynamically |  |  |  |  |
-| TC062 | [User Story Link]() | An unpinned image is dyanmically removed from a board |  |  |  |  |
+| TC001 | [User Story Link - List of all posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87967364&issue=SemMTM%7Cpinterest-clone%7C1) | Post list returns all posts | Navigate to the homepage | All posts displayed on page |  |
+| TC002 | [User Story - Masonry grid](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95975414&issue=SemMTM%7Cpinterest-clone%7C22) | Masonry grid loads images from left to right | Navigate to the home page and use devtools to check that the images have been loaded and ordered from left to right | Images have been ordered from left to right in the grid |  |
+| TC003 | [User Story - Masonry grid](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95975414&issue=SemMTM%7Cpinterest-clone%7C22) | Masonry grid calculates image dimensions and adjusts layout to compensate | Upload images of different aspect ratios then navigate to the homepage | Images of different aspect ratios fit into the masonry grid with even gaps between them |  |
+| TC004 | [User Story Link - List of all posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87967364&issue=SemMTM%7Cpinterest-clone%7C1) | Images are paginated as you scroll | Navigate to the homepage then scroll down | More images are loaded on page scroll |  |
+| TC005 | [User Story - Masonry grid](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95975414&issue=SemMTM%7Cpinterest-clone%7C22) | Masonry grid adjusts for newly paginated images after pagination | Navigate to the homepage then scroll down | Paginated images are placedd within the masonry grid layout |  |
+| **Post Upload** |  |  |  |  |  |
+| TC006 |  | Login modal opened if non-authenticated user tries to open post upload page | Click on the new post button while logged out | Login modal pops up |  |
+| TC007 | [User Story - Image upload](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986375&issue=SemMTM%7Cpinterest-clone%7C17) | Images can be uploaded to the webiste | Upload an image to the app from the post create page after logging in, then navigate to the homepage and find your uploaded image | Users post has been successfully uploaded |  |
+| TC008 |  | Can't upload a post without a title | Log in, navigate to post create page, try to upload an image with no title | Error message displayed and upload prevented |  |
+| TC009 |  | Can't upload a post without an image | Log in, navigate to post create page, try to upload an image with no image | Error message displayed and upload prevented |  |
+| TC010 |  | Can't upload an image that exceeds max file size | Log in, navigate to post create page, try to upload an image over 20mb | Error message displayed and upload prevented |  |
+| TC011 |  | Post title cannot be over character limit | Log in, navigate to post create page, try to add a 101 character title | User cannot type more than 100 characters in the title field |  |
+| TC012 |  | Post description cannot be over character limit | Log in, navigate to post create page, try to add a 301 character description | User cannot type more than 300 characters in the description field |  |
+| TC013 |  | Preview of image to be uploaded shown after image is selected | Navigate to post create page and select an image to upload | Image preview of selected file shown above file selector |  |
+| TC014 |  | Tag suggestions are shown as user types each letter | Navigate to post create page, type the letter c in tag suggestion input | Up to 10 tags shown related to the letter c |  |
+| TC015 |  | Image tags can be deleted | Navigate to post create page, select 3 tags then delete them by pressing the x next to the tag | Deleted tags are removed from the selected tags list |  |
+| TC016 |  | Tags appear on form after selection | Navigate to post create page, select 3 tags | Selected tags appear above tag input box |  |
+| TC017 | [User Story - Image tags](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95978372&issue=SemMTM%7Cpinterest-clone%7C27) | 3 tags can be selected at maximum | Navigate to post create page, select 3 tags then try to add another one | After 3 tags have been selected, no more can be selected |  |
+| TC018 | [User Story - Image tags](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95978372&issue=SemMTM%7Cpinterest-clone%7C27) | Tags appear on post detail page after selection and upload | Upload an image with 3 tags then find that post and click on it | Selected tags appear in post detail page |  |
+| TC019 | [User Story - Create a post](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986375&issue=SemMTM%7Cpinterest-clone%7C17) | Title appears on image after upload | Upload an image with a title then find it and click on it | Title visible above image on post detail page |  |
+| TC020 | [User Story - Create a post](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986375&issue=SemMTM%7Cpinterest-clone%7C17) | Description appears on image after upload | Upload a post with a description, find it on the homepage and click on it | Post description visisble on post detail page |  |
+| TC021 |  | Post form is cleared after image is uploaded | Upload a post | Post from cleared after upload |  |
+| TC022 |  | Unauthenticated users are taken to a login page of they try to access the image upload page via URL | Copy the post create page url, log out, paste the URL into the search bar | User is taken to a login page |  |
+| TC023 |  | Only allowed file types can be uploaded as posts | Navigate to the post create page, try to upload a PDF file in the image selector | Error message displayed and file not uploaded |  |
+| **Profile Page** |  |  |  |  |  |
+|  | [User Story - View created image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87981322&issue=SemMTM%7Cpinterest-clone%7C11) | A list of created image boards can be seen on the profile page | Log in, click on a post, click save, create an image board, then navigate to the profile page | A list of image boards including the newly created one are visible  |  |
+|  | [User Story - Another users image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982835&issue=SemMTM%7Cpinterest-clone%7C15) | A users image boards are visisble on their profile | Click on a post then click on the uploaders profile | A list of their created image boards are visisble |  |
+| TC024 | [User Story - Profile creation](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95979352&issue=SemMTM%7Cpinterest-clone%7C29) | Profile is auto-created for user on sign-up | Create a new user, then navigate to the profile page | Users profile page opens with their username clearly visisble |  |
+| TC025 | [User Story - All pins board](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95979980&issue=SemMTM%7Cpinterest-clone%7C30) | 'All Pin' board is auto-created for user on sign up  | Create a new user, then navigate to the profile page | All Pins board can be seen with no pins in it |  |
+| TC026 | [User Story - Logout](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981777&issue=SemMTM%7Cpinterest-clone%7C34) | 'Log-out', 'Edit Profile', 'Created' and 'Saved' button all appear on the profile page for the profile owner | Log in, navigate to the profile page. Log in as a different user, then go to the previous users profile paage | All buttons are visisble for profile owner, only the "saved" and "created" buttons are visisble for the other user |  |
+| TC027 | [User Story - View created posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87981681&issue=SemMTM%7Cpinterest-clone%7C12) | 'Created' section shows all of the users uploaded posts | Navigate to a users profile page and click the "Created" button | A list of the users uploaded posts is shown |  |
+| TC028 | [User Story - Create image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87972960&issue=SemMTM%7Cpinterest-clone%7C10) | New boards appear in the 'Saved' section after creation | Log in, create a new image board, navigate to the profile page | The newly created board can be seen in the list |  |
+| TC029 | [User Story - Log out](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981777&issue=SemMTM%7Cpinterest-clone%7C34) | Profile page log out button logs the user out | Log in, navigate to the profile page, click log out | User is logged out |  |
+| TC030 |  | 'Edit Profile' button opens the edit profile modal | Log in, navigate to the profile page, click "Edit Profile" | Edit profile modal pops up |  |
+| TC031 | [User Story - Manage profile](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982051&issue=SemMTM%7Cpinterest-clone%7C13) | Submitted changes in the edit profile modal are publicly displayed on the users profile page | Log in, navigate to the profile page, open the edit profile modal, make changes to first and last name and save them. Log in as another user and navigate to the previous users profile page | The previous users first name and last name changes can be seen on their profile |  |
+| TC032 | [User Story - Manage profile](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982051&issue=SemMTM%7Cpinterest-clone%7C13) | Other users can see a users profile and their public information | Log in, navigate to another user profile | The user can see the other users profile information |  |
+| TC033 |  | 'Created' sections pagination works on page scroll | Log in, upload 20 images, navigate to the profile page and click the "Created" button. Open devtools and check the number of images in the created section, scroll down and more images should be loaded into the DOM | More images are loaded which can be seen in devtools |  |
+| TC034 |  | Profile image is displayed in all relevant places after upload | Log in, upload a profile photo, then check the profile page profile photo. Next click on an image you uploaded and make a comment. | Users profile image displayed on profile page, next to users comment and under the users uploaded photo  |  |
+| TC035 |  | Can't exceed character limits on edit profile modal inputs | Open the edit profile modal, add 101 characters on first and last name inputs and 601 on about input  | User can't type more than the allowed character limit |  |
+| TC036 |  | Can't upload a profile image that exceeds the maximum file size | Open edit profile modal, upload a profile photo over 20MB | User gets an error message and file isnt selected |  |
+| TC037 |  | Can only upload allowed file types as profile image | Open edit profile modal, try to upload a PDF | User gets an error message and file isnt selected |  |
+| TC038 |  | Profile image preview is displayed after image is selected | Open edit profile modal, select a valid image file | Image preview shown after file selected |  |
+| TC039 | [User Story - Profile creation](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95979352&issue=SemMTM%7Cpinterest-clone%7C29) | Newly created profiles have a default profile image | Create a new user, navigate to the profile page | Default profile image can be seen on new users profile page |  |
+| TC040 |  | Image boards show the number of posts saved to it | Click on a uploaded post, navigate to the users profile page, click on an image board and count the number of images | Image board has the number of pins visisble under it and the number is correct |  |
+| TC041 |  | Image boards preview images are shown from images pinned to the board | Log in, upload 3 image, create a board and pin those 3 images. Navigate to the profile page and check the newly created board | The board has the 3 saved images as its thumbnails |  |
+| TC042 | [User Story - Manage profile](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982051&issue=SemMTM%7Cpinterest-clone%7C13) | When edit profile changes are submitted, the profile page is updated dynamically | Open the edit profile modal, make changes to the first and last name then submit | The changes are displayed and the page doesn't refresh |  |
+| TC043 | [User Story - Logged in](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981314&issue=SemMTM%7Cpinterest-clone%7C32) | Profile page button on nav bar only accessible for logged in users | Log in, check the nav bar for the profile page button. Log out, check the nav bar for the profile page button | When logged in, the profile page button is in the nav bar. After logging out, the profile page button is not in the nav bar |  |
+| TC044 |  | A non-existant profile cannot be accessed by URL | Navigate to the following url: https://pinterest-clone-sem-29d41bc2ed17.herokuapp.com/profile/1234/ | 404 page displayed |  |
+| TC045 |  | 'All Pins' board only accessible by the profile owner | Log out, then navigate to the following url: [User "Sem" All pins board](https://pinterest-clone-sem-29d41bc2ed17.herokuapp.com/profile/board/30/) Next, log in a "Sem" and navigate to the link | 404 page displayed for logged out user, All pins board opened for "Sem" user |  |
+| TC045 | [User Story - See all pinned posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986915&issue=SemMTM%7Cpinterest-clone%7C19) | 'All Pins' board shows a list of all posts a user has created |  |  |  |
+| TC046 |  | Boards set to private are only visisble and accessible by the board owner |  |  |  |
+| TC047 | [User Story Link - Username](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95983218&issue=SemMTM%7Cpinterest-clone%7C31) | You can navigate to a users profile via URL (case-insensetive) |  |  |  |
+| **Board Detail Page** |  |  |  |  |  |
+| TC048 | [User Story - Another users image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982835&issue=SemMTM%7Cpinterest-clone%7C15) | Boards can be opened to view pinned posts |  |  |  |
+| TC049 | [User Story - Open image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986034&issue=SemMTM%7Cpinterest-clone%7C16) | Masonry grid works as expected on board detail page |  |  |  |
+| TC050 | [User Story - Manage image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982570&issue=SemMTM%7Cpinterest-clone%7C14) | Edit board button only appears for board owner |  |  |  |
+| TC051 | [User Story - Manage image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982570&issue=SemMTM%7Cpinterest-clone%7C14) | Only board owner can edit a board |  |  |  |
+| TC052 |  | Unpin button only appears for board owner |  |  |  |
+| TC053 | [User Story - Manage image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982570&issue=SemMTM%7Cpinterest-clone%7C14) | Unpinned image is removed from board |  |  |  |
+| TC054 | [User Story - All pins board](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95979980&issue=SemMTM%7Cpinterest-clone%7C30) | 'All Pins' board cannot be edited by any user |  |  |  |
+| TC055 | [User Story - All pins board](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95979980&issue=SemMTM%7Cpinterest-clone%7C30) | Edit board button not visisble on 'All Pins' board for any user |  |  |  |
+| TC056 |  | Deleteing a board removed it from a users profile page |  |  |  |
+|  | [User Story - Edit image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95976065&issue=SemMTM%7Cpinterest-clone%7C23) | Board owner can change a boards visibility |  |  |  |
+|  | [User Story - Edit image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95976065&issue=SemMTM%7Cpinterest-clone%7C23) | Board owner can change a boards title |  |  |  |
+| TC057 |  | A deleted board cannot be accessed by URL |  |  |  |
+| TC058 |  | A private board can only be seen by the board owner |  |  |  |
+| TC059 |  | A user cannot access a private board by URL |  |  |  |
+| TC060 | [User Story - Edit image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95976065&issue=SemMTM%7Cpinterest-clone%7C23) | Board title changes can be seen by all users |  |  |  |
+| TC061 | [User Story - Manage image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87982570&issue=SemMTM%7Cpinterest-clone%7C14) | After a board title is changed, it is updated dynamically |  |  |  |
+| TC062 |  | An unpinned image is dyanmically removed from a board |  |  |  |
 | TC063 | [User Story - Create image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87972960&issue=SemMTM%7Cpinterest-clone%7C10) | A newly saved image is displayed in the correct board |  |  |  |  |
-| TC064 | [User Story - All pins board](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95979980&issue=SemMTM%7Cpinterest-clone%7C30) | An image saved to anyboard is automatically added to the 'All Pins' board |  |  |  |  |
-| TC065 | [User Story - Open image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986034&issue=SemMTM%7Cpinterest-clone%7C16) | The correct posts are displated when clicking into a board |  |  |  |  |
-| **Post Detail Page** |  |  |  |  |  |  |
-| TC066 | [User Story - Open an image](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87968971&issue=SemMTM%7Cpinterest-clone%7C4) | The correct image is opened on post click |  |  |  |  |
-| TC067 | [User Story - Like posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95977925&issue=SemMTM%7Cpinterest-clone%7C26) | A logged in user can like a post |  |  |  |  |
-| TC068 | [User Story - Like posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95977925&issue=SemMTM%7Cpinterest-clone%7C26) | The number of likes a post has can be seen by all users |  |  |  |  |
-| TC069 | [User Story - see who uploaded a post](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95978547&issue=SemMTM%7Cpinterest-clone%7C28) | After clicking on a post uploaders profile image, you are taken to their profile page |  |  |  |  |
-| TC070 | [User Story - Like posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95977925&issue=SemMTM%7Cpinterest-clone%7C26) | A user can remove their like from a post |  |  |  |  |
-| TC071 | [User Story - Delete a post](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87972680&issue=SemMTM%7Cpinterest-clone%7C9) | A user can delete their own post |  |  |  |  |
-| TC072 | [User Story - Sign In](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981624&issue=SemMTM%7Cpinterest-clone%7C33) | Any logged in user can comment on a post |  |  |  |  |
-| TC073 | [User Story - Comment on a post](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87969369&issue=SemMTM%7Cpinterest-clone%7C5) | Comments on a post can be seen by all users |  |  |  |  |
-| TC074 | [User Story - Delete other comments](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986654&issue=SemMTM%7Cpinterest-clone%7C18) | The post owner can delete any comments on their posts |  |  |  |  |
-| TC075 | [User Story - Comment date](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95977165&issue=SemMTM%7Cpinterest-clone%7C24) | You can see the amount of time ago a comment was made |  |  |  |  |
-| TC076 | [User Story Link]() | The total number of comments on a post can be seen |  |  |  |  |
-| TC077 | [User Story - Delete own comment](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95974819&issue=SemMTM%7Cpinterest-clone%7C21) | A user can delete their own comment |  |  |  |  |
-| TC078 | [User Story - Edit comment](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87969622&issue=SemMTM%7Cpinterest-clone%7C6) | A user can edit their own comment |  |  |  |  |
-| TC079 | [User Story - Edit comment](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87969622&issue=SemMTM%7Cpinterest-clone%7C6) | Comment edit can be seen by other users after publishing |  |  |  |  |
-| TC080 | [User Story Link]() | The edit comment button is only displayed for the comment creator  |  |  |  |  |
-| TC081 | [User Story Link]() | The delete comment button is only displayed for the post owner or the commeter |  |  |  |  |
-| TC082 | [User Story Link]() | The delete post button is only visisble for the post owner |  |  |  |  |
-| TC083 | [User Story - Pin an image to a board](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87972366&issue=SemMTM%7Cpinterest-clone%7C8) | A user can save a post to a board |  |  |  |  |
-| TC084 | [User Story - Pin an image to a board](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87972366&issue=SemMTM%7Cpinterest-clone%7C8) | A user can create a new board from the save post modal |  |  |  |  |
-|  | [User Story Link](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95978547&issue=SemMTM%7Cpinterest-clone%7C28) | A user can see who uploaded a post under the image. You can see their profile image and their username |  |  |  |  |
-|  | [User Story - profile info on comment](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95977383&issue=SemMTM%7Cpinterest-clone%7C25) | A users comment has their username and profile image next to the comment |  |  |  |  |
-| **Authentication** |  |  |  |  |  |  |
-|  | [User Story - Account registration](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87987195&issue=SemMTM%7Cpinterest-clone%7C20) | A user can sign up with a username and email |  |  |  |  |
-| TC085 | [User Story - Logout](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981777&issue=SemMTM%7Cpinterest-clone%7C34) | Clicking the logout button, logs a user out |  |  |  |  |
-| TC086 | [User Story - Username](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95983218&issue=SemMTM%7Cpinterest-clone%7C31) | When registering, usernames must be unique |  |  |  |  |
-| TC087 | [User Story Link]() | Usernames cannot have URL unsafe characters |  |  |  |  |
-| TC088 | [User Story Link]() | A user must validate their password correctly to create an account |  |  |  |  |
-| TC089 | [User Story - Sign in](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981624&issue=SemMTM%7Cpinterest-clone%7C33) | After account creation a user can sign in with their credentials |  |  |  |  |
-| TC090 | [User Story Link]() | A user can change their password |  |  |  |  |
-| TC091 | [User Story Link]() | When creating an account, usernames cannot be blank |  |  |  |  |
-| TC092 | [User Story Link - Sign in](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981624&issue=SemMTM%7Cpinterest-clone%7C33) | A user must be logged in to access the post upload page |  |  |  |  |
-| TC093 | [User Story - Sign in](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981624&issue=SemMTM%7Cpinterest-clone%7C33) | A user must be logged in to comment |  |  |  |  |
-| TC094 | [User Story - Sign in](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981624&issue=SemMTM%7Cpinterest-clone%7C33) | A user must be logged in to save a post/create a board |  |  |  |  |
-| TC095 | [User Story - Login Pop up modal](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=96121167&issue=SemMTM%7Cpinterest-clone%7C39) | The sign-up/log-in page is a pop-up modal |  |  |  |  |
-| TC096 | [User Story - Logged In](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981314&issue=SemMTM%7Cpinterest-clone%7C32) | Log in/Sign up buttons hidden for authenticated users in top bar |  |  |  |  |
-| TC097 | [User Story - Logged In](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981314&issue=SemMTM%7Cpinterest-clone%7C32) | Sign out button visisble for authenticated users in top bar |  |  |  |  |
-| TC098 | [User Story - Account registration](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87987195&issue=SemMTM%7Cpinterest-clone%7C20) | Sign up/Log in visisble in top bar for unauthenticated users |  |  |  |  |
+| TC064 | [User Story - All pins board](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95979980&issue=SemMTM%7Cpinterest-clone%7C30) | An image saved to anyboard is automatically added to the 'All Pins' board |  |  |  |
+| TC065 | [User Story - Open image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986034&issue=SemMTM%7Cpinterest-clone%7C16) | The correct posts are displated when clicking into a board |  |  |  |
+| **Post Detail Page** |  |  |  |  |  |
+| TC066 | [User Story - Open an image](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87968971&issue=SemMTM%7Cpinterest-clone%7C4) | The correct image is opened on post click |  |  |  |
+| TC067 | [User Story - Like posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95977925&issue=SemMTM%7Cpinterest-clone%7C26) | A logged in user can like a post |  |  |  |
+| TC068 | [User Story - Like posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95977925&issue=SemMTM%7Cpinterest-clone%7C26) | The number of likes a post has can be seen by all users |  |  |  |
+| TC069 | [User Story - see who uploaded a post](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95978547&issue=SemMTM%7Cpinterest-clone%7C28) | After clicking on a post uploaders profile image, you are taken to their profile page |  |  |  |
+| TC070 | [User Story - Like posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95977925&issue=SemMTM%7Cpinterest-clone%7C26) | A user can remove their like from a post |  |  |  |
+| TC071 | [User Story - Delete a post](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87972680&issue=SemMTM%7Cpinterest-clone%7C9) | A user can delete their own post |  |  |  |
+| TC072 | [User Story - Sign In](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981624&issue=SemMTM%7Cpinterest-clone%7C33) | Any logged in user can comment on a post |  |  |  |
+| TC073 | [User Story - Comment on a post](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87969369&issue=SemMTM%7Cpinterest-clone%7C5) | Comments on a post can be seen by all users |  |  |  |
+| TC074 | [User Story - Delete other comments](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986654&issue=SemMTM%7Cpinterest-clone%7C18) | The post owner can delete any comments on their posts |  |  |  |
+| TC075 | [User Story - Comment date](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95977165&issue=SemMTM%7Cpinterest-clone%7C24) | You can see the amount of time ago a comment was made |  |  |  |
+| TC076 |  | The total number of comments on a post can be seen |  |  |  |
+| TC077 | [User Story - Delete own comment](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95974819&issue=SemMTM%7Cpinterest-clone%7C21) | A user can delete their own comment |  |  |  |
+| TC078 | [User Story - Edit comment](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87969622&issue=SemMTM%7Cpinterest-clone%7C6) | A user can edit their own comment |  |  |  |
+| TC079 | [User Story - Edit comment](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87969622&issue=SemMTM%7Cpinterest-clone%7C6) | Comment edit can be seen by other users after publishing |  |  |  |
+| TC080 |  | The edit comment button is only displayed for the comment creator  |  |  |  |
+| TC081 |  | The delete comment button is only displayed for the post owner or the commeter |  |  |  |
+| TC082 |  | The delete post button is only visisble for the post owner |  |  |  |
+| TC083 | [User Story - Pin an image to a board](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87972366&issue=SemMTM%7Cpinterest-clone%7C8) | A user can save a post to a board |  |  |  |
+| TC084 | [User Story - Pin an image to a board](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87972366&issue=SemMTM%7Cpinterest-clone%7C8) | A user can create a new board from the save post modal |  |  |  |
+|  | [User Story Link](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95978547&issue=SemMTM%7Cpinterest-clone%7C28) | A user can see who uploaded a post under the image. You can see their profile image and their username |  |  |  |
+|  | [User Story - profile info on comment](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95977383&issue=SemMTM%7Cpinterest-clone%7C25) | A users comment has their username and profile image next to the comment |  |  |  |
+| **Authentication** |  |  |  |  |  |
+|  | [User Story - Account registration](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87987195&issue=SemMTM%7Cpinterest-clone%7C20) | A user can sign up with a username and email |  |  |  |
+| TC085 | [User Story - Logout](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981777&issue=SemMTM%7Cpinterest-clone%7C34) | Clicking the logout button, logs a user out |  |  |  |
+| TC086 | [User Story - Username](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95983218&issue=SemMTM%7Cpinterest-clone%7C31) | When registering, usernames must be unique |  |  |  |
+| TC087 |  | Usernames cannot have URL unsafe characters |  |  |  |
+| TC088 |  | A user must validate their password correctly to create an account |  |  |  |
+| TC089 | [User Story - Sign in](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981624&issue=SemMTM%7Cpinterest-clone%7C33) | After account creation a user can sign in with their credentials |  |  |  |
+| TC090 |  | A user can change their password |  |  |  |
+| TC091 |  | When creating an account, usernames cannot be blank |  |  |  |
+| TC092 | [User Story Link - Sign in](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981624&issue=SemMTM%7Cpinterest-clone%7C33) | A user must be logged in to access the post upload page |  |  |  |
+| TC093 | [User Story - Sign in](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981624&issue=SemMTM%7Cpinterest-clone%7C33) | A user must be logged in to comment |  |  |  |
+| TC094 | [User Story - Sign in](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981624&issue=SemMTM%7Cpinterest-clone%7C33) | A user must be logged in to save a post/create a board |  |  |  |
+| TC095 | [User Story - Login Pop up modal](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=96121167&issue=SemMTM%7Cpinterest-clone%7C39) | The sign-up/log-in page is a pop-up modal |  |  |  |
+| TC096 | [User Story - Logged In](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981314&issue=SemMTM%7Cpinterest-clone%7C32) | Log in/Sign up buttons hidden for authenticated users in top bar |  |  |  |
+| TC097 | [User Story - Logged In](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981314&issue=SemMTM%7Cpinterest-clone%7C32) | Sign out button visisble for authenticated users in top bar |  |  |  |
+| TC098 | [User Story - Account registration](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87987195&issue=SemMTM%7Cpinterest-clone%7C20) | Sign up/Log in visisble in top bar for unauthenticated users |  |  |  |
