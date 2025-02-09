@@ -84,19 +84,27 @@
 
 <!-- Edit Profile Modal -->
 {% if user.is_authenticated and user == profile.user %}
-<div id="edit-profile-modal" class=>
+<div id="edit-profile-modal" class=> 
     <div id="edit-profile-modal-content" class="modal-content">
         <form id="edit-profile-form" method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' %}">
             {% csrf_token %}
             <h3>Edit Profile</h3>
             <label for="first_name">First Name:</label>
-            <input type="text" id="first_name" name="first_name" value="{{ profile.first_name }}">
+            <input type="text" 
+                id="first_name" 
+                name="first_name" 
+                value="{{ profile.first_name }}"
+                maxlength="100">
             
             <label for="last_name">Last Name:</label>
-            <input type="text" id="last_name" name="last_name" value="{{ profile.last_name }}">
+            <input type="text" 
+                id="last_name" 
+                name="last_name" 
+                value="{{ profile.last_name }}"
+                maxlength="100">
 
             <label for="about">About:</label>
-            <textarea id="about" name="about">{{ profile.about }}</textarea>
+            <textarea id="about" name="about" maxlength="600">{{ profile.about }}</textarea>
 
             <!-- Image preview -->
             <div id="image-preview-container">
