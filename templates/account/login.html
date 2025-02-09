@@ -4,7 +4,13 @@
 
 {% block content %}
 
-<div class="signin-container">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<div class="signin-container"
+    style="
+        max-width: 450px;
+        margin: auto;
+        padding-top: 20px;">
     <div class="signin-row">
         <h3>{% trans "Sign In" %}</h3>
 

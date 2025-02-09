@@ -125,6 +125,7 @@ def post_detail(request, id):
     )
 
 
+@login_required
 def create_post(request):
     """
     View to handle post creation, including form submission and

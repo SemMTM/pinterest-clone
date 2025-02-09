@@ -5,7 +5,11 @@
 {% block content %}
 <h1>{% trans "Sign Up" %}</h1>
 
-<div class="signup-container">
+<div class="signup-container"
+    style="
+      max-width: 450px;
+      margin: auto;
+      padding-top: 20px;"> 
   <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
     {% csrf_token %}
     {{ form.as_p }}
