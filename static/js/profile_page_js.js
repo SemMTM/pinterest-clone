@@ -52,9 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const editProfileModal = document.getElementById('edit-profile-modal');
     const editProfileModalContent = document.getElementById('edit-profile-modal-content')
     const cancelEditProfileButton = document.getElementById('cancel-edit-profile-btn');
-    const editProfileForm = document.getElementById('edit-profile-form');
-    const profileImageInput = document.getElementById('profile_image');
-    const imagePreview = document.getElementById('profile-image-preview');
 
     const showModal = () => {
         editProfileModal.classList.add('modal-show');
@@ -70,17 +67,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cancelEditProfileButton.addEventListener('click', hideModal)
 
-    // Image Preview on profile edit modal
+    // ----- Client-Side Validation for edit profile form -----
+    const MAX_FILE_SIZE_MB = 2; // Maximum file size in MB
+    const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+    const imagePreview = document.getElementById('profile-image-preview');
+    const profileImageInput = document.getElementById('profile_image');
+
     profileImageInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
+    
         if (file) {
+            // Validate file type
+            if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+                showPopUpMessage("Invalid file type. Please upload a JPG, PNG, or WebP image.");
+                event.target.value = ""; // Clear the input field
+                return;
+            }
+    
+            // Validate file size
+            const fileSizeMB = file.size / (1024 * 1024); // Convert bytes to MB
+            if (fileSizeMB > MAX_FILE_SIZE_MB) {
+                showPopUpMessage(`File size too large. Maximum allowed size is ${MAX_FILE_SIZE_MB}MB.`);
+                event.target.value = ""; // Clear the input field
+                return;
+            }
+    
+            // If file is valid, show preview
             const reader = new FileReader();
             reader.onload = (e) => {
-                imagePreview.src = e.target.result; // Update the preview image source
+                imagePreview.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
     });
+
+    const editProfileForm = document.getElementById('edit-profile-form');
 
     // Submit on enter
     if (editProfileForm) {

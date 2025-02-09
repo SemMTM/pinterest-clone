@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import FileExtensionValidator
 from cloudinary.models import CloudinaryField
-from post.models import Post
+from post.models import Post, validate_image_size
 
 VISIBILITY = ((0, "Public"), (1, "Private"))
 
@@ -19,7 +20,12 @@ class Profile(models.Model):
     profile_image = CloudinaryField(
         'image',
         default='https://res.cloudinary.com/dygztovba/image/upload/v1736352521/wmj7j0gxfg9rch8chlfl.jpg',  # noqa
-        blank=False)
+        blank=False,
+        validators=[
+                    FileExtensionValidator
+                    (allowed_extensions=[
+                        'jpg', 'jpeg', 'png', 'webp']),
+                    validate_image_size])
 
     def __str__(self):
         return f"Profile for user: {self.user}"
