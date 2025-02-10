@@ -82,9 +82,12 @@
 | TC064 | [User Story - All pins board](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95979980&issue=SemMTM%7Cpinterest-clone%7C30) | An image saved to any board is automatically added to the 'All Pins' board | Log in, open a post from the homepage, add the post to an image board, navigate to the profile page and open the "All Pins" board | The image saved to the other board is in the "All Pins" board also | As expected | PASS |
 | TC065 | [User Story - Open image boards](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87986034&issue=SemMTM%7Cpinterest-clone%7C16) | The correct posts are displated when clicking into a board | Log in, save 4 posts to a newly created image board, navigate to that image board | The 4 posts can be seen in the image board | As expected | PASS |
 | TC0X1 |  | You cannot create a board with the name "All Pins" | Open a post, click save, create a board with the name "All Pins" | Error is thrown and board is not created | Board was created which caused more errors when trying to open profile page as only 1 all pins board should exist | FAIL |
-| TC0X1 #2 | Retry TC0X1 | Retry TC0X1 |  |  |  |  |
-| TC0X2 | You cannot create a board with an already existing board name |  |  |  |  |  |
-| TC0X3 | You cannot rename a board with an already existing board name |  |  |  |  |  |
+| TC0X1 #2 |  | Add client-side and server-side validation to prevent user from being able to create All Pins board | Retry TC0X1 | Error is thrown and board is not created | As expected | PASS |
+| TC0X2 |  | You cannot create a board with an already existing board name | Try and create a board with the same name as one already on your profile page | Error is thrown and board is not created | As expected | PASS |
+| TC0X3 |  | You cannot rename a board with an already existing board name | Rename a board with the same name as one already on your profile page | Error is thrown and board is not renamed | Board is renamed | FAIL |
+| TC0X3 #2 |  |  |  |  |  |  |
+| TC0X4 |  | You cannot rename a board to All Pins | Rename a board to All Pins | Error is thrown and board is not renamed | Board is renamed | FAIL |
+| TC0X4 #2 |  |  |  |  |  |  |
 | **Post Detail Page** |  |  |  |  |  |
 | TC066 | [User Story - Open an image](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87968971&issue=SemMTM%7Cpinterest-clone%7C4) | The correct image is opened on post click | Navigate to the home page and click on a post | The post detail view of the clicked on image is shown | As expected | PASS |
 | TC067 | [User Story - Like posts](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95977925&issue=SemMTM%7Cpinterest-clone%7C26) | A logged in user can like a post | Log in, navigate to a post from the home page, click the like button | The user can successfully like the post | As expected | PASS |

@@ -71,7 +71,20 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const formData = new FormData(editBoardForm);
             const updateUrl = editBoardForm.getAttribute('action');
+            const newTitle = formData.get('title').trim();
 
+            // Prevent empty title
+            if (!newTitle) {
+                showPopUpMessage("Board title cannot be empty.");
+                return;
+            }
+
+            // Prevent renaming to "All Pins" (case insensitive)
+            if (newTitle.toLowerCase() === "all pins") {
+                showPopUpMessage("You cannot rename a board to 'All Pins'.");
+                return;
+            }
+            
             fetch(updateUrl, {
                 method: 'POST',
                 headers: {
@@ -83,14 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     visibility: formData.get('visibility'), 
                 }),
             })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error('Failed to update the board.');
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    if (data.success) {
+                .then(response => response.json()
+                    .then(data => ({status: response.status, data}))
+                )
+                .then(({ status, data }) => {
+                    if (status === 200 && data.success) {
                         const boardTitleElement = document.getElementById('board-title');
                         if (boardTitleElement) {
                             boardTitleElement.textContent = formData.get('title');
@@ -108,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         showPopUpMessage(data.error || 'An error occurred.');
                     }
                 })
-                .catch((error) => showPopUpMessage('Error updating board'));
+                .catch(() => showPopUpMessage('Error updating board'));
         });
     }
 
