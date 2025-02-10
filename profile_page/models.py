@@ -1,10 +1,31 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import FileExtensionValidator
+from django.core.validators import ValidationError
 from cloudinary.models import CloudinaryField
-from post.models import Post, validate_image_size
+from pathlib import Path
+from post.models import Post
+
 
 VISIBILITY = ((0, "Public"), (1, "Private"))
+MAX_FILE_SIZE_MB = 2  # Maximum file size in MB
+ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp']
+
+
+def validate_image(value):
+    """ Custom validator to handle both CloudinaryResource and new file uploads. """
+    # Skip validation for existing Cloudinary images
+    if isinstance(value, str) or hasattr(value, 'public_id'):
+        return
+
+    # Validate file extension
+    extension = Path(value.name).suffix[1:].lower()  # Extract file extension
+    if extension not in ALLOWED_EXTENSIONS:
+        raise ValidationError(f"Invalid file type: {extension}. Allowed: {', '.join(ALLOWED_EXTENSIONS)}")
+
+    # Validate file size
+    file_size_mb = value.size / (1024 * 1024)  # Convert bytes to MB
+    if file_size_mb > MAX_FILE_SIZE_MB:
+        raise ValidationError(f"File size exceeds {MAX_FILE_SIZE_MB}MB limit.")
 
 
 class Profile(models.Model):
@@ -21,11 +42,8 @@ class Profile(models.Model):
         'image',
         default='https://res.cloudinary.com/dygztovba/image/upload/v1736352521/wmj7j0gxfg9rch8chlfl.jpg',  # noqa
         blank=False,
-        validators=[
-                    FileExtensionValidator
-                    (allowed_extensions=[
-                        'jpg', 'jpeg', 'png', 'webp']),
-                    validate_image_size])
+        validators=[validate_image]
+    )
 
     def __str__(self):
         return f"Profile for user: {self.user}"
