@@ -126,3 +126,26 @@
 | TC096 | [User Story - Logged In](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981314&issue=SemMTM%7Cpinterest-clone%7C32) | Log in/Sign up buttons hidden for authenticated users in top bar | Log-in with existing credentials | Log-in and sign-up buttons disappear from top bar | As expected | PASS |
 | TC097 | [User Story - Logged In](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=95981314&issue=SemMTM%7Cpinterest-clone%7C32) | Sign out button visisble for authenticated users in top bar | Log-in with existing credentials | Log out button now visisble in top bar | As expected | PASS |
 | TC098 | [User Story - Account registration](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87987195&issue=SemMTM%7Cpinterest-clone%7C20) | Sign up/Log in visisble in top bar for unauthenticated users | Log out of signed in account | Log-in and sign-up buttons are visisble in top bar | As expected | PASS |
+
+## Unit Tests
+Extensive unit tests were created for forms and views in each app.
+
+### Post App
+- [Views tests](post\test_views.py)
+- [Forms tests](post\test_forms.py)
+
+### Profile_page App
+- [Views tests](profile_page\test_views.py)
+
+## User Tests
+
+## Lighthouse Testing
+
+## Responsiveness
+
+## Validators
+### CSS
+
+### HTML
+
+### Python
