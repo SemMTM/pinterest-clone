@@ -52,9 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const editProfileModal = document.getElementById('edit-profile-modal');
     const editProfileModalContent = document.getElementById('edit-profile-modal-content')
     const cancelEditProfileButton = document.getElementById('cancel-edit-profile-btn');
-    const editProfileForm = document.getElementById('edit-profile-form');
-    const profileImageInput = document.getElementById('profile_image');
-    const imagePreview = document.getElementById('profile-image-preview');
 
     const showModal = () => {
         editProfileModal.classList.add('modal-show');
@@ -70,17 +67,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cancelEditProfileButton.addEventListener('click', hideModal)
 
-    // Image Preview on profile edit modal
-    profileImageInput.addEventListener('change', (event) => {
+    // ----- Client-Side Validation for edit profile form -----
+    const imagePreview = document.getElementById('profile-image-preview');
+    const profileImageInput = document.getElementById('profile_image');
+    const max_file_size = 20 * 1024 * 1024;
+
+    profileImageInput.addEventListener('change', function(event) {
         const file = event.target.files[0];
+    
         if (file) {
+            const fileSize = file.size; // Get file size in bytes
+            const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+
+            // Validate file type
+            if (!allowedExtensions.includes(fileExtension)) {
+                    showPopUpMessage('Only JPG, JPEG, PNG, and WEBP files are allowed.');
+                    this.value = ''; // Reset the input
+                    return;
+                }
+    
+            // Validate file size
+            if (fileSize > max_file_size) {
+                showPopUpMessage('The uploaded image exceeds the maximum file size of 20MB.');
+                this.value = ''; // Reset the input
+                return;
+            }
+            
+            // If file is valid, show preview
             const reader = new FileReader();
             reader.onload = (e) => {
-                imagePreview.src = e.target.result; // Update the preview image source
+                imagePreview.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
     });
+
+    const editProfileForm = document.getElementById('edit-profile-form');
 
     // Submit on enter
     if (editProfileForm) {

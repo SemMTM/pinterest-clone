@@ -11,8 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
         resizeGridWithImages();
     });
 
+    // Ensure only the first set of images loads before triggering pagination
+    imagesLoaded(document.querySelector(".image-grid"), () => {
+        resizeAllGridItems(); // Resize after first images load
+        enableLazyLoading(); // Activate lazy loading after initial grid is set
+    });
+
     // Initial grid setup
-    window.onload = resizeGridWithImages();
     window.addEventListener("resize", resizeAllGridItems);
 });
 
@@ -64,6 +69,13 @@ function waitForImages() {
     imagesLoaded( allItems[x], resizeInstance);
     // Uses the imagesLoaded library to call 'resizeInstance' once the images in the given item are fully loaded.
     }
+}
+
+// Function to enable lazy loading after first page is fully loaded
+function enableLazyLoading() {
+    document.querySelectorAll("[hx-trigger='revealed']").forEach(trigger => {
+        trigger.setAttribute("hx-trigger", "revealed once"); // Ensures pagination loads only when triggered
+    });
 }
 
 waitForImages();

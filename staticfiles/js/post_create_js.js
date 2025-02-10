@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (file) {
                 const fileSize = file.size; // Get file size in bytes
                 const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
-                const fileExtension = file.name.split('.').pop().toLowerCase(); // Get file extension
+                const fileExtension = file.name.split('.').pop().toLowerCase();
 
                 // Validate file type
                 if (!allowedExtensions.includes(fileExtension)) {
