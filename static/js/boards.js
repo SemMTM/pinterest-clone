@@ -76,8 +76,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Submit Create Board
     submitCreateBoardBtn.addEventListener('click', () => {
         const boardTitle = boardTitleInput.value.trim();
+
         if (!boardTitle) {
             showPopUpMessage('Please enter a board title.');
+            return;
+        }
+
+        // Prevent "All Pins" board creation (case insensitive)
+        if (boardTitle.toLowerCase() === "all pins") {
+            showPopUpMessage('You cannot create a board with the title "All Pins".');
             return;
         }
 

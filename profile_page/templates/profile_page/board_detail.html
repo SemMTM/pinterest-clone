@@ -33,7 +33,9 @@
         </div>
     </div>
 
-    {% if user == board.user %}
+    {% if user != board.user or board.title == 'All Pins' %}
+    <div></div>
+    {% else %}
     <!-- Edit Board Modal -->
     <div id="edit-board-modal" class="board-modal-overlay">
         <div class="board-modal-content">

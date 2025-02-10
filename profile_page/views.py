@@ -486,6 +486,14 @@ def create_board(request):
                                      'error': 'Board title is required.'},
                                     status=400)
 
+            # Prevent "All Pins" board creation (case insensitive)
+            if title.lower() == "all pins":
+                return JsonResponse(
+                    {'success': False,
+                     'error': 'You cannot create'
+                     'a board with the title "All Pins".'},
+                    status=400)
+
             post = get_object_or_404(Post, id=post_id)
 
             board, created = ImageBoard.objects.get_or_create(
