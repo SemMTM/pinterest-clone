@@ -68,31 +68,32 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelEditProfileButton.addEventListener('click', hideModal)
 
     // ----- Client-Side Validation for edit profile form -----
-    const MAX_FILE_SIZE_MB = 2; // Maximum file size in MB
-    const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp"];
-
     const imagePreview = document.getElementById('profile-image-preview');
     const profileImageInput = document.getElementById('profile_image');
+    const max_file_size = 20 * 1024 * 1024;
 
-    profileImageInput.addEventListener('change', (event) => {
+    profileImageInput.addEventListener('change', function(event) {
         const file = event.target.files[0];
     
         if (file) {
+            const fileSize = file.size; // Get file size in bytes
+            const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+
             // Validate file type
-            if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-                showPopUpMessage("Invalid file type. Please upload a JPG, PNG, or WebP image.");
-                event.target.value = ""; // Clear the input field
-                return;
-            }
+            if (!allowedExtensions.includes(fileExtension)) {
+                    showPopUpMessage('Only JPG, JPEG, PNG, and WEBP files are allowed.');
+                    this.value = ''; // Reset the input
+                    return;
+                }
     
             // Validate file size
-            const fileSizeMB = file.size / (1024 * 1024); // Convert bytes to MB
-            if (fileSizeMB > MAX_FILE_SIZE_MB) {
-                showPopUpMessage(`File size too large. Maximum allowed size is ${MAX_FILE_SIZE_MB}MB.`);
-                event.target.value = ""; // Clear the input field
+            if (fileSize > max_file_size) {
+                showPopUpMessage('The uploaded image exceeds the maximum file size of 20MB.');
+                this.value = ''; // Reset the input
                 return;
             }
-    
+            
             // If file is valid, show preview
             const reader = new FileReader();
             reader.onload = (e) => {
