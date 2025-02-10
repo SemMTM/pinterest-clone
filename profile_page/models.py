@@ -12,7 +12,8 @@ ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp']
 
 
 def validate_image(value):
-    """ Custom validator to handle both CloudinaryResource and new file uploads. """
+    """ Custom validator to handle both CloudinaryResource and
+    new file uploads. """
     # Skip validation for existing Cloudinary images
     if isinstance(value, str) or hasattr(value, 'public_id'):
         return
@@ -20,7 +21,9 @@ def validate_image(value):
     # Validate file extension
     extension = Path(value.name).suffix[1:].lower()  # Extract file extension
     if extension not in ALLOWED_EXTENSIONS:
-        raise ValidationError(f"Invalid file type: {extension}. Allowed: {', '.join(ALLOWED_EXTENSIONS)}")
+        raise ValidationError(
+            f"Invalid file type: {extension}. Allowed: {', '.join(
+                ALLOWED_EXTENSIONS)}")
 
     # Validate file size
     file_size_mb = value.size / (1024 * 1024)  # Convert bytes to MB
