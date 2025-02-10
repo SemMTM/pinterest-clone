@@ -619,9 +619,10 @@ def edit_board(request, board_id):
 
             # Prevent renaming to "All Pins" (case insensitive)
             if new_title.lower() == "all pins":
-                return JsonResponse({"success": False,
-                                    "error": "You cannot rename a board to 'All Pins'."},
-                                    status=400)
+                return JsonResponse(
+                    {"success": False,
+                     "error": "You cannot rename a board to 'All Pins'."},
+                    status=400)
 
             # Prevent renaming to an already existing board (case insensitive)
             existing_board = ImageBoard.objects.filter(
@@ -629,9 +630,11 @@ def edit_board(request, board_id):
             ).exclude(id=board.id).first()
 
             if existing_board:
-                return JsonResponse({"success": False,
-                                    "error": f"A board with the title '{new_title}' already exists."},
-                                    status=400)
+                return JsonResponse(
+                    {"success": False,
+                     "error": f"A board with the title '{new_title}'"
+                     ' already exists.'},
+                    status=400)
 
             board.title = new_title
             board.visibility = int(new_visibility)
