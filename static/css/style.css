@@ -1289,3 +1289,12 @@ h1, h2, h3, h4, h5, h6 {
 #password-change p {
     margin-bottom: 15px;
 }
+
+.errorlist li {
+    color: rgb(199, 0, 0);
+    list-style-type: none;
+}
+
+#password-change ul li {
+    list-style-type: none;
+}
