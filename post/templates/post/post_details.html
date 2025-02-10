@@ -233,6 +233,7 @@
         </div>
     </div>
 
+    {% if user.is_authenticated %}
     <!-- Create Board Modal -->
     <div id="create-board-modal" class="create-modal-hidden">
         <div class="create-modal-content">
@@ -265,6 +266,7 @@
             </form>
         </div>
     </div>
+    {% endif %}
 
     <!-- Message pop-up -->
     <div class="pop-up-message-overlay modal">

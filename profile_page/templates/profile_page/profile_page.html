@@ -82,8 +82,8 @@
     </div>
 </div>
 
-<!-- Edit Profile Modal -->
 {% if user.is_authenticated and user == profile.user %}
+<!-- Edit Profile Modal -->
 <div id="edit-profile-modal" class=> 
     <div id="edit-profile-modal-content" class="modal-content">
         <form id="edit-profile-form" method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' %}">
