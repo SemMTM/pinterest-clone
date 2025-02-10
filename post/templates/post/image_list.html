@@ -7,7 +7,8 @@
     hx-swap="afterend">
     <div class="item-content">
         <a class="grid-image" href="{% url 'post_detail' post.id %}">
-            <img src="{{ post.image.url }}" alt="{{ post.title }}"/>
+            <img src="{{ post.image.url|add:'?f_auto,q_auto,cacheControl=public,max-age=31536000'}}" 
+                 alt="{{ post.title }}"/>
         </a>
     </div>
 </div> 
@@ -16,7 +17,8 @@
 <div class="grid-item">
     <div class="item-content">
         <a class="div-link" href="{% url 'post_detail' post.id %}">
-            <img src="{{ post.image.url }}" alt="{{ post.title }}"/>
+            <img src="{{ post.image.url|add:'?f_auto,q_auto,cacheControl=public,max-age=31536000'}}" 
+                 alt="{{ post.title }}"/>
         </a>
     </div>
 </div> 

@@ -139,7 +139,15 @@ Extensive unit tests were created for forms and views in each app.
 
 ## User Tests
 
-## Lighthouse Testing
+## PageSpeed Insight Testing
+PageSpeed Insight testing was performed and found performance to be sub par on a few areas. 
+The performance section is expected to be lower due to the large amount of images on the website.
+
+![PageSpeed Tests](<static/readme_images/Screenshot_4.png>)
+
+#### Addressed Issues
+The best practices score was lower then expected, the first area targetted for improvemnt was the following warning:
+- "Serve static assets with an efficient cache policy"
 
 ## Responsiveness
 
