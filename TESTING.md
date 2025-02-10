@@ -147,7 +147,14 @@ The performance section is expected to be lower due to the large amount of image
 
 #### Addressed Issues
 The best practices score was lower then expected, the first area targetted for improvemnt was the following warning:
-- "Serve static assets with an efficient cache policy"
+- Issue: "Serve static assets with an efficient cache policy"
+- Solution:
+
+- Issue "Properly size images"
+- Solution:
+
+- Issue: "Document does not have a meta description"
+- Solution: Add meta description to head
 
 ## Responsiveness
 

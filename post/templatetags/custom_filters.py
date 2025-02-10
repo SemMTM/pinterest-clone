@@ -40,3 +40,11 @@ def time_ago(value):
         return f"{int(months)} mo"
     else:
         return f"{int(years)} y"
+
+
+@register.filter(name='force_https')
+def force_https(url):
+    """ Replaces http:// with https:// in Cloudinary image URLs """
+    if url and url.startswith("http://"):
+        return url.replace("http://", "https://")
+    return url
