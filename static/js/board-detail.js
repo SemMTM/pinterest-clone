@@ -112,7 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 formData.get('visibility') === '0' ? 'Public' : 'Private';
                         }
 
-                        editBoardModal.classList.add('hidden');
+                        editBoardModal.classList.remove('modal-show');
+                        editBoardModalContent.classList.remove('board-modal-content-visible');
                         showPopUpMessage(data.message);
                     } else {
                         showPopUpMessage(data.error || 'An error occurred.');
@@ -121,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch(() => showPopUpMessage('Error updating board'));
         });
     }
+
 
     //Unpin image functions
     const unpinModal = document.getElementById('unpin-modal');
@@ -175,7 +177,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         postElement.remove(); // Remove the grid item directly from the DOM
                     }
     
-                    unpinModal.classList.add('hidden'); 
+                    unpinModal.classList.add('unpin-modal-hidden');
+                    unpinModal.classList.remove('unpin-modal-visible');
                     currentImageId = null; 
                     currentBoardId = null; 
                     showPopUpMessage('Post removed successfully!');
