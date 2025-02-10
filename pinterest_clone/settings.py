@@ -162,3 +162,23 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Force HTTPS Redirects
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+
+# Prevent cookies from being sent over HTTP
+SESSION_COOKIE_SECURE = True
+# Ensures session cookies are only sent over HTTPS
+CSRF_COOKIE_SECURE = True  # Ensures CSRF cookie is sent only over HTTPS
+
+# Enables Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # One year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Preload the site into browser HSTS lists
+
+# Prevents browsers from detecting content type automatically
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True  # Enables XSS protection
+X_FRAME_OPTIONS = "DENY"  # Prevents clickjacking attacks
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
