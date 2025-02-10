@@ -30,11 +30,12 @@ SECRET_KEY = {
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = [
     '8000-semmtm-pinterestclone-yymd39f8mut.ws.codeinstitute-ide.net',
     '.herokuapp.com',
     "127.0.0.1",
+    'localhost'
     ]
 
 
