@@ -271,4 +271,32 @@ There was only one error. The unpin-button-container element which is generated 
 
 ### Python
 
+All Python files were validated and returned no errors. The only error is in SETTINGS.py and it is regrding the env.py import.
+
 ### JavaScript
+
+#### board-detail
+
+![board-detail Validation](<static/readme_images/Screenshot_9.png>)
+
+Only one error about optional chaining but it is needed in the statement to prevent errors if the valuse doesnt exist.
+
+#### boards.js
+
+![boards Validation](<static/readme_images/Screenshot_10.png>)
+
+Initially there were only a few errors for missing semi-colons, these errors have been addressed.
+
+#### comment.js
+
+No errors apart from outdated Jshint errors such as 'async function' error or 'optional chaining error'
+
+#### login-modal.js
+
+#### masonry.js
+
+#### pop_up.js
+
+#### post_create_js
+
+#### profile_page_js

@@ -1,11 +1,11 @@
-import { showPopUpMessage } from './pop_up.js'
+import { showPopUpMessage } from './pop_up.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Open Edit Board Modal
     const openEditBoardModalBtn = document.getElementById('open-edit-board-modal-btn');
     const editBoardModal = document.getElementById('edit-board-modal');
     const editBoardForm = document.getElementById('edit-board-form');
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const editBoardModalContent = document.getElementsByClassName("board-modal-content")[0];
 
     if (openEditBoardModalBtn) {
