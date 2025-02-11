@@ -145,7 +145,7 @@ The performance section is expected to be lower due to the large amount of image
 
 ![PageSpeed Tests](<static/readme_images/Screenshot_4.png>)
 
-#### Addressed Issues
+### Addressed Issues
 The best practices score was lower then expected, the areas targetted for improvment are as follows:
 
 **Issue** 
@@ -190,11 +190,85 @@ If image grid did not resize images fast enough then HTMX trigger "Revealed" wou
 
 Load only the first page of images on page load, then the 2nd page after grid resize, then all others on scroll.
 
+### After Changes
+
+After making the above changes the new PageSpeed Insight had great improvments in the SEO score, performance score and best practices score:
+
+![PageSpeed Tests](<static/readme_images/Screenshot_1.png>)
+
 ## Responsiveness
+
+All pages were tested to ensure responsiveness on screensizes from 320px and upwards.
+
+**Steps to test:**
+
+- Open browser and navigate to Pinterest95.exe
+- Open the developer tools (right click and inspect)
+- Set to responsive and decrease width to 320px
+- Set the zoom to 50%
+- Click and drag the responsive window to maximum width
+
+**Expected:**
+
+- Website is responsive on all screens
+- No images are distorted
+- No horizontal scroll is present
+- There are no issues with modals
+- No elements overlap
+- Elements are spaced appropriately
+
+**Actual:**
+
+Website behaved as expected. Website was also tested on a number of mobile devices with no issues.
 
 ## Validators
 ### CSS
 
+No validation errors in the CSS file.
+
+![CSS Validation](<static/readme_images/Screenshot_2.png>)
+
 ### HTML
 
+#### Home Page
+
+First validation attempt had the following error for all images:
+
+"Trailing slash on void elements has no effect and interacts badly with unquoted attribute values"
+
+The trailing slashes were removed. 
+
+The only errors after that were due to the htmx triggers being on empty spans, this is not an actual issue with HTMX as modern browsers support it so no change was made.
+
+![HTML Validation](<static/readme_images/Screenshot_3.png>)
+
+#### Post Detail Page
+
+There were 2 errors on this page, the like icon and the comment upload icon had no alt attribute. The alt attributes were added and no errors were returned.
+
+![HTML Validation](<static/readme_images/Screenshot_5.png>)
+
+#### Post Create Page
+
+Only 1 error was returned due to an empty src attribute on the uploaded image preview. Once the user selects an image to upload, the src is dynamically added to show a preview so this error will not be addressed as its a part of this feature.
+
+![HTML Validation](<static/readme_images/Screenshot_6.png>)
+
+#### Profile Page
+
+There were a few errors on this page:
+
+1. Duplicate forms with the "logout-from" id - This was solved by removing the ID from the profile page logout button, this retained functionality and solved the errors.
+2. Multiple errors with the HTMX tags on the buttons for calling the "Created" board and the "Saved" board - These errors will not be addressed as the HTMX is a core part of the functionality that allows these features to work.
+
+![HTML Validation](<static/readme_images/Screenshot_7.png>)
+
+#### Board Detail Page
+
+There was only one error. The unpin-button-container element which is generated for all images was using an ID to apply styles instead of a class, this was changed to a class as well as the CSS rules and the errors went.
+
+![HTML Validation](<static/readme_images/Screenshot_8.png>)
+
 ### Python
+
+### JavaScript

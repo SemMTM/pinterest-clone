@@ -39,9 +39,9 @@
                 <button id="edit-profile-btn" class="btn pp-btn">Edit Profile</button>
             </div>
             <div>
-                <form method="POST" action="{% url 'custom_accounts:logout' %}" id="logout-form">
+                <form method="POST" action="{% url 'custom_accounts:logout' %}">
                     {% csrf_token %}
-                    <button id="logout-button" class="btn">Log out</button>
+                    <button class="btn">Log out</button>
                 </form>
             </div>
         </div>
@@ -85,7 +85,7 @@
 
 {% if user.is_authenticated and user == profile.user %}
 <!-- Edit Profile Modal -->
-<div id="edit-profile-modal" class=> 
+<div id="edit-profile-modal" class=""> 
     <div id="edit-profile-modal-content" class="modal-content">
         <form id="edit-profile-form" method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' %}">
             {% csrf_token %}

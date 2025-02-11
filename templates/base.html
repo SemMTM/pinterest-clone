@@ -39,104 +39,104 @@
         referrerpolicy="no-referrer">
 </head>
 
-<body data-is-authenticated="{{ user.is_authenticated }}">
+    <body data-is-authenticated="{{ user.is_authenticated }}">
 
-    <div class="main-container">
+        <div class="main-container">
 
-        <!-- Navigation Bar -->
-        <nav class="navigation-bar">
-            <div class="nav-1">
-                <div class="nav-2 nav-btn {% if request.path == home_url %}active{% endif %}">
-                    <div class="nav-3">
-                        <a class="nav-a" href="{% url 'home' %}">
-                            <img class="icon" src="/static/icons/icons8-home.svg" alt="home button">
-                        </a>
+            <!-- Navigation Bar -->
+            <nav class="navigation-bar">
+                <div class="nav-1">
+                    <div class="nav-2 nav-btn {% if request.path == home_url %}active{% endif %}">
+                        <div class="nav-3">
+                            <a class="nav-a" href="{% url 'home' %}">
+                                <img class="icon" src="/static/icons/icons8-home.svg" alt="home button">
+                            </a>
+                        </div>
                     </div>
-                </div>
-                
-                {% if user.is_authenticated %}
-                <div class="nav-2 nav-btn {% if request.path == create_post_url %}active{% endif %}">
-                    <div class="nav-3">
-                        <a class="nav-a" href="{% url 'create_post' %}">
-                            <img class="icon" src="/static/icons/icons8-plus.svg" alt="create post button">
-                        </a>
+                    
+                    {% if user.is_authenticated %}
+                    <div class="nav-2 nav-btn {% if request.path == create_post_url %}active{% endif %}">
+                        <div class="nav-3">
+                            <a class="nav-a" href="{% url 'create_post' %}">
+                                <img class="icon" src="/static/icons/icons8-plus.svg" alt="create post button">
+                            </a>
+                        </div>
                     </div>
-                </div>
 
-                {% else %}
-                <div class="nav-2 nav-btn">
-                    <div class="nav-3">
-                        <a class="nav-a" href="{% url 'custom_accounts:login_modal' %}">
-                            <img class="icon" src="/static/icons/icons8-plus.svg" alt="create post button">
-                        </a>
+                    {% else %}
+                    <div class="nav-2 nav-btn">
+                        <div class="nav-3">
+                            <a class="nav-a" href="{% url 'custom_accounts:login_modal' %}">
+                                <img class="icon" src="/static/icons/icons8-plus.svg" alt="create post button">
+                            </a>
+                        </div>
                     </div>
-                </div>
-                {% endif %}
-                
-                {% if user.is_authenticated %}
-                <div class="nav-2 nav-btn" id="profile-btn">
-                    <div class="nav-3">
-                        <a class="nav-a" href="{% url 'profile_page' username=user.username %}">
-                            <img class="icon" src="/static/icons/user.svg" alt="profile page button">
-                        </a>
+                    {% endif %}
+                    
+                    {% if user.is_authenticated %}
+                    <div class="nav-2 nav-btn" id="profile-btn">
+                        <div class="nav-3">
+                            <a class="nav-a" href="{% url 'profile_page' username=user.username %}">
+                                <img class="icon" src="/static/icons/user.svg" alt="profile page button">
+                            </a>
+                        </div>
                     </div>
+                    {% endif %}
                 </div>
-                {% endif %}
+            </nav>
+
+            <!-- Top Bar -->
+            {% if user.is_authenticated %}
+            <div class="top-bar">
+                <div class="btn-container">
+                    <form method="POST" action="{% url 'custom_accounts:logout' %}" id="logout-form">
+                        {% csrf_token %}
+                        <button id="logout-button" class="btn">Log out</button>
+                    </form>
+                </div>
             </div>
-        </nav>
 
-        <!-- Top Bar -->
-        {% if user.is_authenticated %}
-        <div class="top-bar">
-            <div class="btn-container">
-                <form method="POST" action="{% url 'custom_accounts:logout' %}" id="logout-form">
-                    {% csrf_token %}
-                    <button id="logout-button" class="btn">Log out</button>
-                </form>
+            {% else %}
+            <div class="top-bar">
+                <div class="btn-container">
+                    <span class="{% if user.is_authenticated %}hidden{% endif %}">
+                        <a id="login-link" 
+                            class="auth-trigger btn login-btn" 
+                            href="{% url 'custom_accounts:login_modal' %}">
+                            Log-in
+                        </a>
+                        <a id="signup-link" 
+                            class="btn sign-up-btn auth-trigger" 
+                            href="{% url 'custom_accounts:signup_modal' %}">
+                            Sign-up
+                        </a>
+                    </span>
+                </div>
+            </div>
+            {% endif %}
+
+            <div>
+                {% block content %}
+                <!-- Content Goes here -->
+                {% endblock content %}       
+            </div>
+            <div id="bottom-bar"></div>
+        </div>
+        
+
+        <div id="auth-modal" class="hidden login-modal-overlay">
+            <div class="auth-modal-content ">
+                <span id="close-auth-modal" class="modal-close">&times;</span>
+                <div id="auth-modal-content">
+                    <!-- Login/Signup content will be loaded dynamically -->
+                </div>
             </div>
         </div>
 
-        {% else %}
-        <div class="top-bar">
-            <div class="btn-container">
-                <span class="{% if user.is_authenticated %}hidden{% endif %}">
-                    <a id="login-link" 
-                        class="auth-trigger btn login-btn" 
-                        href="{% url 'custom_accounts:login_modal' %}">
-                        Log-in
-                    </a>
-                    <a id="signup-link" 
-                        class="btn sign-up-btn auth-trigger" 
-                        href="{% url 'custom_accounts:signup_modal' %}">
-                        Sign-up
-                    </a>
-                </span>
-            </div>
-        </div>
-        {% endif %}
-
-        <div>
-            {% block content %}
-            <!-- Content Goes here -->
-            {% endblock content %}       
-        </div>
-        <div id="bottom-bar"></div>
-    </div>
-    
-
-    <div id="auth-modal" class="hidden login-modal-overlay">
-        <div class="auth-modal-content ">
-            <span id="close-auth-modal" class="modal-close">&times;</span>
-            <div id="auth-modal-content">
-                <!-- Login/Signup content will be loaded dynamically -->
-            </div>
-        </div>
-    </div>
-
-    {% block scripts %}
-    <!-- Scripts go here -->
-    {% endblock %}
-    
-    <script src="{% static 'js/login-modal.js' %}"></script>
-</body>
+        {% block scripts %}
+        <!-- Scripts go here -->
+        {% endblock %}
+        
+        <script src="{% static 'js/login-modal.js' %}"></script>
+    </body>
 </html>

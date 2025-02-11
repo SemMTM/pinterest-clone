@@ -17,7 +17,7 @@
                 sizes="(max-width: 320px) 320px,
                         (max-width: 500px) 500px,
                         (max-width: 800px) 800px"
-                alt="{{ post.title }}"/>
+                alt="{{ post.title }}">
         </div>
         <div class="details-container">
             <h2 id="post-title" class="text-wrap">{{ post.title }}</h2>
@@ -59,7 +59,7 @@
             </div>
 
             <div class="det-container-inner">
-                <img id="like-icon" src="/static/icons/heart.svg">
+                <img id="like-icon" src="/static/icons/heart.svg" alt="like icon">
                 <span id="like-count">{{ post.likes }}</span>
             </div>
 
@@ -177,7 +177,7 @@
                                 <input type="hidden" id="edit-comment-id" name="comment_id" value="">
                                 <div>
                                     <button id="submitButton" class="btn" type="submit">
-                                        <img src="/static/icons/up-arrow.svg">
+                                        <img src="/static/icons/up-arrow.svg" alt="comment submit">
                                     </button>
                                 </div>
                             </form>

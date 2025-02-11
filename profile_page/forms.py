@@ -9,7 +9,7 @@ class ProfileForm(forms.ModelForm):
         fields = ['about', 'first_name', 'last_name', 'profile_image']
 
         def clean_profile_image(self):
-            """ Ensure profile image validation only 
+            """ Ensure profile image validation only
             applies to new uploads. """
             image = self.cleaned_data.get("profile_image")
 

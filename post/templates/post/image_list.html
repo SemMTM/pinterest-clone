@@ -12,27 +12,24 @@
                 sizes="(max-width: 320px) 320px,
                         (max-width: 500px) 500px,
                         (max-width: 800px) 800px"
-                 alt="{{ post.title }}"/>
+                 alt="{{ post.title }}">
         </a>
     </div>
 </div>
 {% endfor %}
 
-<!-- Conditional HTMX trigger: Different behavior for first and next pages -->
 {% if page_obj.has_next %}
     {% if page_obj.number == 1 %}
-        <!-- Load page 2 ONLY after Masonry resizes -->
-        <div id="load-next-page"
+        <span id="load-next-page"
              hx-trigger="after-masonry"
              hx-get="{% url 'home' %}?page=2"
              hx-swap="afterend">
-        </div>
+        </span>
     {% else %}
-        <!-- Load all other pages on scroll -->
-        <div id="load-next-page"
+        <span id="load-next-page"
              hx-trigger="revealed"
              hx-get="{% url 'home' %}?page={{ page_obj.number|add:1 }}"
              hx-swap="afterend">
-        </div>
+        </span>
     {% endif %}
 {% endif %}

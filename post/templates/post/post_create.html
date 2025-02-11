@@ -12,7 +12,7 @@
             <form id="post-create-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="post-form-section">
-                    <img id="image-preview" src="" alt="Image preview" style="display: none;"/>
+                    <img id="image-preview" src="" alt="Image preview" style="display: none;">
                     {{ post_form.image }}
                 </div>
                 <div class="post-form-section">
