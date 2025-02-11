@@ -110,7 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const url = commentId ? `/${postId}/update_comment/${commentId}/`
+            const url = commentId
+                ? `/${postId}/update_comment/${commentId}/`
                 : `/${postId}/add_comment/`;
 
             const headers = {
@@ -119,7 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Content-Type': commentId ? 'application/json' : 'application/x-www-form-urlencoded',
             };
 
-            const payload = commentId ? JSON.stringify({ body })
+            const payload = commentId
+                ? JSON.stringify({ body })
                 : new URLSearchParams({ body, csrfmiddlewaretoken: csrfToken }).toString();
             try {
                 const response = await fetch(url, { method: 'POST', headers, body: payload });
@@ -145,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     showPopUpMessage(data.error || 'An error occurred.');
                 }
-            } catch (error) {
+            } catch {
                 showPopUpMessage('An unexpected error occurred.');
             }
         });

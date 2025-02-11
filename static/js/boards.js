@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('save-to-board-modal');
     const closeModalButton = document.getElementById('close-save-modal');
     const boardButtons = document.querySelectorAll('.save-modal-board-btn');
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
     // Open modal
     saveButton.addEventListener('click', () => {
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         showPopUpMessage(data.message);
                     }
                 })
-                .catch(error => showPopUpMessage('Error saving post'));
+                .catch(() => showPopUpMessage('Error saving post'));
         });
     });
 

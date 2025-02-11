@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const openEditBoardModalBtn = document.getElementById('open-edit-board-modal-btn');
     const editBoardModal = document.getElementById('edit-board-modal');
     const editBoardForm = document.getElementById('edit-board-form');
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
     const editBoardModalContent = document.getElementsByClassName("board-modal-content")[0];
 
     if (openEditBoardModalBtn) {
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .catch(error => {
-                showPopUpMessage('Error unpinning the post:');
+                showPopUpMessage(error.message || 'Error unpinning the post:');
             });
     });
 });
