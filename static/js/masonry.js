@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initial grid setup
     resizeGridWithImages().then(() => {
-        console.log("Masonry resized. Triggering HTMX for page 2.");
         if (document.getElementById("load-next-page")) {
             document.getElementById("load-next-page").dispatchEvent(new Event("after-masonry"));
         }

@@ -9,8 +9,15 @@
 <div id="image-detail-container">
     <div id="image-detail-container-inner">
         <div class="image-container">
-            <img src="{{ post.image.url|force_https }}?f_auto,q_auto,cacheControl=public,max-age=31536000" 
-                alt="{{ post.title }}" />
+            <img src="{{ post.image.url|force_https }}?w=500&h=500&c=fit&q_auto,f_auto&cacheControl=public,max-age=31536000"
+                srcset="
+                    {{ post.image.url|force_https }}?w=320&h=320&c=fit&q_auto,f_auto&cacheControl=public,max-age=31536000 320w,
+                    {{ post.image.url|force_https }}?w=500&h=500&c=fit&q_auto,f_auto&cacheControl=public,max-age=31536000 500w,
+                    {{ post.image.url|force_https }}?w=800&h=800&c=fit&q_auto,f_auto&cacheControl=public,max-age=31536000 800w"
+                sizes="(max-width: 320px) 320px,
+                        (max-width: 500px) 500px,
+                        (max-width: 800px) 800px"
+                alt="{{ post.title }}"/>
         </div>
         <div class="details-container">
             <h2 id="post-title" class="text-wrap">{{ post.title }}</h2>
