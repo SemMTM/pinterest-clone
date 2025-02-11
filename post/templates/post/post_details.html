@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block content %}
 {% load static %}
 {% load crispy_forms_tags %}
@@ -8,7 +9,8 @@
 <div id="image-detail-container">
     <div id="image-detail-container-inner">
         <div class="image-container">
-            <img src="{{ post.image.url }}" alt="{{ post.title }}" />
+            <img src="{{ post.image.url|force_https }}?f_auto,q_auto,cacheControl=public,max-age=31536000" 
+                alt="{{ post.title }}" />
         </div>
         <div class="details-container">
             <h2 id="post-title" class="text-wrap">{{ post.title }}</h2>
@@ -59,7 +61,7 @@
                 <div id="user-icon-container">
                     <a href="{% url 'profile_page' post.user.username  %}">
                         <div class="user-icon"
-                            style="background-image: url('{{ post.user.profile.profile_image.url }}');
+                            style="background-image: url('{{ post.user.profile.profile_image.url|force_https }}');
                                 background-size: cover;
                                 background-position: center;">
                         </div>
@@ -127,7 +129,7 @@
                             <div class="comment" data-comment-id="{{ comment.id }}">
                                 <div class="comment-user-container">
                                     <div class="commenter-profile-img"
-                                        style="background-image: url('{{ comment.author.profile.profile_image.url }}');
+                                        style="background-image: url('{{ comment.author.profile.profile_image.url|force_https }}');
                                                 background-size: cover;
                                                 background-position: center;">
                                     </div>

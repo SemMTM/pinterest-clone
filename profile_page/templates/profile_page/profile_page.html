@@ -1,5 +1,6 @@
 {% extends 'base.html' %} 
 {% load static %}
+{% load custom_filters %}
 {% url 'account_logout' as logout_url %}
 
 {% block content %}
@@ -8,7 +9,7 @@
 
         <div class="p-con">
             <div id="profile-user-icon"
-                style="background-image: url('{{ profile.profile_image.url }}'); 
+                style="background-image: url('{{ profile.profile_image.url|force_https }}?f_auto,q_auto,cacheControl=public,max-age=31536000'); 
                         background-size: cover; 
                         background-position: center;">
             </div>

@@ -146,15 +146,41 @@ The performance section is expected to be lower due to the large amount of image
 ![PageSpeed Tests](<static/readme_images/Screenshot_4.png>)
 
 #### Addressed Issues
-The best practices score was lower then expected, the first area targetted for improvemnt was the following warning:
-- Issue: "Serve static assets with an efficient cache policy"
-- Solution:
+The best practices score was lower then expected, the areas targetted for improvment are as follows:
 
-- Issue "Properly size images"
-- Solution:
+**Issue** 
 
-- Issue: "Document does not have a meta description"
-- Solution: Add meta description to head
+"Serve static assets with an efficient cache policy"
+
+**Solution**
+
+Add a Long-Term cache policy for Cloudinary image. This was done by adding the following to the end of image src links: 
+
+```|add:'?f_auto,q_auto,cacheControl=public,max-age=31536000'```
+
+**Issue**
+
+
+
+**Solution**
+
+Force all Cloudinary images to load as https. This was done by creating a custom template tag that swaps any image url that starts with http to https.
+
+**Issue**
+
+"Properly size images"
+
+**Solution**
+
+
+
+**Issue**
+
+"Document does not have a meta description"
+
+**Solution**
+
+Add meta description to head
 
 ## Responsiveness
 

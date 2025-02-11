@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 
 <div class="boards-grid">
     {% for item in boards_with_images %}
@@ -8,7 +9,8 @@
                 <!-- Large tile for the first image -->
                 {% if item.images|length > 0 %}
                 <div class="tile-image large">
-                    <img src="{{ item.images.0.post_id.image.url }}" alt="{{ item.images.0.post_id.title }}">
+                    <img src="{{ item.images.0.post_id.image.url|force_https }}?f_auto,q_auto,cacheControl=public,max-age=31536000"
+                        alt="{{ item.images.0.post_id.title }}">
                 </div>
                 {% else %}
                 <div class="tile-image large"></div>
@@ -17,7 +19,8 @@
                 <!-- Small tile for the second image -->
                 {% if item.images|length > 1 %}
                 <div class="tile-image small">
-                    <img src="{{ item.images.1.post_id.image.url }}" alt="{{ item.images.1.post_id.title }}">
+                    <img src="{{ item.images.1.post_id.image.url|force_https }}?f_auto,q_auto,cacheControl=public,max-age=31536000"
+                        alt="{{ item.images.1.post_id.title }}">
                 </div>
                 {% else %}
                 <div class="tile-image small">
@@ -28,7 +31,8 @@
                 <!-- Small tile for the third image -->
                 {% if item.images|length > 2 %}
                 <div class="tile-image small">
-                    <img src="{{ item.images.2.post_id.image.url }}" alt="{{ item.images.2.post_id.title }}">
+                    <img src="{{ item.images.2.post_id.image.url|force_https }}?f_auto,q_auto,cacheControl=public,max-age=31536000"
+                        alt="{{ item.images.2.post_id.title }}">
                 </div>
                 {% else %} 
                 <div class="tile-image small">

@@ -1,5 +1,6 @@
 {% extends 'base.html' %} 
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
 <div class="board-detail PaLe">
@@ -25,7 +26,8 @@
                     </div>
                     {% endif %}
                     <a class="div-link" href="{% url 'post_detail' image.post_id.id %}">
-                        <img src="{{ image.post_id.image.url }}" alt="{{ image.post_id.title }}">
+                        <img src="{{ image.post_id.image.url|force_https }}?f_auto,q_auto,cacheControl=public,max-age=31536000" 
+                            alt="{{ image.post_id.title }}">
                     </a>
                 </div>
             </div>
