@@ -160,7 +160,7 @@ Add a Long-Term cache policy for Cloudinary image. This was done by adding the f
 
 **Issue**
 
-
+"Does not use HTTPS"
 
 **Solution**
 
