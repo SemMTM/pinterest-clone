@@ -1,28 +1,38 @@
 {% load custom_filters %}
 
 {% for post in page_obj %}
-{% if forloop.last %}
-<div 
-    class="grid-item" 
-    hx-trigger="revealed" 
-    hx-get="{% url 'home' %}?page={{ page_obj.number|add:1 }}"
-    hx-swap="afterend">
-    <div class="item-content">
-        <a class="grid-image" href="{% url 'post_detail' post.id %}">
-            <img src="{{ post.image.url|force_https }}?f_auto,q_auto,cacheControl=public,max-age=31536000" 
-                 alt="{{ post.title }}" loading="lazy"/>
-        </a>
-    </div>
-</div> 
-
-{% else %}
 <div class="grid-item">
     <div class="item-content">
-        <a class="div-link" href="{% url 'post_detail' post.id %}">
-            <img src="{{ post.image.url|force_https }}?f_auto,q_auto,cacheControl=public,max-age=31536000" 
-                 alt="{{ post.title }}" loading="lazy"/>
+        <a class="grid-image" href="{% url 'post_detail' post.id %}">
+            <img src="{{ post.image.url|force_https }}?w=500&h=500&c=fit&q_auto,f_auto&cacheControl=public,max-age=31536000"
+                srcset="
+                    {{ post.image.url|force_https }}?w=320&h=320&c=fit&q_auto,f_auto&cacheControl=public,max-age=31536000 320w,
+                    {{ post.image.url|force_https }}?w=500&h=500&c=fit&q_auto,f_auto&cacheControl=public,max-age=31536000 500w,
+                    {{ post.image.url|force_https }}?w=800&h=800&c=fit&q_auto,f_auto&cacheControl=public,max-age=31536000 800w"
+                sizes="(max-width: 320px) 320px,
+                        (max-width: 500px) 500px,
+                        (max-width: 800px) 800px"
+                 alt="{{ post.title }}"/>
         </a>
     </div>
-</div> 
-{% endif %}
+</div>
 {% endfor %}
+
+<!-- Conditional HTMX trigger: Different behavior for first and next pages -->
+{% if page_obj.has_next %}
+    {% if page_obj.number == 1 %}
+        <!-- Load page 2 ONLY after Masonry resizes -->
+        <div id="load-next-page"
+             hx-trigger="after-masonry"
+             hx-get="{% url 'home' %}?page=2"
+             hx-swap="afterend">
+        </div>
+    {% else %}
+        <!-- Load all other pages on scroll -->
+        <div id="load-next-page"
+             hx-trigger="revealed"
+             hx-get="{% url 'home' %}?page={{ page_obj.number|add:1 }}"
+             hx-swap="afterend">
+        </div>
+    {% endif %}
+{% endif %}
