@@ -182,6 +182,14 @@ Use Cloudinary parameters to integrate dynamic resizing and optimisation of imag
 
 Add meta description to head
 
+**Issue**
+
+If image grid did not resize images fast enough then HTMX trigger "Revealed" would trigger and all pages of images would be loaded then resized.
+
+**Solution**
+
+Load only the first page of images on page load, then the 2nd page after grid resize, then all others on scroll.
+
 ## Responsiveness
 
 ## Validators
