@@ -293,22 +293,12 @@ Initially there were only a few errors for missing semi-colons, these errors hav
 
 No errors apart from outdated Jshint errors such as 'async function' error or 'optional chaining error'
 
-#### login-modal.js
+- *login-modal.js* - No errors
 
-No errors
+- *masonry.js* - There are some errors about variables being undefined even though they are, no nothing to change here.
 
-#### masonry.js
+- *pop_up.js* - No errors.
 
-There are some errors about variables being undefined even though they are, no nothing to change here.
+- *post_create_js* - No errors.
 
-#### pop_up.js
-
-No errors.
-
-#### post_create_js
-
-No errors.
-
-#### profile_page_js
-
-No errors.
+- *profile_page_js* - No errors.
