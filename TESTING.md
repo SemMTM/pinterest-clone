@@ -172,7 +172,7 @@ Force all Cloudinary images to load as https. This was done by creating a custom
 
 **Solution**
 
-Use Cloudinary parameters to integrate dynamic resizing and optimisation of images.
+Use Cloudinary parameters to integrate dynamic resizing and optimisation of images. Add server-side image compression and conversion to JPEG.
 
 **Issue**
 
