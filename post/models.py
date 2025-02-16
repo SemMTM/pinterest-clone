@@ -39,12 +39,11 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         """ Override save method to compress and convert images
-        before saving."""
-        if self.image:
+        before saving only when new image is uploaded."""
+        if self.pk is None or (self.image and hasattr(self.image, "file")):
             self.image = compress_and_convert_to_jpeg(self.image)
-            # Apply compression
 
-        super().save(*args, **kwargs)  # Save the model
+        super().save(*args, **kwargs)
 
 
 class Comment(models.Model):
