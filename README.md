@@ -12,8 +12,67 @@ and many other interactive features.
 
 This is a Django-basedd website with all CRUD functionality, agile methodologies were used to plan and implement all features.
 
-The live site can be found [here](post\test_views.py)
+The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.herokuapp.com)
 
+# Table of Contents
+- The Strategy Plane
+ - Site Goals
+ - Agile Planning
+ - Epics
+- The Structure Plane
+ - Features
+ - Future Features
+- The Skeleton Frame
+ - Wireframes
+ - Database Design
+ - Security
+- The Surface Plane
+ - Design
+ - Colour Scheme
+ - Typography
+- Technologies
+- Bugs
+- Deployment
+- Credits
+
+# The Strategy Plane
+
+## Site Goals
+
+## Agile Planning
+
+## Epics
+
+# The Structure Plane
+
+## Features
+
+### Feature 1
+#### Description
+#### Implementation
+#### User Stories Completed
+
+## Unimplemented Features
+
+## Future Features
+
+# The Skeleton Plane
+
+## Wireframes
+
+## Database Design
+
+## Security
+
+# The Surface Plane
+
+## Design
+
+## Color Scheme
+
+## Typography
+
+# Technologies
 
 ### Tech used:
 - imagesLoaded - library:
@@ -22,6 +81,20 @@ The live site can be found [here](post\test_views.py)
     - For imporved forms and form validation
 - Django allauth
     - Used for user authentication and accounts on site.
+
+# Bugs
+
+# Deployment
+
+## Version Control
+
+## Heroku Deployment
+
+## Run Locally
+
+## Fork Project
+
+# Credits
 
 
 ### Credits:
