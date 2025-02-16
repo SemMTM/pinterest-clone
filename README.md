@@ -15,25 +15,35 @@ This is a Django-basedd website with all CRUD functionality, agile methodologies
 The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.herokuapp.com)
 
 # Table of Contents
-- The Strategy Plane
- - Site Goals
- - Agile Planning
- - Epics
-- The Structure Plane
- - Features
- - Future Features
-- The Skeleton Frame
- - Wireframes
- - Database Design
- - Security
-- The Surface Plane
- - Design
- - Colour Scheme
- - Typography
-- Technologies
-- Bugs
-- Deployment
-- Credits
+- [The Strategy Plane](#the-strategy-plane)
+    - [Site Goals](#site-goals)
+    - [Agile Planning](#agile-planning)
+    - [Epics](#epics)
+- [The Structure Plane](#the-structure-plane)
+    - [Features](#features)
+    - [Unimplemented Features](#unimplemented-features)
+    - [Future Features](#future-features)
+- [The Skeleton Frame](#the-skeleton-plane)
+    - [Wireframes](#wireframes)
+    - [Database Design](#database-design)
+    - [Security](#security)
+- [The Surface Plane](#the-surface-plane)
+    - [Design](#design)
+    - [Colour Scheme](#color-scheme)
+    - [Typography](#typography)
+- [Technologies](#technologies)
+    - [Technology Used](#technology-used)
+    - [Python Modules Used](#python-modules-used)
+    - [External Python Modules Used](#external-python-modules-used)
+- [Bugs](#bugs)
+    - [Fixed Bugs](#fixed-bugs)
+    - [Unfixed Bugs](#unfixed-bugs)
+- [Deployment](#deployment)
+    - [Version Control](#version-control)
+    - [Heroku Deployment](#heroku-deployment)
+    - [Run Locally](#run-locally)
+    - [Fork Project](#fork-project)
+- [Credits](#credits)
 
 # The Strategy Plane
 
@@ -74,7 +84,9 @@ The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.h
 
 # Technologies
 
-### Tech used:
+## Technology Used
+Main tech like languages, github etc
+
 - imagesLoaded - library:
     - Used to detect when images have been loaded for responsive masonry layout.
 - Djanbgo Crispy Forms
@@ -82,7 +94,15 @@ The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.h
 - Django allauth
     - Used for user authentication and accounts on site.
 
+## Python Modules Used
+
+## External Python Modules Used
+
 # Bugs
+
+## Fixed Bugs
+
+## Unfixed Bugs
 
 # Deployment
 
