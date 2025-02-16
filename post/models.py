@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator, FileExtensionValidator
 from django.core.exceptions import ValidationError
 from cloudinary.models import CloudinaryField
 import uuid
+from .utils import compress_and_convert_to_jpeg
 
 
 def validate_image_size(image):
@@ -35,6 +36,15 @@ class Post(models.Model):
     liked_by = models.ManyToManyField(User, related_name="liked_posts",
                                       blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        """ Override save method to compress and convert images
+        before saving."""
+        if self.image:
+            self.image = compress_and_convert_to_jpeg(self.image)
+            # Apply compression
+
+        super().save(*args, **kwargs)  # Save the model
 
 
 class Comment(models.Model):

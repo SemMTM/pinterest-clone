@@ -4,6 +4,7 @@ from django.core.validators import ValidationError
 from cloudinary.models import CloudinaryField
 from pathlib import Path
 from post.models import Post
+from post.utils import compress_and_convert_to_jpeg
 
 
 VISIBILITY = ((0, "Public"), (1, "Private"))
@@ -50,6 +51,15 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"Profile for user: {self.user}"
+
+    def save(self, *args, **kwargs):
+        """ Override save method to compress and convert images
+        before saving. """
+        if self.profile_image:
+            self.profile_image = compress_and_convert_to_jpeg(
+                self.profile_image)  # Apply compression
+
+        super().save(*args, **kwargs)  # Save the model
 
 
 class ImageBoard(models.Model):
