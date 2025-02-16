@@ -8,8 +8,7 @@
     <div class="item-content">
         <a class="grid-image" href="{% url 'post_detail' post.id %}">
             <img src="{{ post.image.url|force_https }}?f_auto,q_auto,cacheControl=public,max-age=31536000" 
-                alt="{{ post.title }}"
-                loading="lazy">
+                alt="{{ post.title }}">
         </a>
     </div>
 </div>
@@ -22,8 +21,7 @@
     <div class="item-content">
         <a class="grid-image" href="{% url 'post_detail' post.id %}">
             <img src="{{ post.image.url|force_https }}?f_auto,q_auto,cacheControl=public,max-age=31536000"
-                alt="{{ post.title }}"
-                loading="lazy">
+                alt="{{ post.title }}">
         </a>
     </div>
 </div>
