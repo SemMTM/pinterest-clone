@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     showPopUpMessage('An error occurred.');
                 }
             })
-            .catch((error) => {
+            .catch(() => {
                 showPopUpMessage('An unexpected error occurred.');
             });
     });

@@ -1,4 +1,4 @@
-const popUpMessageContent = document.querySelector('.pop-up-message-content')
+const popUpMessageContent = document.querySelector('.pop-up-message-content');
 const popUpMessageText = document.querySelector('.pop-up-message-text');
 
 /**
@@ -7,11 +7,11 @@ const popUpMessageText = document.querySelector('.pop-up-message-text');
      */
 export function showPopUpMessage(message) {
     popUpMessageText.textContent = message;
-    popUpMessageContent.classList.add('pop-up-show-modal')
+    popUpMessageContent.classList.add('pop-up-show-modal');
 
     //Hide the message after 2 seconds
     setTimeout(() => {
-        popUpMessageContent.classList.remove('pop-up-show-modal')
+        popUpMessageContent.classList.remove('pop-up-show-modal');
 
         // Clear the message after the animation
         setTimeout(() => {

@@ -1,4 +1,4 @@
-import { showPopUpMessage } from './pop_up.js'
+import { showPopUpMessage } from './pop_up.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const createdButton = document.getElementById('created-btn');
@@ -50,22 +50,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Edit Profile Modal
     const editProfileButton = document.getElementById('edit-profile-btn'); 
     const editProfileModal = document.getElementById('edit-profile-modal');
-    const editProfileModalContent = document.getElementById('edit-profile-modal-content')
+    const editProfileModalContent = document.getElementById('edit-profile-modal-content');
     const cancelEditProfileButton = document.getElementById('cancel-edit-profile-btn');
 
     const showModal = () => {
         editProfileModal.classList.add('modal-show');
         editProfileModalContent.classList.add('edit-profile-modal-visible');
-    }
+    };
 
     const hideModal = () => { 
         editProfileModal.classList.remove('modal-show'); 
         editProfileModalContent.classList.remove('edit-profile-modal-visible');
-    }
+    };
     
     editProfileButton.addEventListener('click', showModal);
 
-    cancelEditProfileButton.addEventListener('click', hideModal)
+    cancelEditProfileButton.addEventListener('click', hideModal);
 
     // ----- Client-Side Validation for edit profile form -----
     const imagePreview = document.getElementById('profile-image-preview');

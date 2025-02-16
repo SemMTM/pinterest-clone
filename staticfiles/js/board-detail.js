@@ -1,4 +1,4 @@
-import { showPopUpMessage } from './pop_up.js'
+import { showPopUpMessage } from './pop_up.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Open Edit Board Modal
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .catch(error => {
-                showPopUpMessage('Error unpinning the post:');
+                showPopUpMessage(error.message || 'Error unpinning the post:');
             });
     });
 });

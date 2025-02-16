@@ -1,4 +1,4 @@
-import { showPopUpMessage } from './pop_up.js'
+import { showPopUpMessage } from './pop_up.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Save modal function
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         showPopUpMessage(data.message);
                     }
                 })
-                .catch(error => showPopUpMessage('Error saving post'));
+                .catch(() => showPopUpMessage('Error saving post'));
         });
     });
 
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (deletePostBtn) {
         deletePostBtn.addEventListener('click', () => {
             deletePostModal.classList.remove('hidden');
-            deletePostModal.classList.add('delete-post-modal-visible')
+            deletePostModal.classList.add('delete-post-modal-visible');
         });
     }
 
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (cancelDeletePostBtn) {
         cancelDeletePostBtn.addEventListener('click', () => {
             deletePostModal.classList.add('hidden');
-            deletePostModal.classList.remove('delete-post-modal-visible')
+            deletePostModal.classList.remove('delete-post-modal-visible');
         });
     }
 });

@@ -1,4 +1,18 @@
-# Pinterest 95
+# Pinterest95
+Pinterest95 is the first ever version of the now well known social media platform Pinterest. Designed during the days of windows 95, it has a very famililar style and many great features! Pinterest95 is a social media platform that allows users to discover new inspiration for anything and everthing. It is an image sharing platform that allows users to create image/mood boards of posts they like, imteract with images an share posts of their own. 
+
+To use the features of Pinterest95 a user must create and account on log in. Afterwards a user will then be able to:
+
+- Create/Delete posts
+- Comment/Like posts
+- Create/Edit/Delete image boards
+- Save images to image boards
+
+and many other interactive features.
+
+This is a Django-basedd website with all CRUD functionality, agile methodologies were used to plan and implement all features.
+
+The live site can be found [here](post\test_views.py)
 
 
 ### Tech used:
