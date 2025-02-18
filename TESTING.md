@@ -194,7 +194,7 @@ Load only the first page of images on page load, then the 2nd page after grid re
 
 After making the above changes the new PageSpeed Insight had great improvments in the SEO score, performance score and best practices score:
 
-![PageSpeed Tests](<static/readme_images/Screenshot_1.png>)
+![PageSpeed Tests](<static/readme_images/Screenshot_14.png>)
 
 ## Responsiveness
 
@@ -220,6 +220,12 @@ All pages were tested to ensure responsiveness on screensizes from 320px and upw
 **Actual:**
 
 Website behaved as expected. Website was also tested on a number of mobile devices with no issues.
+
+## WAVE Testing
+
+WAVE testing returned no errors.
+
+![WAVE Test](<static/readme_images/Screenshot_15.png>)
 
 ## Validators
 ### CSS

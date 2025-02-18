@@ -204,8 +204,188 @@ The Profile epic is for all user stories related to the users own profile page. 
 # The Skeleton Plane
 
 ## Wireframes
+### Home Page
+<details>
+<summary>View wireframes</summary>
+
+#### Desktop
+
+![Homepage wireframe](static/readme_images/Home%20page%20desktop%20wireframe.png)
+
+#### Mobile
+
+![Homepage wireframe](static/readme_images/Home%20page%20mobile%20wireframe.png)
+</details>
+
+### Edit Profile
+<details>
+<summary>View wireframes</summary>
+
+#### Desktop
+
+![Edit profile wireframe](static/readme_images/Edit%20profile%20wireframe%20desktop.png)
+
+#### Mobile
+
+![Edit profile wireframe](static/readme_images/Edit%20profile%20wireframe%20mobile.png)
+</details>
+
+### Post Detail Page
+<details>
+<summary>View wireframes</summary>
+
+#### Desktop
+
+![Post detail wireframe](static/readme_images/Individual%20image%20wireframe%20desktop.png)
+
+#### Mobile
+
+![post detail wireframe](static/readme_images/Individual%20image%20wireframe%20mobile.png)
+</details>
+
+### Board Detail Page
+<details>
+<summary>View wireframes</summary>
+
+#### Desktop
+
+![board detail wireframe](static/readme_images/Pinned%20board%20page%20wireframe%20desktop.png)
+
+#### Mobile
+
+![board detail wireframe](static/readme_images/Pinned%20board%20page%20wireframe%20mobile.png)
+
+</details>
+
+### Profile Page
+<details>
+<summary>View wireframes</summary>
+
+#### Desktop
+
+![profile page wireframe](static/readme_images/Profile%20Page%20wireframe%20desktop.png)
+
+#### Mobile
+
+![profile page wireframe](static/readme_images/Profile%20Page%20wireframe%20mobile.png)
+
+</details>
+
+### Post Creation Page
+<details>
+<summary>View wireframes</summary>
+
+#### Desktop
+
+![post creation wireframe](static/readme_images/Upload%20image%20desktop%20wireframe.png)
+
+#### Mobile
+
+![post creation wireframe](static/readme_images/Upload%20image%20mobile%20wireframe.png)
+
+</details>
 
 ## Database Design
+
+The Pinterest95 project utilizes a relational database structure to support user-generated content, interactions, and organizational features. The Django ORM facilitates database management, allowing dynamic interactions between models.
+
+<details>
+
+<summary>Click to view ERD</summary>
+
+![ERD](<static/readme_images/Screenshot_16.png>)
+
+</details>
+
+### Key Models & Their Purpose
+
+#### User Model (Django’s Built-in User)
+
+- Fields: `username`, `first_name`, `last_name`, `email`, `password`
+- Purpose:
+    - Manages authentication and user-related data
+    - Used as a ForeignKey reference in various models (e.g., Posts, Comments, Profile)
+    - Django provides built-in functionality for authentication and session management
+
+#### Profile Model
+
+- Fields: `username (FK)`, `about`, `first_name`, `last_name`, `profile_image`
+- Purpose:
+    - Extends the User model to store additional profile-related details
+    - Stores a profile picture (CloudinaryField) for efficient media handling
+    - Allows user personalization with an "About" section
+- Why It's Needed:
+    - Separating profile data from the User model allows flexibility
+    - Not all users may need profile customization, reducing unnecessary data in authentication processes
+
+#### Post Model
+
+- Fields: `id (UUID)`, `image`, `title`, `author (FK)`, `likes`, `liked_by`, `created_on`
+- Purpose:
+    - Represents user-uploaded images with associated metadata (title, likes, timestamp)
+    - Uses Cloudinary for image hosting to optimize performance
+    - Tracks likes (although this is redundant, as it can be derived from liked_by ManyToMany relationships)
+- Why It's Needed:
+    - Core functionality revolves around image sharing
+    - UUID is used instead of IntegerField for scalability and security
+    - ForeignKey to User ensures posts are linked to their authors
+
+#### Comments Model
+
+- Fields: `id`, `post (FK)`, `body`, `author (FK)`, `created_on`
+- Purpose:
+    - Enables users to comment on posts
+    - Each comment is linked to a post and an author
+    - Uses created_on to track timestamps
+- Why It's Needed:
+    - Increases user engagement by allowing discussion on shared content
+    - Helps in building a community-driven platform
+
+#### ImageBoard Model
+
+- Fields: `id`, `title`, `author (FK)`
+- Purpose:
+    - Enables users to create boards for organizing images
+    - Each board is user-specific and acts like a categorized collection
+- Why It's Needed:
+    - Improves content organization
+
+#### BoardImageRelationships Model
+
+- Fields: `post_id (FK)`, `board_id (FK)`
+- Purpose:
+    - Establishes a Many-to-Many relationship between Post and ImageBoard
+    - Allows users to add posts to multiple boards
+- Why It's Needed:
+    - Facilitates a tagging mechanism where one post can belong to multiple boards
+    - Prevents duplication of images while maintaining multiple categorizations
+
+#### ImageTags Model
+
+- Fields: `tag_name`
+- Purpose:
+    - Stores predefined tags that can be associated with posts
+- Why It's Needed:
+    - Allows for better searchability and filtering of content
+
+#### ImageTagRelationships Model
+- Fields: `post_id (FK)`, `tag_name (FK)`
+- Purpose:
+    - Creates a Many-to-Many relationship between Post and ImageTags
+- Why It's Needed:
+    - Enables categorization and discoverability of images based on tags
+    - Optimizes search and filtering mechanisms
+
+
+### Differences Between Live Database & ERD
+
+There were changes made to the database throughout the project after the Entity Relationship Diagram was created:
+
+| Aspect | ERD | Live Database|
+|----|----|----|
+| Likes Handling | `likes` is an IntegerField in `Post` | In the codebase, a Many-to-Many relationship (`liked_by`) is used instead of an IntegerField, which avoids inconsistencies. |
+| Profile Model | Contains `username` as a reference to the `User` model | In the live implementation, the Profile model uses OneToOneField(User), which is a better practice. |
+| Tagging System | Uses `ImageTags` with `tag_name` & `slug` | The live system implements a Many-to-Many relationship (ImageTagRelationships), improving flexibility. `slug` is also ommited as the tag search function has not been implemented yet. |
 
 ## Security
 
@@ -395,7 +575,6 @@ MySQL is the **relational database** used to **store structured data**.
 [Back to Table of Contents](#table-of-contents)
 
 # Credits
-
 
 ### Credits:
 - How to pin navbar to the bottom of the screen: https://forum.builder.io/t/how-do-you-pin-a-nav-bar-to-the-bottom-of-the-screen/32
