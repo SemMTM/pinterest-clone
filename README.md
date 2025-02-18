@@ -22,10 +22,16 @@ The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.h
 - [The Strategy Plane](#the-strategy-plane)
     - [Site Goals](#site-goals)
     - [Agile Planning](#agile-planning)
+- [The Scope Plane](#the-scope-plane)
     - [Epics](#epics)
     - [User Stories](#user-stories)
 - [The Structure Plane](#the-structure-plane)
     - [Features](#features)
+        - Homepage
+        - Post Detail Page
+        - Profile Page
+        - Board Detail Page
+        - Create Post Page
     - [Unimplemented Features](#unimplemented-features)
     - [Future Features](#future-features)
 - [The Skeleton Frame](#the-skeleton-plane)
@@ -190,10 +196,71 @@ The Profile epic is for all user stories related to the users own profile page. 
 
 ## Features
 
-### Feature 1
+## Homepage
+
+### Masonry Grid
 #### Description
+The Masonry Grid on the dynamically arranges images in a visually appealing, staggered layout. This feature ensures that images of varying heights fit together neatly while maximizing screen space and providing a visually appealing browsing experience. The masonry grid is used in multiple areas within the project: the board detail page, home page and created pins section.
+
+![Homepage masonry grid](static/readme_images/Screenshot_17.png)
+
 #### Implementation
+
+1. Backend (Django View)
+    - The `PostList` class-based view fetches posts ordered by creation date
+    - Implements pagination to retrieve 10 posts per request
+    - Supports HTMX-based dynamic loading, ensuring that new posts are loaded efficiently
+2. Frontend (HTML & CSS)
+    - The homepage contains a .image-grid container that holds post items
+    - `image_list.html` renders posts inside `.grid-item` elements, ensuring a consistent grid structure
+    - CSS Grid & Flexbox are used to define a responsive column layout
+3. JavaScript for Masonry Effect
+    - `masonry.js` ensures that each image is correctly positioned within the grid
+    - Uses `resizeGridWithImages()` to calculate row spans dynamically based on image heights
+    - Listens for HTMX events (htmx:afterSwap) to adjust the layout when new posts are loaded
+
+#### Why This Implementation Works Well:
+- Automatically adjusts image positions based on height
+- Ensures a responsive layout across different screen sizes
+- Efficient grid updates when new posts are loaded
+- Smooth user experience without layout shifts or gaps
+
 #### User Stories Completed
+
+### Infinite Scroll
+#### Description
+Infinite scrolling allows users to continuously load more posts without having to navigate through traditional pagination. Instead of manually clicking through pages, new posts are fetched and displayed automatically as the user scrolls down.
+
+#### Implementation
+
+1. Backend (Django View)
+    - The `PostList` class-based view in views.py handles paginated requests
+    - Uses Django’s built-in pagination to fetch 10 posts per request
+    - If a request is made via `HTMX`, it dynamically loads more posts
+2. Frontend (HTMX & Templates)
+    - The homepage includes an initial set of posts and a trigger for infinite scrolling
+    - `HTMX` is used to fetch the next page of posts when the user reaches the end of the current list
+    - `image_list.html` contains only the post items, ensuring that `HTMX` swaps new posts into the existing grid seamlessly.
+3. JavaScript for Masonry Layout
+    - `masonry.js` ensures that newly loaded images are properly arranged within the grid
+    - Listens for `HTMX` events like `htmx:afterSwap` to resize grid items after new posts load
+    - Uses `imagesLoaded()` to wait for images to fully load before adjusting layout
+
+#### Why This Implementation Works Well:
+- Seamless scrolling experience without page reloads
+- Efficient batch loading with Django’s Paginator
+- Optimized UI updates using HTMX and Masonry.js
+- Prevents unnecessary requests by stopping when there are no more posts
+
+
+
+## Post Detail Page
+
+## Profile Page
+
+## Board Detail Page
+
+## Create Post Page
 
 ## Unimplemented Features
 
@@ -383,9 +450,9 @@ There were changes made to the database throughout the project after the Entity 
 
 | Aspect | ERD | Live Database|
 |----|----|----|
-| Likes Handling | `likes` is an IntegerField in `Post` | In the codebase, a Many-to-Many relationship (`liked_by`) is used instead of an IntegerField, which avoids inconsistencies. |
-| Profile Model | Contains `username` as a reference to the `User` model | In the live implementation, the Profile model uses OneToOneField(User), which is a better practice. |
-| Tagging System | Uses `ImageTags` with `tag_name` & `slug` | The live system implements a Many-to-Many relationship (ImageTagRelationships), improving flexibility. `slug` is also ommited as the tag search function has not been implemented yet. |
+| **Likes Handling** | `likes` is an IntegerField in `Post` | In the codebase, a Many-to-Many relationship (`liked_by`) is used instead of an IntegerField, which avoids inconsistencies. |
+| **Profile Model** | Contains `username` as a reference to the `User` model | In the live implementation, the Profile model uses OneToOneField(User), which is a better practice. |
+| **Tagging System** | Uses `ImageTags` with `tag_name` & `slug` | The live system implements a Many-to-Many relationship (ImageTagRelationships), improving flexibility. `slug` is also ommited as the tag search function has not been implemented yet. |
 
 ## Security
 
@@ -465,7 +532,7 @@ This projects design was inspired by the nostalgic windows 95 design. This means
 
 The colour scheme for the project is primarily windows 95 grey (#c0c0c0) and black font (#000000).
 
-Buttons on hover turn blue (##010281) with white text. Danger buttons such as delete are red (rgb(212, 47, 47)).
+Buttons on hover turn blue (#010281) with white text. Danger buttons such as delete are red (rgb(212, 47, 47)).
 
 ### Typography
 
@@ -633,7 +700,7 @@ MySQL is the **relational database** used to **store structured data**.
 # Bugs
 ### Fixed Bugs
 
-| Bug | Fix |
+| **Bug** | **Fix** |
 |---|---|
 | Edit board modal doesn't reappear after successful board edit and clicking "edit board" again | The modal was hidden by applying and removing styles via JavaScript to hide/show the modal. The correct styles were not being removed after form submission. Corrected this and it fixed the issue |
 | An unautherised user can access the create post page by navigating via URL | Added @login_required to the create_post view |
@@ -645,7 +712,7 @@ MySQL is the **relational database** used to **store structured data**.
 
 ### Unfixed Bugs
 
-| Bug | Reason for being unfixed |
+| **Bug** | **Reason for being unfixed** |
 |---|---|
 | When a new user adds profile information for the first time and submits the info, the new information is not dynamically updated, it requires a refresh to be shown. All updates afterwards are dynamically shown | Time constraints |
 | The default profile image doesn't show on the first visit for a newly created user but shows on all visits thereafter | Time constraints |
@@ -657,6 +724,16 @@ MySQL is the **relational database** used to **store structured data**.
 ### Version Control
 
 The website was created using Visual Studio Code editor. The webpage was deployed on Heroku and can be visisted [HERE](https://pinterest-clone-sem-29d41bc2ed17.herokuapp.com/).
+
+Git was used to push changes in the local enviroment to the remote repository using the following commands:
+
+`git add .` - This command is used to add any changed files to the staging area before they are commited.
+
+`git commit -m "message"` - This command was used to commit changes to the local repository queue ready to be pushed.
+- Commits were made after every small and incremental change to enhance maintainability with a clear commit history.
+- Commit messages were made in alignment with the EU Commissions [Commit guidelines](https://ec.europa.eu/component-library/v1.15.0/eu/docs/conventions/git/) for clear and readable message.
+
+`git push` - This command was used to push all committed code to the remote repository on Github.
 
 ### Initial Deployment
 
@@ -679,4 +756,4 @@ The website was created using Visual Studio Code editor. The webpage was deploye
 - How to call a function inside a template: https://stackoverflow.com/questions/57832308/how-do-you-call-a-javascript-function-inside-a-django-template
 - show image in admin - https://dev.to/vijaysoni007/how-to-show-images-of-the-model-in-django-admin-5hk4
 - How to get user id - https://stackoverflow.com/questions/6898260/django-user-id-fields
-- Coding help through the entire project - ChatGPT
+- Coding help throughout the entire project - ChatGPT
