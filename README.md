@@ -389,6 +389,63 @@ There were changes made to the database throughout the project after the Entity 
 
 ## Security
 
+Security is a critical part of any web application and many steps have been taken to incorporate several security measures to protect user data and system integrity. The Pinterest95 project follows strong security practices to protect user data, prevent attacks, and ensure safe interactions between users. 
+
+### Authentication & Autherisation Security
+#### What’s Implemented:
+
+- Django Allauth for Authentication
+    - Django Allauth is used to handle authentication securely
+    - Supports hashed password storage using Django’s default password hashers
+    - Implements session-based authentication with Django’s built-in session management
+    - Provides an easy way to extend authentication with social login
+- Login & Signup Security
+    - Users are authenticated using username/email and password
+    - Passwords are stored securely using Django’s PBKDF2 password hashing algorithm
+    - Email verification is optional but can be enforced to prevent fake accounts
+- Session Security
+    - Django’s secure session cookies prevent session hijacking
+
+### User Authorization & Access Control
+#### What’s Implemented:
+
+- `@login_required` for sensitive views
+    - Prevents unauthorized users from accessing restricted pages
+    - Redirects unauthenticated users to the login page
+- Restricting Object Access to Owners
+    - Ensures that users can only modify their own posts, profiles, comments and boards
+
+### Cross-Site Scripting (XSS) Prevention
+#### What’s Implemented:
+
+- Automatic HTML Escaping in Django Templates
+    - Django escapes all user input by default in templates: ```<h1>{{ post.title }}</h1>  <!-- Safe from XSS -->```
+    - Prevents JavaScript injection attacks
+
+### Cross-Site Request Forgery (CSRF) Protection
+#### What’s Implemented:
+
+- CSRF protection is enabled by default in Django for all forms
+- CSRF tokens are required for POST requests and included in AJAX-based authentication
+- Ensures that requests originate from trusted sources
+- Prevents CSRF attacks on API endpoints
+
+### SQL Injection Protection
+#### What’s Implemented:
+
+- Django ORM Automatically Prevents SQL Injection
+    - All queries use Django’s ORM, which escapes inputs: ```Post.objects.filter(title__icontains="User Input")```
+    - Raw SQL is not used, reducing injection risks
+
+### Secure File Upload Handling
+#### What’s Implemented:
+
+- Cloudinary for Secure Image Hosting
+    - The project does not store images locally, instead using: ```image = CloudinaryField('image')```
+    - Prevents arbitrary file uploads and execution
+- File Type & Size Validation
+    - Restricts uploaded file formats (`jpg`, `jpeg`, `png`, `webp`):
+
 [Back to Table of Contents](#table-of-contents)
 
 # The Surface Plane
