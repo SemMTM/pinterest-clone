@@ -47,11 +47,14 @@ The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.h
 
 # The Strategy Plane
 
+
 ## Site Goals
 
 ## Agile Planning
 
 ## Epics
+
+[Back to Table of Contents](#table-of-contents)
 
 # The Structure Plane
 
@@ -66,6 +69,8 @@ The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.h
 
 ## Future Features
 
+[Back to Table of Contents](#table-of-contents)
+
 # The Skeleton Plane
 
 ## Wireframes
@@ -74,6 +79,8 @@ The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.h
 
 ## Security
 
+[Back to Table of Contents](#table-of-contents)
+
 # The Surface Plane
 
 ## Design
@@ -81,6 +88,8 @@ The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.h
 ## Color Scheme
 
 ## Typography
+
+[Back to Table of Contents](#table-of-contents)
 
 # Technologies
 
@@ -91,11 +100,11 @@ This project utilizes a combination of **programming languages, frameworks, and 
 |--------------|------------------------|
 | **Python** | Used as the primary programming language for the backend, handling logic, database interactions, and API endpoints. |
 | **Django** | Backend web framework responsible for handling user authentication, database management, and API routing. |
-| **MySQL** | The relational database management system (RDBMS) used to store user data, posts, comments, and other project-related content. |
+| **PostgresSQL** | The relational database management system (RDBMS) used to store user data, posts, comments, and other project-related content. |
 | **HTMX** | Enables dynamic content loading and AJAX-like interactions without writing JavaScript. Used for infinite scrolling, modals, and partial page updates. |
 | **JavaScript** | Used for handling real-time UI updates, form validation, grid resizing, and client-side interactions. |
 | **HTML** | Defines the structure of the web pages and is dynamically rendered using Django templates. |
-| **CSS** | Handles styling, layout, and responsiveness across all devices. Used alongside Tailwind CSS or custom styles. |
+| **CSS** | Handles styling, layout, and responsiveness across all devices. |
 | **Visual Studio Code** | The main code editor used for development, debugging, and testing. |
 | **GitHub** | Used for version control, collaboration, and storing project code in a remote repository. |
 | **Git** | Used for local version control, allowing developers to commit, branch, and push changes efficiently. |
@@ -182,7 +191,7 @@ Django is the **backend framework** used to **handle authentication, database op
 - Manages **database queries efficiently using the Django ORM**.
 - Handles **server-side validation and security best practices**.
 
-### MySQL
+### PostgresSQL
 MySQL is the **relational database** used to **store structured data**.
 
 - Stores **user data, posts, comments, likes, and boards**.
@@ -233,11 +242,15 @@ MySQL is the **relational database** used to **store structured data**.
 | `urllib3` | 2.3.0 | HTTP Client for Requests |
 | `whitenoise` | 6.8.2 | Static File Serving |
 
+[Back to Table of Contents](#table-of-contents)
+
 # Bugs
 
 ## Fixed Bugs
 
 ## Unfixed Bugs
+
+[Back to Table of Contents](#table-of-contents)
 
 # Deployment
 
@@ -248,6 +261,8 @@ MySQL is the **relational database** used to **store structured data**.
 ## Run Locally
 
 ## Fork Project
+
+[Back to Table of Contents](#table-of-contents)
 
 # Credits
 
@@ -261,3 +276,4 @@ MySQL is the **relational database** used to **store structured data**.
 - How to call a function inside a template: https://stackoverflow.com/questions/57832308/how-do-you-call-a-javascript-function-inside-a-django-template
 - show image in admin - https://dev.to/vijaysoni007/how-to-show-images-of-the-model-in-django-admin-5hk4
 - How to get user id - https://stackoverflow.com/questions/6898260/django-user-id-fields
+- Coding help through the entire project - ChatGPT
