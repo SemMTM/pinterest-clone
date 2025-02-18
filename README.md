@@ -391,6 +391,13 @@ There were changes made to the database throughout the project after the Entity 
 
 Security is a critical part of any web application and many steps have been taken to incorporate several security measures to protect user data and system integrity. The Pinterest95 project follows strong security practices to protect user data, prevent attacks, and ensure safe interactions between users. 
 
+### Secure Enviroment Variables
+#### What’s Implemented:
+- All important enviroment variables have been store in an uncommited separate file
+    - Storing them in a separate file helps prevent accidental leaks of credentials and ensures that secrets are not hardcoded in the project
+    - Database credentials, secret keys, and API keys are not stored directly in settings.py
+    - The project imports env.py at runtime to load secrets
+
 ### Authentication & Autherisation Security
 #### What’s Implemented:
 
@@ -450,11 +457,23 @@ Security is a critical part of any web application and many steps have been take
 
 # The Surface Plane
 
-## Design
+### Design
 
-## Color Scheme
+This projects design was inspired by the nostalgic windows 95 design. This means that in terms of UI the design will be simple, with raised bezeled buttons that invert on hover and selection.
 
-## Typography
+### Colour Scheme
+
+The colour scheme for the project is primarily windows 95 grey (#c0c0c0) and black font (#000000).
+
+Buttons on hover turn blue (##010281) with white text. Danger buttons such as delete are red (rgb(212, 47, 47)).
+
+### Typography
+
+The project uses the Microsoft Sans Serif font to align with the Windows 95 theme with a slight modernisation. 
+
+### Imagery
+
+The icons used are from icons8.com. They are pixelated & retro looking to further enforce the nostalgic feel I want the project to have.
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -612,22 +631,40 @@ MySQL is the **relational database** used to **store structured data**.
 [Back to Table of Contents](#table-of-contents)
 
 # Bugs
+### Fixed Bugs
 
-## Fixed Bugs
+| Bug | Fix |
+|---|---|
+| Edit board modal doesn't reappear after successful board edit and clicking "edit board" again | The modal was hidden by applying and removing styles via JavaScript to hide/show the modal. The correct styles were not being removed after form submission. Corrected this and it fixed the issue |
+| An unautherised user can access the create post page by navigating via URL | Added @login_required to the create_post view |
+| You can create a board with the name "All Pins" in the board creation modal. There should only be one "All Pins" board per user | Added server-side and client-side validation to prevent this |
+| You can duplicate a board name if you rename it throught the edit board modal. Board names per user should be unique | Added server-side and client-side validation to prevent this |
+| The unpin modal doesn't reappear after unpinning an image | The modal was hidden by applying and removing styles via JavaScript to hide/show the modal. The correct styles were not being removed after unpinning a post. Corrected this and it fixed the issue |
+| AttributeError returned when trying to edit user Profile page info. New bug intorduced after implementing file size validation to Cloudinary image | Removed the previously implemented server-side validation and added client-side validation to catch the issue before submission |
 
-## Unfixed Bugs
+
+### Unfixed Bugs
+
+| Bug | Reason for being unfixed |
+|---|---|
+| When a new user adds profile information for the first time and submits the info, the new information is not dynamically updated, it requires a refresh to be shown. All updates afterwards are dynamically shown | Time constraints |
+| The default profile image doesn't show on the first visit for a newly created user but shows on all visits thereafter | Time constraints |
 
 [Back to Table of Contents](#table-of-contents)
 
 # Deployment
 
-## Version Control
+### Version Control
 
-## Heroku Deployment
+The website was created using Visual Studio Code editor. The webpage was deployed on Heroku and can be visisted [HERE](https://pinterest-clone-sem-29d41bc2ed17.herokuapp.com/).
 
-## Run Locally
+### Initial Deployment
 
-## Fork Project
+### Heroku (Production) Deployment
+
+### Run Locally
+
+### Fork Project
 
 [Back to Table of Contents](#table-of-contents)
 

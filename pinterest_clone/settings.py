@@ -30,7 +30,7 @@ SECRET_KEY = {
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'DEBUG' in os.environ
 ALLOWED_HOSTS = [
     '8000-semmtm-pinterestclone-yymd39f8mut.ws.codeinstitute-ide.net',
     '.herokuapp.com',
