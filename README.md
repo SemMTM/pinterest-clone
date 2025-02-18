@@ -23,6 +23,7 @@ The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.h
     - [Site Goals](#site-goals)
     - [Agile Planning](#agile-planning)
     - [Epics](#epics)
+    - [User Stories](#user-stories)
 - [The Structure Plane](#the-structure-plane)
     - [Features](#features)
     - [Unimplemented Features](#unimplemented-features)
@@ -90,11 +91,98 @@ The primary site goals are to offer users a sharing and disovery experience allo
     - Possible future ad-based revenue model
     - Could expand with premium profiles or exclusive content features
 
+# The Scope Plane
 ## Agile Planning
 
-![ERD](static/readme_images/Screenshot_13.png)
+This project was developed using agile methodologies by delivering small features in incremental sprints. As this was my first full-stack project I did not know how long each feature would take to implement due to lack of experience, as a result the sprints were not given a time frame individually. The total time for all features to be impementated was 2 months. The long time frame was to allow for a lack of efficiency while I gained more experince with Django and the whole process of developing a full-stack application.
+
+All user stories were assigned to epics, prioritised under the labels, Must have, Should have and Could have. "Must have" stories were the most important fetures and were subsequently implemented first, then the "Should haves" were implemented and finally the "Could haves". Some "Could haves" were not implemented due to time constraints. Feature implementation was done this way to ensure all core requirments were implemented first, with nice to have features being added with available capacity.
+
+The Product Backlog was created using Github projects and can be located [HERE](https://github.com/users/SemMTM/projects/2/views/1). All user stories have acceptance criteria in order to define the functionality that marks that story as complete.
+
+![Product Backlog](static/readme_images/Screenshot_13.png)
 
 ## Epics
+
+This project had 7 main epics that user stories were catagorised into:
+
+#### Authentication
+The Authentication epic is for all user stories pertaining to user authentication and registration. This epic provides crutial functionaliy and security to the app and users. Without user authentication almost of all the features Pinterest95 currently has would not be do-able.
+
+#### Backend
+The Backend epic is for all stories related to the set up of the project and database. Another critical epic as without the server-side set up or database the app would not function.
+
+#### Comments
+The Comments epic is for all user stories related to the comment functionailty. This includes, creating, editing, deleteing comments and other minor comment related features.
+
+#### Home Page
+The Home Page epic is for all user stories related to the home page. This is particularly important as this is the area where users will discover new content and spend most of their time. This epic includes all user stories related to the masonry grid layout and implementation as well as the nav bar.
+
+#### Image Boards
+The Image Boards epic is for all user stories relating to the mood boards of images that users can create. A big part of the goals of the app is to help users get visual inspiration, allowing users to save and collect images into one area that they can specify and customise is cruital to the user experience.
+
+#### Posts
+The Post epic is for user stories related to post creation, deletion, like, image tags etc.
+
+#### Profile
+The Profile epic is for all user stories related to the users own profile page. The profile page is where users can customise their experince and is the area that other users can also see. This page shows the users public image boards, all posts they have created, their public profile info and more.
+
+## User Stories
+
+#### Authentication
+- As a user I can Sign in/Log in via a pop up modal so that I don't need to go to a new page to sign in
+- As a user I can log out
+- As a user I can sign in to the app so that I can use all of its features
+- As a user I can tell if I am logged in so that I can log in if needed
+- As a user I can create an account so that I can use all of the sites features
+
+#### Backend
+- As a developer I need to create my database models so that I can store and access information for the app to function
+- As a developer I need to set up all auth so that my app can have user authentication
+- As a developer I need to connect my app to my SQL database so that I can store information to create the app
+- As a developer I need to set up cloudinary so that users can upload images
+
+#### Comments
+- As a user I can see how long ago a comment was made so that I know how old a comment is
+- As a user I can see left a specific comment on an image so that I know who left the comment
+- As a user I can delete one of my comments from a post
+- As a user I can edit or delete comments I have made so that I can interact with other users
+- As a user I can delete comments on my post so that I can manage my content better
+- As a user I can comment on a post so that I can interact with other users
+
+#### Home Page
+- As a user I can search for image themes so that I can find related images (not implemented)
+- As a user I can find images by clicking tags so that I can find content related to the tag (not implemented)
+- As a User I can access a nav bar so that I can go to different pages on the website
+- As a user I can see posts in a masonry grid so that my user experience is better
+- As a user I can see a list of images so that select which image I would like to open
+
+#### Image Boards
+- As a developer I can create a blank "All Pins" board for every user so that they can see all their pinned images
+- As a user I can edit an image boards visibility and title so that I have more control over my experience
+- As a user I can see an image board with all of my pinned images so that I can go through my pins quickly
+- As a user I can open image boards so that I can see a list of the images saved to it
+- As a user I can edit my image boards so that I can customise them to my preferences
+- As a user I can create image boards so that I can save images to it and view them later
+
+#### Posts
+- As a developer I can convert image to JPEG and compress them before upload so that image load much faster for users
+- As a user I can tag an image with image tags so that other users can see what the post is about
+- As a user I can like an image so that I can interact with posts I enjoy
+- As a user I can see who uploaded a post so that I can go to their profile and see more about the user
+- As a user I can delete my posts so that I can remove posts I don't want to be uploaded anymore
+- As a user I can pin images to one of my image boards so that I can see all images in one place
+- As a user I can create a post so that I can share content
+- As a User I can Open a post so that view it in greater detail
+
+#### Profile
+- As a user I can have a unique username so that users can find my profile
+- As a developer I can create a blank user profile with a default image when a user is created
+- As a User I can edit my profile information so that I can manage my profile
+- As a user I can see image boards other users have created so that I can look through their saved images
+- As a user I can view my created posts so that I can manage them
+- As a user I can view a users profile so that I can interact with other users
+- As a user I can see a list of my and other users created image boards on the profile so that I can view image collections
 
 [Back to Table of Contents](#table-of-contents)
 
