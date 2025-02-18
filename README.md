@@ -1,5 +1,9 @@
 # Pinterest95
-Pinterest95 is the first ever version of the now well known social media platform Pinterest. Designed during the days of windows 95, it has a very famililar style and many great features! Pinterest95 is a social media platform that allows users to discover new inspiration for anything and everthing. It is an image sharing platform that allows users to create image/mood boards of posts they like, imteract with images an share posts of their own. 
+The Pinterest95 project is a retro-styled image-sharing and discovery platform inspired by the windows 95 aesthetic, it is a social media platform that allows users to discover new inspiration for anything and everthing. Users can create image/mood boards of posts they like, interact with images, and share posts of their own. 
+
+![Website - Desktop](static/readme_images/Screenshot_11.png)
+
+![Website - Mobile](static/readme_images/Screenshot_12.png)
 
 To use the features of Pinterest95 a user must create and account on log in. Afterwards a user will then be able to:
 
@@ -47,10 +51,48 @@ The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.h
 
 # The Strategy Plane
 
-
 ## Site Goals
 
+The primary site goals are to offer users a sharing and disovery experience allowing them to explore content and get visual inspiration seamlessly.
+
+### Functional Goals 
+
+- Image sharing and discovery
+    - Users can upload, store, and share images with a community
+- User profiles and personalisation
+    - Users have their own profile pages which can be customised
+- Engagement and interaction
+    - Users can interact with other posts, fostering engagement 
+- Authentication & account management
+    - User can log-in/sign-up
+- Search & discoverablilty (not implemented yet)
+    - Users can search for posts and explore content based on interest
+- Mobile & desktop compatibility
+    - The site is designed to be responsive across devices
+
+### User-Centric Goals
+- Casual Users
+    - Users looking for visual inspiration can browse content effortlessly
+    - Intuitive design with aesthetic, nostalgia-driven UI
+- Content Creators
+    - Provides an easy way to showcase creative work
+    - Profile customization and engagement features (likes, comments)
+- Community Building
+    - Encourages social interaction through likes and comments
+
+### Business & Technmical Goals
+- Performance & Scalability
+    - Use cloud-based image hosting for faster image serving
+    - Database optimisation such as UUIDs for posts (better indexing and scalability)
+- Security & Privacy
+    - CSRF protection and authentication handled by Django Allauth.
+- Potential Monetisation and Growth
+    - Possible future ad-based revenue model
+    - Could expand with premium profiles or exclusive content features
+
 ## Agile Planning
+
+![ERD](static/readme_images/Screenshot_13.png)
 
 ## Epics
 
