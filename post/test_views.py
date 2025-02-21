@@ -10,7 +10,7 @@ from uuid import uuid4
 from cloudinary.models import CloudinaryField
 from PIL import Image
 import io
-from post.models import Post, Comment, ImageTags, ImageTagRelationships
+from post.models import Post, Comment, ImageTags
 from post.forms import PostForm
 
 
@@ -169,7 +169,7 @@ class CreatePostViewTest(TestCase):
         data = {
             "title": "Test Post",
             "description": "This is a test post",
-            "image": self.generate_test_image(),  # Move the image into the data dict
+            "image": self.generate_test_image(),
         }
 
         response = self.client.post(self.url, data, follow=True)

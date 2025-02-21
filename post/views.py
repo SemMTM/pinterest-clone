@@ -101,11 +101,11 @@ def post_detail(request, id):
     - Passes all the gathered data to the `"post/post_details.html"` template
       for rendering.
     """
-    queryset = Post.objects.all().select_related('user__profile')
-    post = get_object_or_404(queryset, id=id)
+    post = get_object_or_404(Post.objects.select_related(
+        'user__profile'), id=id)
     comments = post.comments.select_related(
         'author__profile').order_by("created_on")
-    comment_count = post.comments.count()
+    comment_count = len(comments)
     user_boards = ImageBoard.objects.filter(
         user=request.user) if request.user.is_authenticated else []
     comment_form = CommentForm()
@@ -161,11 +161,11 @@ def create_post(request):
             post.user = request.user
             post.save()
 
-            selected_tags = post_form.cleaned_data['tags']
-            for tag in selected_tags:
-                ImageTagRelationships.objects.create(post_id=post,
-                                                     tag_name=tag)
-                # Create relationships for each selected tag
+            ImageTagRelationships.objects.bulk_create([
+              ImageTagRelationships(
+                  post_id=post,
+                  tag_name=tag) for tag in post_form.cleaned_data['tags']
+            ])
 
             return JsonResponse({'success': True, 'message':
                                  "Your post has been created successfully!"})
@@ -531,26 +531,21 @@ def like_post(request, id):
     if request.method == "POST":
         post = get_object_or_404(Post, id=id)
 
-        if isinstance(request.user, AnonymousUser):
-            return JsonResponse({"success": False, "error":
-                                "You need to log in to like this post."},
-                                status=401)
+        if request.user.is_authenticated:
+            liked = post.liked_by.filter(id=request.user.id).exists()
 
-        user = request.user
+            if liked:
+                post.liked_by.remove(request.user)
+            else:
+                post.liked_by.add(request.user)
 
-        if user in post.liked_by.all():
-            post.liked_by.remove(user)  # Unlike the post
-            post.likes -= 1
-            liked = False
-        else:
-            post.liked_by.add(user)  # Like the post
-            post.likes += 1
-            liked = True
+            return JsonResponse({
+                "success": True, "liked": not liked,
+                "likes_count": post.liked_by.count()})
 
-        post.save()
-
-        return JsonResponse({"success": True, "liked": liked, "likes_count":
-                             post.likes})
+        return JsonResponse({
+            "success": False,
+            "error": "You need to log in to like this post."}, status=401)
 
     return JsonResponse({"success": False, "error": "Invalid request method."},
                         status=405)
