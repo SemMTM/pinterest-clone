@@ -1,28 +1,15 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
-from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import patch
 from uuid import uuid4
-from PIL import Image
-import io
-from profile_page.models import Profile, ImageBoard, BoardImageRelationship
+from pinterest_clone.tests.test_utils import generate_test_image
 from post.models import Post
 from .views import sync_all_pins_board
+from .models import Profile, ImageBoard, BoardImageRelationship
 
 
 class ProfilePageViewTest(TestCase):
-    @classmethod
-    def generate_test_image(cls):
-        """Generate a valid in-memory image for testing."""
-        image = Image.new('RGB', (100, 100), color='red')
-        img_io = io.BytesIO()
-        image.save(img_io, format='JPEG')
-        img_io.seek(0)
-        return SimpleUploadedFile("test_image.jpg",
-                                  img_io.getvalue(),
-                                  content_type="image/jpeg")
-
     @classmethod
     def setUpTestData(cls):
         # Create users
@@ -33,7 +20,7 @@ class ProfilePageViewTest(TestCase):
 
         cls.profile = Profile.objects.create(
             user=cls.user,
-            profile_image=cls.generate_test_image()  # Use a local test image
+            profile_image=generate_test_image()  # Use a local test image
         )
 
         # Create "All Pins" board explicitly

@@ -8,10 +8,9 @@ from django.utils.timezone import now
 import json
 from uuid import uuid4
 from cloudinary.models import CloudinaryField
-from PIL import Image
-import io
-from post.models import Post, Comment, ImageTags
-from post.forms import PostForm
+from pinterest_clone.tests.test_utils import generate_test_image
+from .models import Post, Comment, ImageTags
+from .forms import PostForm
 
 
 class PostListViewTest(TestCase):
@@ -117,17 +116,6 @@ class PostListViewTest(TestCase):
 
 class CreatePostViewTest(TestCase):
     @classmethod
-    def generate_test_image(cls):
-        """Generate a valid in-memory image for testing."""
-        image = Image.new('RGB', (100, 100), color='red')
-        img_io = io.BytesIO()
-        image.save(img_io, format='JPEG')
-        img_io.seek(0)
-        return SimpleUploadedFile("test_image.jpg",
-                                  img_io.getvalue(),
-                                  content_type="image/jpeg")
-
-    @classmethod
     def setUpTestData(cls):
         cls.user = User.objects.create_user(username="testuser",
                                             password="password123")
@@ -169,7 +157,7 @@ class CreatePostViewTest(TestCase):
         data = {
             "title": "Test Post",
             "description": "This is a test post",
-            "image": self.generate_test_image(),
+            "image": generate_test_image(),
         }
 
         response = self.client.post(self.url, data, follow=True)
@@ -184,7 +172,7 @@ class CreatePostViewTest(TestCase):
         data = {
             "title": "Test Post Without Tags",
             "description": "This is a test post without tags",
-            "image": self.generate_test_image(),
+            "image": generate_test_image(),
         }
 
         response = self.client.post(self.url, data, follow=True)
@@ -326,17 +314,6 @@ class TagSuggestionsViewTest(TestCase):
 
 class AddCommentViewTest(TestCase):
     @classmethod
-    def generate_test_image(cls):
-        """Generate a valid in-memory image for testing."""
-        image = Image.new('RGB', (100, 100), color='red')
-        img_io = io.BytesIO()
-        image.save(img_io, format='JPEG')
-        img_io.seek(0)
-        return SimpleUploadedFile("test_image.jpg",
-                                  img_io.getvalue(),
-                                  content_type="image/jpeg")
-
-    @classmethod
     @patch("cloudinary.uploader.upload", return_value={
             "url": "http://mock.url/test_image.jpg",
             "public_id": "mock_public_id",
@@ -354,7 +331,7 @@ class AddCommentViewTest(TestCase):
             title="Test Post",
             description="Test Description",
             user=cls.user,
-            image=cls.generate_test_image()
+            image=generate_test_image()
         )
 
         cls.url = reverse("add_comment", kwargs={"post_id": cls.post.id})

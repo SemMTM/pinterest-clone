@@ -185,26 +185,16 @@ def image_boards(request, username):
 
     sync_all_pins_board(user)
 
-    # Fetch "All Pins" board if it's public or the user owns the profile
-    if request.user == user:
-        # retreives all ImageBoard objects that match the varibles,
-        # add an image_count variable with .annotate then returns the
-        # .first() matching object
-        all_pins_board = ImageBoard.objects.filter(
-            user=user, title="All Pins").annotate(
-            image_count=Count('image_board_id')).first()
+    filters = {"user": user}
+    if request.user != user:
+        filters["visibility"] = 0
 
-        other_boards = ImageBoard.objects.filter(
-            user=user).annotate(image_count=Count(
-                'image_board_id')).exclude(title="All Pins")
-    else:
-        all_pins_board = ImageBoard.objects.filter(
-            user=user, title="All Pins", visibility=0
-        ).annotate(image_count=Count('image_board_id')).first()
+    all_pins_board = ImageBoard.objects.filter(**filters, title="All Pins")\
+        .annotate(image_count=Count('image_board_id')).first()
 
-        other_boards = ImageBoard.objects.filter(
-            user=user, visibility=0).annotate(
-                image_count=Count('image_board_id')).exclude(title="All Pins")
+    other_boards = ImageBoard.objects.filter(**filters)\
+        .annotate(image_count=Count(
+            'image_board_id')).exclude(title="All Pins")
 
     boards = [all_pins_board] + list(
         other_boards) if all_pins_board else list(other_boards)
