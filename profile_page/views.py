@@ -301,11 +301,16 @@ def sync_all_pins_board(user):
     ).distinct()
 
     # Add posts not already in "All Pins"
-    for post in saved_posts:
-        BoardImageRelationship.objects.get_or_create(
-            post_id=post,
-            board_id=all_pins_board
-        )
+    existing_posts = set(BoardImageRelationship.objects.filter(
+                        board_id=all_pins_board
+    ).values_list("post_id", flat=True))
+
+    new_relationships = [
+        BoardImageRelationship(post_id=post, board_id=all_pins_board)
+        for post in saved_posts if post.id not in existing_posts
+    ]
+
+    BoardImageRelationship.objects.bulk_create(new_relationships)
 
 
 @receiver(post_save, sender=BoardImageRelationship)

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import ValidationError
 from cloudinary.models import CloudinaryField
 from pathlib import Path
+from urllib.parse import urlparse
 from post.models import Post
 from post.utils import compress_and_convert_to_jpeg
 
@@ -53,11 +54,13 @@ class Profile(models.Model):
         return f"Profile for user: {self.user}"
 
     def save(self, *args, **kwargs):
-        """ Override save method to compress and convert images
-        before saving. """
+        """ Override save method to compress and convert
+        images before saving. """
         if self.profile_image:
-            self.profile_image = compress_and_convert_to_jpeg(
-                self.profile_image)  # Apply compression
+            parsed_url = urlparse(str(self.profile_image))
+            if not parsed_url.scheme:  # Only process images that are not URLs
+                self.profile_image = compress_and_convert_to_jpeg(
+                    self.profile_image)
 
         super().save(*args, **kwargs)  # Save the model
 
