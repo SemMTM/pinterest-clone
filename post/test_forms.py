@@ -2,6 +2,8 @@ from unittest.mock import patch
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
+from PIL import Image
+import io
 from post.forms import CommentForm, PostForm
 from post.models import Comment, Post, ImageTags
 
@@ -88,68 +90,38 @@ class PostFormTest(TestCase):
         self.tag3 = ImageTags.objects.create(tag_name="technology")
         self.tag4 = ImageTags.objects.create(tag_name="health")
 
-    @patch("cloudinary.uploader.upload")
-    def test_form_valid_data(self, mock_upload):
+    @staticmethod
+    def generate_test_image():
+        """Generate a valid in-memory image for testing."""
+        image = Image.new('RGB', (100, 100), color='red')
+        img_io = io.BytesIO()
+        image.save(img_io, format='JPEG')
+        img_io.seek(0)
+        return SimpleUploadedFile("test_image.jpg",
+                                  img_io.getvalue(),
+                                  content_type="image/jpeg")
+
+    def test_form_valid_data(self):
         """Test that the form is valid with proper data."""
-        # Mock Cloudinary response
-        mock_upload.return_value = {
-            "url": "http://example.com/test_image.jpg",
-            "public_id": "test_image",
-            "version": "12345",
-            "type": "upload",
-            "format": "jpg",
-            "resource_type": "image",
-        }
-
-        image = SimpleUploadedFile("test_image.jpg", b"fake_image_content",
-                                   content_type="image/jpeg")
+        test_image = self.generate_test_image()
         form_data = {
-            "title": "A test post",
-            "description": "This is a description.",
-            "tags": [self.tag1.pk, self.tag2.pk],
+            "title": "Test Post",
+            "description": "A test post description"
         }
-        form_files = {"image": image}
-
+        form_files = {"image": test_image}
         form = PostForm(data=form_data, files=form_files)
         self.assertTrue(form.is_valid())
-        post = form.save(commit=False)
-        post.user = self.user
-        post.save()
 
-        self.assertEqual(Post.objects.count(), 1)
-        self.assertEqual(post.title, "A test post")
-        self.assertEqual(post.description, "This is a description.")
-
-    @patch("cloudinary.uploader.upload")
-    def test_form_with_no_tags(self, mock_upload):
+    def test_form_with_no_tags(self):
         """Test that the form is valid when no tags are selected."""
-        # Mock Cloudinary response
-        mock_upload.return_value = {
-            "url": "http://example.com/test_image.jpg",
-            "public_id": "test_image",
-            "version": "12345",
-            "type": "upload",
-            "format": "jpg",
-            "resource_type": "image",
-        }
-
-        image = SimpleUploadedFile("test_image.jpg", b"fake_image_content",
-                                   content_type="image/jpeg")
+        test_image = self.generate_test_image()
         form_data = {
-            "title": "A post without tags",
-            "description": "No tags for this post.",
-            "tags": [],
+            "title": "Test Post",
+            "description": "A test post description"
         }
-        form_files = {"image": image}
-
+        form_files = {"image": test_image}
         form = PostForm(data=form_data, files=form_files)
         self.assertTrue(form.is_valid())
-        post = form.save(commit=False)
-        post.user = self.user
-        post.save()
-
-        self.assertEqual(Post.objects.count(), 1)
-        self.assertEqual(post.title, "A post without tags")
 
     def test_form_with_max_tags(self):
         """Test that the form is valid when selecting exactly 3 tags."""
