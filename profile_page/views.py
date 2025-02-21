@@ -13,6 +13,11 @@ from .models import Profile, ImageBoard, BoardImageRelationship
 from .forms import ProfileForm
 
 
+def get_user_by_username(username):
+    """Helper function to fetch user case-insensitively."""
+    return get_object_or_404(User.objects.filter(username__iexact=username))
+
+
 def profile_page(request, username):
     """
     Displays a user's profile page and ensures the correct username format.
@@ -43,7 +48,7 @@ def profile_page(request, username):
       - Associates each post with the `"All Pins"` board.
     - Renders the profile page template with the user's profile data.
     """
-    user = get_object_or_404(User.objects.filter(username__iexact=username))
+    user = get_user_by_username(username)
 
     if username != user.username.lower():
         return redirect('profile_page', username=user.username.lower())
@@ -109,7 +114,7 @@ def created_pins(request, username):
       is returned.
     """
     # Fetch the user using the username case-insensitively
-    user = get_object_or_404(User.objects.filter(username__iexact=username))
+    user = get_user_by_username(username)
 
     # Fetch posts created by the user
     created_posts = Post.objects.filter(user=user).order_by('-created_on')
@@ -171,7 +176,7 @@ def image_boards(request, username):
     - If the request user does not own the profile, they
       can only see public boards.
     """
-    user = get_object_or_404(User.objects.filter(username__iexact=username))
+    user = get_user_by_username(username)
 
     sync_all_pins_board(user)
 

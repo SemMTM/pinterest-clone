@@ -531,21 +531,26 @@ def like_post(request, id):
     if request.method == "POST":
         post = get_object_or_404(Post, id=id)
 
-        if request.user.is_authenticated:
-            liked = post.liked_by.filter(id=request.user.id).exists()
+        if isinstance(request.user, AnonymousUser):
+            return JsonResponse({"success": False, "error":
+                                "You need to log in to like this post."},
+                                status=401)
 
-            if liked:
-                post.liked_by.remove(request.user)
-            else:
-                post.liked_by.add(request.user)
+        user = request.user
 
-            return JsonResponse({
-                "success": True, "liked": not liked,
-                "likes_count": post.liked_by.count()})
+        if user in post.liked_by.all():
+            post.liked_by.remove(user)  # Unlike the post
+            post.likes -= 1
+            liked = False
+        else:
+            post.liked_by.add(user)  # Like the post
+            post.likes += 1
+            liked = True
 
-        return JsonResponse({
-            "success": False,
-            "error": "You need to log in to like this post."}, status=401)
+        post.save()
+
+        return JsonResponse({"success": True, "liked": liked, "likes_count":
+                             post.likes})
 
     return JsonResponse({"success": False, "error": "Invalid request method."},
                         status=405)
