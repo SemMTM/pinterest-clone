@@ -18,6 +18,15 @@ def get_user_by_username(username):
     return get_object_or_404(User.objects.filter(username__iexact=username))
 
 
+def get_or_create_all_pins_board(user):
+    """Helper function to get or create the 'All Pins' board."""
+    return ImageBoard.objects.get_or_create(
+        user=user,
+        title="All Pins",
+        visibility=1
+    )[0]
+
+
 def profile_page(request, username):
     """
     Displays a user's profile page and ensures the correct username format.
@@ -55,11 +64,7 @@ def profile_page(request, username):
 
     profile, created = Profile.objects.get_or_create(user=user)
 
-    all_pins_board, created = ImageBoard.objects.get_or_create(
-        user=user,
-        title="All Pins",
-        visibility=1
-    )
+    all_pins_board = get_or_create_all_pins_board(user)
 
     if created:
         # Add all posts saved to any board into the "All Pins" board

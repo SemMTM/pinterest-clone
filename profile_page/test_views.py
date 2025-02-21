@@ -1,14 +1,28 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import patch
 from uuid import uuid4
+from PIL import Image
+import io
 from profile_page.models import Profile, ImageBoard, BoardImageRelationship
 from post.models import Post
 from .views import sync_all_pins_board
 
 
 class ProfilePageViewTest(TestCase):
+    @classmethod
+    def generate_test_image(cls):
+        """Generate a valid in-memory image for testing."""
+        image = Image.new('RGB', (100, 100), color='red')
+        img_io = io.BytesIO()
+        image.save(img_io, format='JPEG')
+        img_io.seek(0)
+        return SimpleUploadedFile("test_image.jpg",
+                                  img_io.getvalue(),
+                                  content_type="image/jpeg")
+
     @classmethod
     def setUpTestData(cls):
         # Create users
@@ -17,14 +31,16 @@ class ProfilePageViewTest(TestCase):
         cls.other_user = User.objects.create_user(username="otheruser",
                                                   password="password456")
 
-        # Create the profile explicitly
-        cls.profile, _ = Profile.objects.get_or_create(user=cls.user)
+        cls.profile = Profile.objects.create(
+            user=cls.user,
+            profile_image=cls.generate_test_image()  # Use a local test image
+        )
 
-        # Create "All Pins" board explicitly (Public)
+        # Create "All Pins" board explicitly
         cls.all_pins_board, _ = ImageBoard.objects.get_or_create(
             user=cls.user,
             title="All Pins",
-            visibility=0,  # Public
+            visibility=1,
         )
 
         # Create a private board
@@ -56,7 +72,7 @@ class ProfilePageViewTest(TestCase):
         all_pins_board = ImageBoard.objects.filter(user=self.user,
                                                    title="All Pins").first()
         self.assertIsNotNone(all_pins_board)
-        self.assertEqual(all_pins_board.visibility, 0)  # Public
+        self.assertEqual(all_pins_board.visibility, 1)
 
     def test_redirect_to_lowercase_username(self):
         """Test that the profile page redirects to a lowercase username if
