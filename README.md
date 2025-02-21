@@ -199,6 +199,7 @@ The Profile epic is for all user stories related to the users own profile page. 
 ## Homepage
 
 ### Masonry Grid
+---
 #### Description
 The Masonry Grid on the dynamically arranges images in a visually appealing, staggered layout. This feature ensures that images of varying heights fit together neatly while maximizing screen space and providing a visually appealing browsing experience. The masonry grid is used in multiple areas within the project: the board detail page, home page and created pins section.
 
@@ -228,6 +229,7 @@ The Masonry Grid on the dynamically arranges images in a visually appealing, sta
 #### User Stories Completed
 
 ### Infinite Scroll
+---
 #### Description
 Infinite scrolling allows users to continuously load more posts without having to navigate through traditional pagination. Instead of manually clicking through pages, new posts are fetched and displayed automatically as the user scrolls down.
 
@@ -252,7 +254,115 @@ Infinite scrolling allows users to continuously load more posts without having t
 - Optimized UI updates using HTMX and Masonry.js
 - Prevents unnecessary requests by stopping when there are no more posts
 
+### Navbar & Profile Page Button (Authenticated Users Only)
+---
+#### Description
+The Navbar provides users with quick access to (currently implemented) key sections of the website. It adjusts dynamically based on whether the user is authenticated. One key feature is the Profile Page Button, which is only visible to logged-in users. If a user is not authenticated, the profile button is hidden to prevent access to profile-related features.
 
+![Nav Bar](static/readme_images/Screenshot_18.png)
+
+#### Implementation
+1. Backend (Django view)
+    - The navbar is included in base.html, ensuring it is available across all pages
+    - Uses Django template conditionals to show/hide elements dynamically
+        - If the user is logged in, the profile button is displayed, linking to their profile page
+        - If the user is not logged in, the profile button is hidden
+2. Frontend (CSS & HTML)
+    - Navbar Structure:
+        - A horizontal navigation bar for mobile users
+        - A vertical sidebar navigation for desktop users
+    - CSS Styling:
+        - Styled to match the Windows 95 aesthetic with box-shadow effects that mimic old-school button clicks
+        - The active tab is highlighted for better user experience
+    - Responsive Design:
+        - Mobile: Navbar is fixed at the bottom for easy access
+        - Desktop: Navbar is fixed to the left, allowing quick navigation
+        - Uses CSS media queries to adapt layout across different screen sizes
+3. JavaScript for Enhancements
+    - Listens for click events to toggle active states
+    - Ensures that clicking a button updates the UI instantly
+
+#### Why This Implementation Works Well
+- Responsive design ensures usability on both mobile and desktop.
+- Consistent navigation experience, styled to match the retro Windows 95 aesthetic
+- Efficient rendering using Django conditionals, avoiding unnecessary elements for non-authenticated users
+
+## Sign-in/Up Modal
+---
+#### Description
+The Sign Up / Sign In Pop-Up Modal provides an interactive, AJAX-powered authentication system that allows users to log in or register without a full-page reload. Instead of navigating to a separate authentication page, users can open a modal window, enter their credentials, and submit the form dynamically.
+
+- Sign In Modal
+
+![Sign in modal](static/readme_images/Screenshot_21.png)
+
+- Sign Up Modal
+
+![Sign up modal](static/readme_images/Screenshot_22.png)
+
+#### Implementation
+1. Backend (Django & Django Allauth)
+    - The authentication system is built using Django Allauth
+    - Custom views `CustomLoginView` and `CustomSignupView` extend Allauth’s built-in views to support AJAX-based authentication
+    - If the request is an AJAX request, the view returns the rendered form as a JSON response, allowing it to be loaded inside the modal
+2. Frontend (HTML & JavaScript)
+    - HTML Structure:
+        - The modal is hidden by default and only appears when triggered
+        - It contains the login or signup form dynamically loaded via AJAX
+    - JavaScript Enhancements:
+        - Uses event listeners to detect when a user clicks a Login/Sign Up button
+        - Performs an AJAX fetch request to load the authentication form dynamically
+        - Submits the form asynchronously, and if successful, reloads the page or updates the UI
+3. User Flow & Interaction
+    - When the user clicks "Log In" or "Sign Up", JavaScript fetches the authentication form from the backend
+    - The form is inserted inside the modal, allowing the user to enter credentials
+    - When the form is submitted, an AJAX request sends the data to the backend:
+        - If the login/signup is successful, the page reloads to reflect the authenticated state
+        - If the credentials are incorrect, error messages are dynamically updated in the modal
+
+#### Why This Implementation Works Well
+- No full-page reloads → Faster, seamless authentication experience
+- Uses Django Allauth → Secure, well-integrated authentication system
+- AJAX-powered modal → Loads dynamically, reducing unnecessary navigation
+- User-friendly → Provides immediate feedback for errors without refreshing the page
+
+### Dynamic Top Bar
+---
+#### Description
+
+The Top Bar dynamically changes depending on whether the user is logged in or not
+- If the user is authenticated → Displays the logout option
+- If the user is not logged in → Displays the Sign In and Sign Up options
+- This ensures that users see only relevant actions based on their authentication state
+
+- Authenticated user
+
+![Top bar - logged in](static/readme_images/Screenshot_19.png)
+
+- Unauthenticated user
+
+![Top bar - logged out](static/readme_images/Screenshot_20.png)
+
+#### Implementation
+1. Backend
+    - The top bar is included in base.html, ensuring it is available across all pages
+    - Uses Django template tags to check authentication status
+2. Frontend (HTML & CSS)
+    - Layout:
+        - The top bar is fixed to ensure it is always visible
+        - Uses flexbox to align items properly
+    - Styling:
+        - Uses Windows 95-inspired aesthetics with border effects
+        - Highlights the active tab to indicate the user’s current section
+3. JavaScript Enhancements
+    - The Sign In / Sign Up buttons use AJAX-based modal authentication (previously discussed)
+    - Clicking "Log Out" immediately logs the user out and refreshes the page to update the top bar
+
+#### Why This Implementation Works Well
+- Provides a seamless authentication experience without unnecessary navigation
+- Ensures users only see relevant actions based on their state
+- Uses Django template logic for secure, server-side rendering
+- JavaScript enhancements make it dynamic and responsive
 
 ## Post Detail Page
 
@@ -261,6 +371,8 @@ Infinite scrolling allows users to continuously load more posts without having t
 ## Board Detail Page
 
 ## Create Post Page
+
+## Dynamic Pop-up
 
 ## Unimplemented Features
 
