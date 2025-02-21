@@ -200,7 +200,7 @@ The Profile epic is for all user stories related to the users own profile page. 
 
 ### Masonry Grid
 ---
-#### Description
+#### What The Feature Does
 The Masonry Grid on the dynamically arranges images in a visually appealing, staggered layout. This feature ensures that images of varying heights fit together neatly while maximizing screen space and providing a visually appealing browsing experience. The masonry grid is used in multiple areas within the project: the board detail page, home page and created pins section.
 
 ![Homepage masonry grid](static/readme_images/Screenshot_17.png)
@@ -230,7 +230,7 @@ The Masonry Grid on the dynamically arranges images in a visually appealing, sta
 
 ### Infinite Scroll
 ---
-#### Description
+#### What The Feature Does
 Infinite scrolling allows users to continuously load more posts without having to navigate through traditional pagination. Instead of manually clicking through pages, new posts are fetched and displayed automatically as the user scrolls down.
 
 #### Implementation
@@ -256,7 +256,7 @@ Infinite scrolling allows users to continuously load more posts without having t
 
 ### Navbar & Profile Page Button (Authenticated Users Only)
 ---
-#### Description
+#### What The Feature Does
 The Navbar provides users with quick access to (currently implemented) key sections of the website. It adjusts dynamically based on whether the user is authenticated. One key feature is the Profile Page Button, which is only visible to logged-in users. If a user is not authenticated, the profile button is hidden to prevent access to profile-related features.
 
 ![Nav Bar](static/readme_images/Screenshot_18.png)
@@ -289,7 +289,7 @@ The Navbar provides users with quick access to (currently implemented) key secti
 
 ### Sign-in/Up Modal
 ---
-#### Description
+#### What The Feature Does
 The Sign Up / Sign In Pop-Up Modal provides an interactive, AJAX-powered authentication system that allows users to log in or register without a full-page reload. Instead of navigating to a separate authentication page, users can open a modal window, enter their credentials, and submit the form dynamically.
 
 - Sign In Modal
@@ -328,8 +328,7 @@ The Sign Up / Sign In Pop-Up Modal provides an interactive, AJAX-powered authent
 
 ### Dynamic Top Bar
 ---
-#### Description
-
+#### What The Feature Does
 The Top Bar dynamically changes depending on whether the user is logged in or not
 - If the user is authenticated → Displays the logout option
 - If the user is not logged in → Displays the Sign In and Sign Up options
@@ -366,9 +365,8 @@ The Top Bar dynamically changes depending on whether the user is logged in or no
 
 ## Post Detail Page
 
-#### Description
-
-The Post Detail Page displays the full details of a post, including the image, description, tags, comments, and user interactions (liking, saving, commenting). It allows users to engage with a post, view related information, and interact seamlessly. 
+#### What The Feature Does
+The Post Detail Page displays the full details of a post, including the image, description, tags, comments, and user interactions (liking, saving, commenting). It allows users to engage with a post, delete a post if they are the post owner, view related information, and interact seamlessly. 
 
 The profile that created the post can be seen above the comment section, it displays their username and profile image. Once clicked on, it will take the user to the post owners profile page.
 
@@ -398,14 +396,14 @@ The profile that created the post can be seen above the comment section, it disp
 
 ### Like Button
 ---
-#### Description
+#### What The Feature Does
 The Like Feature allows users to like and unlike posts, providing a way to interact with content. Each post displays a like count, which updates dynamically when a user likes or unlikes it.
 
-- Liked post
+- **Liked post**
 
 ![Liked post](static/readme_images/Screenshot_24.png)
 
-- Unliked Post
+- **Unliked Post**
 
 ![Unliked post](static/readme_images/Screenshot_25.png)
 
@@ -432,7 +430,7 @@ The Like Feature allows users to like and unlike posts, providing a way to inter
 
 ### Comment
 ---
-#### Description
+#### What The Feature Does
 The Comment Section allows users to interact with posts by adding, editing, and deleting comments dynamically. It includes multiple interactive features, such as:
 - Real-time comment updates (new comments appear without page reloads)
 - Comment editing & deletion with instant UI updates
@@ -442,15 +440,15 @@ The Comment Section allows users to interact with posts by adding, editing, and 
 
 This creates a seamless and engaging user experience without unnecessary page reloads.
 
-- Comment section and counter
+- **Comment section and counter**
 
 ![Comment section](static/readme_images/Screenshot_26.png)
 
-- Comment modal 
+- **Comment modal**
 
 ![comment modal](static/readme_images/Screenshot_27.png)
 
-- Delete comment confirmation modal
+- **Delete comment confirmation modal**
 
 ![Delete comment confirmation modal](static/readme_images/Screenshot_28.png)
 
@@ -483,7 +481,7 @@ This creates a seamless and engaging user experience without unnecessary page re
 
 ### Save To/Create Board Modal
 ---
-#### Description
+#### What The Feature Does
 The Save to Board Modal allows users to save a post to one or more boards in an intuitive and dynamic way. Instead of navigating to a different page, users can quickly organize posts into boards through an interactive pop-up modal.
 
 Key functionalities include:
@@ -494,15 +492,15 @@ Key functionalities include:
 
 This ensures an efficient and user-friendly experience for organizing posts.
 
-- Save button
+- **Save button**
 
 ![Save button](static/readme_images/Screenshot_25.png)
 
-- Save to board modal
+- **Save to board modal**
 
 ![Save to board modal](static/readme_images/Screenshot_29.png)
 
-- Create board modal
+- **Create board modal**
 
 ![Create board modal](static/readme_images/Screenshot_30.png)
 
@@ -535,7 +533,7 @@ This ensures an efficient and user-friendly experience for organizing posts.
 
 ## Profile Page
 
-#### Description
+#### What The Feature Does
 The Profile Page serves as a personalized space where users can manage and showcase their saved and created posts. It provides an overview of the user’s activity, including:
 
 - User profile details (profile picture, name, bio)
@@ -564,9 +562,9 @@ This creates an organized and engaging profile experience, making it easy for us
     - Responsive design ensures that the profile adapts well to different screen sizes
 3. JavaScript & HTMX for Dynamic Features
     - AJAX is used to update the profile details dynamically, allowing users to edit their bio and profile picture without a page refresh
-    - Tabs switch dynamically, instantly displaying "Created" or "Saved" posts when selected
+    - Tabs switch dynamically via HTMX, instantly displaying "Created" or "Saved" posts when selected
     - The board list updates in real-time, reflecting changes when a user saves or removes posts
-    - Interactive animations enhance transitions between sections, improving user experience
+    - Interactive animations enhance transitions between sections, improving user experience    
 
 #### Why This Implementation Works Well
 - Optimized database queries minimize unnecessary data fetching
@@ -577,14 +575,190 @@ This creates an organized and engaging profile experience, making it easy for us
 
 ### Edit Profile Modal
 ---
+#### What The Feature Does
+The Edit Profile Modal allows users to update their profile details seamlessly without navigating away from the profile page. It provides a smooth and intuitive experience for modifying:
+- Profile Picture: Users can upload a new image or keep their existing one
+- First & Last Name: Editable text fields allow updating user identity
+- Bio/About Section: Users can personalize their profile with a description
+
+This enhances personalization and ensures users can manage their profile easily in a distraction-free environment.
+
+![Profile edit modal](static/readme_images/Screenshot_32.png)
+
+#### Implementation
+1. Backend (Django View & Profile Model)
+    - The Profile model stores user details, including the profile image, name, and bio
+    - The edit profile view processes updates, ensuring:
+        - The user is authenticated before making changes
+        - Validation checks ensure fields contain valid data
+        - Profile images are compressed and converted before saving
+    - AJAX is used to handle updates without reloading the page, improving responsiveness
+2. Frontend (Modal Structure & Styling)
+    - The modal opens as an overlay, keeping users on the profile page while editing
+    - Text input fields for name and bio provide a clean, editable interface
+    - Profile picture upload functionality allows users to preview their new image before saving
+    - CSS animations enhance modal transitions, making interactions smoother
+    - A save button updates the profile dynamically, while a cancel button closes the modal without changes
+3. JavaScript for Dynamic Updates
+    - AJAX is used to send profile updates, ensuring the page does not refresh after submitting changes
+    - Real-time input validation prevents errors before submission
+    - When a user updates their profile image, a preview appears instantly before uploading
+    - After a successful update, the modal closes, and the new profile details appear immediately on the page
+
+####  Why This Implementation Works Well
+- Prevents page reloads, improving user experience
+- AJAX-powered updates ensure seamless profile modifications
+- Modal-based design keeps users on the profile page while editing
+- Live preview of profile images enhances user feedback before saving
+- Real-time updates ensure changes reflect instantly without navigating away
 
 ### Saved Section
 ---
+#### What The Feature Does
+The Saved Section allows users to view, organize, and manage posts they have saved into different boards. It provides an efficient way to categorize favorite posts and quickly access them later.
+
+Key functionalities include:
+- Displaying all boards the user has created
+- The "All Pins" board, which automatically collects all saved posts
+- Board-specific filtering, allowing users to view posts in each board separately
+- Interactive UI with smooth navigation between boards
+- Real-time updates when posts are saved or removed from boards
+
+This ensures an intuitive and organized experience for managing saved content.
+
+![Saved posts section](static/readme_images/Screenshot_31.png)
+
+#### How It Was Implemented
+1. Backend (Django Views & Database Structure)
+    - The ImageBoard model stores boards created by the user
+    - A Many-to-Many relationship between posts and boards allows users to save multiple posts across multiple boards
+    - The saved section view retrieves:
+        - The user’s boards
+        - The posts assigned to each board
+        - The “All Pins” board, which automatically includes all saved posts
+    - Django ORM optimizations (`select_related()`, `prefetch_related()`) reduce database queries for better performance
+2. Frontend (Layout & Navigation)
+    - A masonry grid layout displays all user-created boards, making navigation easy
+    - Clicking on a board dynamically filters the saved posts for that board
+    - The "All Pins" board remains accessible, showing all saved posts in one place
+    - A clean, organized UI ensures saved content is visually appealing and easy to manage
+3. JavaScript for Dynamic Updates
+    - Clicking a board updates the saved posts instantly without requiring a page refresh.
+    - Removing a post from a board dynamically updates the UI, ensuring the post disappears without reloading
+    - If a board is empty, the UI reflects that in real time, preventing unnecessary blank sections
+
+#### Why This Implementation Works Well
+- Efficient database queries ensure smooth retrieval of saved posts
+- Interactive board navigation allows users to switch between categories effortlessly
+- AJAX-powered updates make saving and removing posts seamless
+- Organized layout helps users keep track of saved content easily
+- The "All Pins" board provides quick access to all saved posts, improving usability
 
 ### Created Posts Section
 ---
+#### What the Feature Does
+The Created Posts Section allows users to view all the posts they have uploaded. This section ensures that users can easily access their own content while keeping it separate from saved posts.
+
+Key functionalities include:
+- Displaying all posts the user has created in a clean masonry grid layout
+- Smooth navigation between created and saved content through tab switching
+
+This provides an organized and user-friendly way for users to manage their uploaded content.
+
+![Created Posts section](static/readme_images/Screenshot_33.png)
 
 ## Board Detail Page
+#### What the Feature Does
+
+The Board Detail Page allows users to view and manage posts saved to a specific board. It provides an organized display of board contents, enabling users to:
+
+- See all posts saved in a selected board in a clean grid layout
+- Easily remove posts from the board without navigating away
+- Access post details by clicking on any saved post
+- Navigate between different boards using a structured UI
+- Set the visisbility of boards, ensure private boards are only accessible to the owner
+
+This creates an intuitive and efficient way to browse and manage saved content.
+
+- **Board detail page**
+
+![Board detail section](static/readme_images/Screenshot_34.png)
+
+- **Unpin confirmation modal**
+
+![Unpin confirmation modal](static/readme_images/Screenshot_35.png)
+
+#### How It Was Implemented
+1. Backend (Django Views & Database Structure)
+    - The Board model `ImageBoard` stores user-created boards with a visibility setting (public or private)
+    - The `BoardImageRelationship` model links posts to boards, enabling Many-to-Many relationships
+    - The view fetches all posts associated with a board, ensuring private boards are restricted to the owner
+    - Django ORM optimizations (`select_related()`, `prefetch_related()`) ensure minimal database queries for better performance
+2. Frontend (Layout & Navigation)
+    - The board’s name appears as a header, helping users identify their current board
+    - A masonry grid layout displays all saved posts, keeping the page visually structured
+    - Users can click on any post to view its details, ensuring easy navigation
+    - A remove button allows users to delete posts from the board, updating the UI dynamically
+    - Private boards show visibility indicators, ensuring users know which boards are private
+3. JavaScript for Interactive Features
+    - Clicking on a post opens the post detail page, allowing users to explore content further
+    - Removing a post dynamically updates the board, ensuring a seamless experience
+    - Navigation between boards happens instantly, avoiding unnecessary page reloads
+    - AJAX requests handle post removal in real-time, reflecting changes without refreshing the page
+    - Error handling prevents unauthorized access to private boards, ensuring security
+
+#### Why This Implementation Works Well
+- Optimized database queries ensure smooth loading of board contents
+- Dynamic post removal keeps the interface responsive
+- Visibility controls prevent unauthorized access to private boards
+- Intuitive navigation allows quick switching between boards
+- A visually appealing grid layout ensures content is easy to browse
+
+### Edit Board Modal
+#### What the Feature Does
+The Edit Board Modal allows users to modify board details dynamically without leaving the board detail page. It provides an intuitive way to:
+
+- Change the board name to better organize saved content
+- Update board visibility (public or private) to control who can view it
+- Give immediate feedback with real-time updates in the UI
+- Delete a board
+- Ensure smooth transitions with an animated modal interface
+
+This feature makes managing boards quick and efficient, enhancing user control over saved content.
+
+- **Edit Board Modal**
+
+![edit board modal](static/readme_images/Screenshot_36.png)
+
+- **Delete Board Confirmation Modal**
+
+![delete board confirmation modal](static/readme_images/Screenshot_37.png)
+
+#### How It Was Implemented
+1. Backend (Django View & Database Structure)
+    - The `ImageBoard` model includes fields for `title` and `visibility`, allowing updates
+    - The edit board view handles changes securely, ensuring:
+        - Only the board owner can make modifications
+        - Validation checks prevent empty or duplicate board names
+        - The updated board details are returned as JSON, allowing real-time UI updates
+2. Frontend (Modal Structure & Styling)
+    - The edit modal overlays the board detail page, keeping the user in context
+    - Text input fields allow name changes, with live validation to ensure valid updates
+    - Visibility options let users switch between public and private settings
+    - CSS animations enhance modal transitions, making interactions feel smooth
+    - Save and cancel buttons ensure user control, preventing accidental changes
+3. JavaScript for Dynamic Updates
+    - When a user clicks "Edit Board," the modal fetches the current board details dynamically
+    - Submitting changes sends an AJAX request, updating the database without a full page reload
+    - If the update is successful, the modal closes, and the board name updates instantly on the page
+    - Error handling prevents invalid submissions, keeping board names unique and meaningful
+
+#### Why This Implementation Works Well
+- Ensures board updates happen seamlessly without navigating away
+- AJAX-powered updates prevent unnecessary page reloads
+- Smooth modal animations improve user experience
+- Real-time feedback lets users see changes immediately
+- Secure access control ensures only the board owner can modify it
 
 ## Create Post Page
 
