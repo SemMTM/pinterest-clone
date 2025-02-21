@@ -366,6 +366,35 @@ The Top Bar dynamically changes depending on whether the user is logged in or no
 
 ## Post Detail Page
 
+#### Description
+
+The Post Detail Page displays the full details of a post, including the image, description, tags, comments, and user interactions (liking, saving, commenting). It allows users to engage with a post, view related information, and interact seamlessly.
+
+![post detail page](static/readme_images/Screenshot_23.png)
+
+#### Implementation
+1. Backend (Django View & Query Optimization)
+    - The post_detail view retrieves the post details and related data (comments, tags, and user boards)
+    - Uses `select_related()` and `prefetch_related()` for optimized database queries:
+        - `select_related("user__profile")` → Fetches post author and profile in one query
+        - `prefetch_related("comments", "comments__author__profile")` → Preloads comments and authors for better performance
+2. Frontend (HTML & CSS)
+    - Displays the post image, title, and description prominently
+    - Lists comments in a structured format, allowing users to engage in discussions
+    - Includes buttons for liking, saving, and sharing for easy user interaction
+    - Tagging system shows related topics and enables discovery of similar posts
+3. JavaScript for Interactive Features
+    - Liking a post updates the like count dynamically via AJAX
+    - Saving a post to a board triggers an async request to update the user’s saved items
+    - Comment submission happens in real-time without page reload, keeping the user experience smooth
+
+#### Why This Implementation Works Well
+- Efficient data fetching using Django’s ORM optimizations
+- Interactive UI with AJAX-powered actions for liking, commenting, and saving posts
+- Well-structured layout for easy navigation and engagement
+- Optimized database queries to improve performance
+
+
 ## Profile Page
 
 ## Board Detail Page
