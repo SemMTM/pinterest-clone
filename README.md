@@ -287,7 +287,7 @@ The Navbar provides users with quick access to (currently implemented) key secti
 - Consistent navigation experience, styled to match the retro Windows 95 aesthetic
 - Efficient rendering using Django conditionals, avoiding unnecessary elements for non-authenticated users
 
-## Sign-in/Up Modal
+### Sign-in/Up Modal
 ---
 #### Description
 The Sign Up / Sign In Pop-Up Modal provides an interactive, AJAX-powered authentication system that allows users to log in or register without a full-page reload. Instead of navigating to a separate authentication page, users can open a modal window, enter their credentials, and submit the form dynamically.
@@ -368,7 +368,9 @@ The Top Bar dynamically changes depending on whether the user is logged in or no
 
 #### Description
 
-The Post Detail Page displays the full details of a post, including the image, description, tags, comments, and user interactions (liking, saving, commenting). It allows users to engage with a post, view related information, and interact seamlessly.
+The Post Detail Page displays the full details of a post, including the image, description, tags, comments, and user interactions (liking, saving, commenting). It allows users to engage with a post, view related information, and interact seamlessly. 
+
+The profile that created the post can be seen above the comment section, it displays their username and profile image. Once clicked on, it will take the user to the post owners profile page.
 
 ![post detail page](static/readme_images/Screenshot_23.png)
 
@@ -394,8 +396,193 @@ The Post Detail Page displays the full details of a post, including the image, d
 - Well-structured layout for easy navigation and engagement
 - Optimized database queries to improve performance
 
+### Like Button
+---
+#### Description
+The Like Feature allows users to like and unlike posts, providing a way to interact with content. Each post displays a like count, which updates dynamically when a user likes or unlikes it.
+
+- Liked post
+
+![Liked post](static/readme_images/Screenshot_24.png)
+
+- Unliked Post
+
+![Unliked post](static/readme_images/Screenshot_25.png)
+
+#### Implementation
+1. Backend (Django View & Database Structure)
+    - The `like_post` view handles the toggle logic for likes:
+        - If the user has already liked the post, their like is removed
+        - If the user has not liked the post, their like is added
+    - The `Post` model uses a ManyToManyField
+        - This allows a user to like multiple posts and a post to have multiple likes
+2. Frontend (HTML & CSS)
+    - The like button is displayed alongside the like count
+    - The button changes state dynamically to indicate whether the post is liked or not
+    - CSS animations provide a smooth transition when toggling the like state
+3. JavaScript for Interactive Liking
+    - AJAX is used to send the like request without refreshing the page
+    - Server responds with updated like count, which is dynamically updated in the UI.
+
+#### Why This Implementation Works Well
+- Efficient many-to-many relationship handles likes without extra models.
+- Django ORM optimizations prevent unnecessary queries.
+- AJAX-powered liking updates the UI instantly, improving user experience.
+- Intuitive user interaction with a visual like toggle and real-time count updates.
+
+### Comment
+---
+#### Description
+The Comment Section allows users to interact with posts by adding, editing, and deleting comments dynamically. It includes multiple interactive features, such as:
+- Real-time comment updates (new comments appear without page reloads)
+- Comment editing & deletion with instant UI updates
+- Animated pop-up modal for a smooth experience
+- Live comment counter that updates dynamically
+- "Time ago" display for each comment (e.g. "5 minutes ago")
+
+This creates a seamless and engaging user experience without unnecessary page reloads.
+
+- Comment section and counter
+
+![Comment section](static/readme_images/Screenshot_26.png)
+
+- Comment modal 
+
+![comment modal](static/readme_images/Screenshot_27.png)
+
+- Delete comment confirmation modal
+
+![Delete comment confirmation modal](static/readme_images/Screenshot_28.png)
+
+#### Implementation
+1. Backend (Django Views & Database Structure)
+    - A `Comment` model stores user comments, linking each comment to a post and an author
+    - The comment creation view processes new comments, ensuring validation before saving them to the database
+    - Editing a comment is restricted to the original author, and only valid updates are accepted
+    - Deleting a comment removes it from the database and prevents unauthorized users from modifying content
+    - The views return JSON responses, allowing the frontend to update dynamically without requiring full page reloads
+2. Frontend (HTML & CSS for Display and Styling)
+    - The comment section is structured to display comments in a user-friendly format, including the username, user profile images, timestamp, and comment body
+    - Interactive buttons allow users to edit or delete their own comments
+    - A comment input box enables users to add new comments with a smooth submission experience
+    - The comment counter updates automatically, reflecting the number of comments in real-time
+    - CSS animations enhance interactions, making transitions smoother when comments are added, updated, or deleted
+3. JavaScript for Dynamic Commenting
+    - New comments are posted asynchronously, ensuring they appear instantly without a refresh
+    - Editing a comment updates the UI in real-time, allowing users to modify their text without disrupting the page
+    - Deleting a comment instantly removes it, with the counter adjusting dynamically
+    - Event listeners handle user interactions, ensuring buttons and modals function as expected
+    - The "time ago" display updates dynamically, showing relative timestamps like "5 d" or "6 w"
+
+#### Why This Implementation Works Well
+- Django ORM optimizations ensure comments are retrieved and managed efficiently
+- AJAX-powered actions keep the experience smooth and interactive
+- The animated pop-up modal makes editing and deleting comments more user-friendly
+- Live updates prevent manual page refreshes, improving the overall usability
+- The comment counter remains accurate in real-time, reflecting interactions instantly
+
+### Save To/Create Board Modal
+---
+#### Description
+The Save to Board Modal allows users to save a post to one or more boards in an intuitive and dynamic way. Instead of navigating to a different page, users can quickly organize posts into boards through an interactive pop-up modal.
+
+Key functionalities include:
+- Displaying all user-created boards so users can choose where to save a post
+- Creating a new board directly from the modal if the desired board does not exist
+- Real-time feedback when a post is saved to a board
+- Dynamic UI updates to reflect changes without requiring a full page reload
+
+This ensures an efficient and user-friendly experience for organizing posts.
+
+- Save button
+
+![Save button](static/readme_images/Screenshot_25.png)
+
+- Save to board modal
+
+![Save to board modal](static/readme_images/Screenshot_29.png)
+
+- Create board modal
+
+![Create board modal](static/readme_images/Screenshot_30.png)
+
+#### Implementation
+1. Backend (Django Views & Database Structure)
+    - The save-to-board functionality is handled through a Many-to-Many relationship between posts and boards
+    - The modal fetches all the user's boards dynamically from the database when opened
+    - A view processes saving requests, checking if the post is already in the selected board before adding it
+    - If a new board is created, it is immediately saved to the database and updated in the UI
+    - The response is sent back as JSON, allowing the frontend to update instantly
+2. Frontend (Modal Structure & Styling)
+    - The modal opens when the user clicks "Save" on a post, overlaying the current page
+    - A list of the user's boards is displayed, allowing selection with a single click
+    - A text input field allows new board creation, dynamically adding it to the list
+    - Save buttons provide instant feedback, changing state when a post is successfully saved
+    - CSS animations ensure smooth modal transitions, making interactions more seamless
+3. JavaScript for Interactive Updates
+    - Fetching the user's boards asynchronously when the modal is opened, ensuring the latest list is shown
+    - Handling save actions dynamically, preventing duplicate saves and providing immediate visual feedback
+    - Allowing new board creation directly from the modal, updating both the backend and the UI in real-time
+    - Closing the modal smoothly after saving, ensuring a polished experience
+    - Preventing duplicate saves by checking if the post is already in a board before sending a request
+
+#### Why This Implementation Works Well
+- Efficient database structure using Many-to-Many relationships for flexible post-organization
+- AJAX-based interactions eliminate the need for full-page reloads
+- Seamless UI integration with real-time updates when saving posts
+- User-friendly modal design that simplifies saving and creating boards
+- Prevents redundant saves by checking for existing relationships before submitting
 
 ## Profile Page
+
+#### Description
+The Profile Page serves as a personalized space where users can manage and showcase their saved and created posts. It provides an overview of the user’s activity, including:
+
+- User profile details (profile picture, name, bio)
+- Tabs for “Created” and “Saved” posts, allowing easy navigation
+- A list of boards where users have organized their saved posts
+- An "All Pins" board, which consolidates all saved posts in one place
+- Interactive elements such as editing profile information and managing boards
+
+This creates an organized and engaging profile experience, making it easy for users to manage their content.
+
+![Profile Page](static/readme_images/Screenshot_31.png)
+
+#### Implementation
+1. Backend (Django Views & Database Structure)
+    - The Profile model stores user details, including a profile picture, name, and bio
+    - A One-to-One relationship with the User model ensures that each user has a profile
+    - The profile view retrieves:
+        - The user’s created posts
+        - The user’s saved posts, grouped into boards
+        - The “All Pins” board, which consolidates all saved posts
+    - Django’s ORM optimizations (select_related(), prefetch_related()) ensure minimal database queries
+2. Frontend (Layout & Navigation)
+    - The profile layout is divided into sections, with tabs for "Created" and "Saved" content
+    - The user’s profile image and bio appear at the top, providing a personal touch
+    - A board grid layout allows users to navigate and manage their saved collections easily
+    - Responsive design ensures that the profile adapts well to different screen sizes
+3. JavaScript & HTMX for Dynamic Features
+    - AJAX is used to update the profile details dynamically, allowing users to edit their bio and profile picture without a page refresh
+    - Tabs switch dynamically, instantly displaying "Created" or "Saved" posts when selected
+    - The board list updates in real-time, reflecting changes when a user saves or removes posts
+    - Interactive animations enhance transitions between sections, improving user experience
+
+#### Why This Implementation Works Well
+- Optimized database queries minimize unnecessary data fetching
+- Intuitive tabbed navigation provides easy access to different content sections
+- AJAX-based profile updates allow seamless editing of user details
+- A structured and visually appealing UI enhances the profile experience
+- Board organization features make managing saved posts effortless
+
+### Edit Profile Modal
+---
+
+### Saved Section
+---
+
+### Created Posts Section
+---
 
 ## Board Detail Page
 
