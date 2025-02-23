@@ -701,7 +701,6 @@ This creates an intuitive and efficient way to browse and manage saved content.
     - A remove button allows users to delete posts from the board, updating the UI dynamically
     - Private boards show visibility indicators, ensuring users know which boards are private
 3. JavaScript for Interactive Features
-    - Clicking on a post opens the post detail page, allowing users to explore content further
     - Removing a post dynamically updates the board, ensuring a seamless experience
     - Navigation between boards happens instantly, avoiding unnecessary page reloads
     - AJAX requests handle post removal in real-time, reflecting changes without refreshing the page
@@ -715,6 +714,7 @@ This creates an intuitive and efficient way to browse and manage saved content.
 - A visually appealing grid layout ensures content is easy to browse
 
 ### Edit Board Modal
+---
 #### What the Feature Does
 The Edit Board Modal allows users to modify board details dynamically without leaving the board detail page. It provides an intuitive way to:
 
@@ -761,12 +761,142 @@ This feature makes managing boards quick and efficient, enhancing user control o
 - Secure access control ensures only the board owner can modify it
 
 ## Create Post Page
+#### What the Feature Does
+The Post Creation Page allows users to upload and publish new posts with ease. It provides a streamlined experience for adding content by offering:
+- Image upload functionality to attach a photo to the post
+- Title and description fields for content customization
+- Tag selection to categorize posts for better discoverability
+- Smooth validation and feedback to guide users through the process
+- Real-time updates ensuring the post is published without unnecessary delays
+
+This page ensures that users can create engaging posts quickly and efficiently.
+
+#### How It Was Implemented
+1. Backend (Django View & Database Structure)
+    - The Post model stores post data, including image, title, description
+    - The post creation view handles form validation and file uploads, ensuring:
+        - Only authenticated users can create posts
+        - Images are compressed and optimized before saving
+        - Tag relationships are correctly assigned to categorize posts
+        - The response is returned as JSON, allowing dynamic frontend updates
+2. Frontend (Form Layout & User Experience)
+    - The upload area provides a file selection option, making image uploads simple
+    - Input fields for title and description allow users to add context to their posts
+    - A tag selector enables users to categorize their post
+    - Error messages appear dynamically, preventing invalid submissions
+    - A responsive and clean design ensures smooth navigation, even on mobile devices
+3. JavaScript for Interactive Features
+    AJAX-powered form submission prevents page reloads, keeping the process fast
+    Real-time image preview shows the uploaded file instantly before submission
+    Auto-suggestions for tags make it easy for users to find relevant categories
+    If an error occurs (e.g. missing fields or invalid image type), it is displayed instantly
+    After successful submission, the page updates dynamically, ensuring the new post appears without reloading
+
+#### Why This Implementation Works Well
+- Optimized database structure ensures posts are stored efficiently
+- AJAX-based form submission eliminates unnecessary page reloads
+- Live image preview improves the user experience
+- Tagging system enhances searchability and post organization
+- Validation feedback prevents errors and ensures a smooth process
+
+### Image Tagging
+---
+#### What the Feature Does
+The Image Tagging feature allows users to categorize posts with relevant tags. 
+
+Currently, the tagging features functionality is minimal as the intended search and tag filtering features were not implemented due to time constraints.
+
+Currently the tag feature enables:
+- Tag selection during post creation to assign relevant topics
+- Auto-suggested tags based on user input
+- Dynamic updates when tags are added or removed
+
+With future implementations they woul be enable:
+- Clickable tags on post detail pages to filter content by category
+- Improved search functionality, allowing users to find posts by tags
+- Post recommendations on post detail page for discoverability
+
+#### How It Was Implemented
+1. Backend (Django Model & Views)
+    The `ImageTags` model stores individual tags, while `ImageTagRelationships` connects posts to multiple tags
+    The post creation view allows users to assign multiple tags to a post
+    AJAX-based tag suggestions retrieve existing tags from the database as users type, preventing duplicate tags
+    The tag suggestions view filters based on user input, returning up to 10 relevant tags dynamically
+2. Frontend (Tagging UI & User Experience)
+    Tag input with auto-suggestions enables users to quickly select or create tags
+    Each tag appears as a badge beneath the post, visually grouping content
+    A clean and interactive design ensures that tagging feels natural and intuitive
+3. JavaScript for Dynamic Tagging
+    Auto-suggestions fetch related tags from the database, appearing as dropdown options while typing
+    Tag selection updates in real-time, preventing duplicate selections
+    AJAX-based search filters content instantly when a user clicks a tag
+    Removing a tag updates the UI dynamically, reflecting changes without requiring a page refresh
+
+#### Why This Implementation Works Well
+- AJAX-based tag suggestions enhance usability and prevent duplicates
+- Dynamic UI updates ensure smooth interaction without page reloads
+- Efficient database queries prevent unnecessary lookups, optimizing performance
+
+While this feature doesn't currently do much to enhance the user experince, it is a good foundation for other impactful features to be built on and implemented in future releases.
 
 ## Dynamic Pop-up
+#### What the Feature Does
+The Dynamic Pop-Up Notification System provides real-time feedback for user interactions such as success messages, warnings, and error alerts. This feature ensures that notifications appear dynamically on the screen whenever a user:
+- Comments on or saves a post
+- Successfully submits a form
+- Encounters an error (e.g. failed action)
+- Performs an action that requires confirmation (e.g. deleting a comment)
+
+This non-intrusive system enhances usability by keeping users informed without disrupting their experience.
+
+#### How It Was Implemented
+1. Backend (Django Responses for Notifications)
+    - AJAX responses include status messages, indicating whether an action was successful or failed
+    - The server sends structured JSON responses, containing notification types like "success" or "error"
+    - Notifications appear automatically when an action completes, instead of requiring a full-page reload
+2. Frontend (Notification UI & Display Behavior)
+    - A notification container dynamically displays messages at the bottom of the screen
+    - Messages fade out automatically after a few seconds, ensuring a smooth experience
+    - Animations make notifications slide in and out, making them feel smooth and interactive
+3. JavaScript for Dynamic Pop-Ups (pop_up.js)
+    - The `pop_up.js` module is responsible for handling all notification logic across the site:
+        - Listens for AJAX responses and extracts message data
+        - Creates a notification element dynamically, inserting it into the notification area
+        - Applies animations so notifications smoothly slide in and disappear after a set time
+    - Key Functionalities in pop_up.js
+        - Handles different types of notifications (success or error)
+        - Ensures messages are not repeated unnecessarily
+        - Fades out old notifications after a set duration to prevent clutter
+        - Can be triggered manually via JavaScript, allowing notifications to be used anywhere on the site
+
+#### Why This Implementation Works Well
+- Keeps users informed without disrupting workflow
+- Works dynamically with AJAX-powered interactions
+- Visually distinct notifications make messages clear and readable
+- Animations improve user experience, making notifications smooth and natural
+- Fully reusable across different parts of the site, improving consistency
 
 ## Unimplemented Features
+Serveral features were not implemented due to time constraints and can be seen in the [backlog](https://github.com/users/SemMTM/projects/2).
+
+These unimplemented features include:
+- Filter images by tag
+- Search bar feature to serch for images or users 
 
 ## Future Features
+This project has many oppertunites to add many interesting features, such as:
+- Messaging system
+- Search algorithm and search bar
+- Post recommendation on post detail page
+- Follow users
+- Notification centre 
+- Like/Reply to comments
+- Post recommendations on homepage based on user post interaction history
+- Post editing 
+- Drag and drop file selector on post creation
+- Filter image by tag via a tag bar on the homepage
+- Users can create tags rather then searching through a set list
+- See all liked posts
 
 [Back to Table of Contents](#table-of-contents)
 
