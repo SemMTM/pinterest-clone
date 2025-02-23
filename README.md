@@ -27,11 +27,12 @@ The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.h
     - [User Stories](#user-stories)
 - [The Structure Plane](#the-structure-plane)
     - [Features](#features)
-        - Homepage
-        - Post Detail Page
-        - Profile Page
-        - Board Detail Page
-        - Create Post Page
+        - [Homepage](#home-page)
+        - [Post Detail Page](#post-detail-page)
+        - [Profile Page](#profile-page)
+        - [Board Detail Page](#board-detail-page)
+        - [Create Post Page](#create-post-page)
+        - [Dynamic Pop-up](#dynamic-pop-up)
     - [Unimplemented Features](#unimplemented-features)
     - [Future Features](#future-features)
 - [The Skeleton Frame](#the-skeleton-plane)
@@ -771,6 +772,8 @@ The Post Creation Page allows users to upload and publish new posts with ease. I
 
 This page ensures that users can create engaging posts quickly and efficiently.
 
+![Create post page](static/readme_images/Screenshot_38.png)
+
 #### How It Was Implemented
 1. Backend (Django View & Database Structure)
     - The Post model stores post data, including image, title, description
@@ -811,7 +814,13 @@ Currently the tag feature enables:
 - Auto-suggested tags based on user input
 - Dynamic updates when tags are added or removed
 
-With future implementations they woul be enable:
+![Image tag suggestions](static/readme_images/Screenshot_39.png)
+
+![Successful tags](static/readme_images/Screenshot_40.png)
+
+![Live tags](static/readme_images/Screenshot_41.png)
+
+With future implementations they would enable:
 - Clickable tags on post detail pages to filter content by category
 - Improved search functionality, allowing users to find posts by tags
 - Post recommendations on post detail page for discoverability
@@ -848,6 +857,14 @@ The Dynamic Pop-Up Notification System provides real-time feedback for user inte
 - Performs an action that requires confirmation (e.g. deleting a comment)
 
 This non-intrusive system enhances usability by keeping users informed without disrupting their experience.
+
+![dynamic pop up](static/readme_images/Screenshot_42.png)
+
+![dynamic pop up](static/readme_images/Screenshot_43.png)
+
+![dynamic pop up](static/readme_images/Screenshot_44.png)
+
+![dynamic pop up](static/readme_images/Screenshot_45.png)
 
 #### How It Was Implemented
 1. Backend (Django Responses for Notifications)
