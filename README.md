@@ -1,5 +1,5 @@
 # Pinterest95
-The Pinterest95 project is a retro-styled image-sharing and discovery platform inspired by the windows 95 aesthetic, it is a social media platform that allows users to discover new inspiration for anything and everthing. Users can create image/mood boards of posts they like, interact with images, and share posts of their own. 
+The Pinterest95 project is a retro-styled image-sharing and discovery platform inspired by the windows 95 aesthetic, it is the first ever live deployment of the now famous Pinterest app! The social media platform allows users to discover new inspiration for anything and everthing. Users can create image/mood boards of posts they like, interact with images, and share posts of their own. 
 
 ![Website - Desktop](static/readme_images/Screenshot_11.png)
 
@@ -14,7 +14,7 @@ To use the features of Pinterest95 a user must create and account on log in. Aft
 
 and many other interactive features.
 
-This is a Django-basedd website with all CRUD functionality, agile methodologies were used to plan and implement all features.
+This is a Django-based website with all CRUD functionality, agile methodologies were used to plan and implement all features.
 
 The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.herokuapp.com)
 
@@ -114,7 +114,7 @@ The Product Backlog was created using Github projects and can be located [HERE](
 This project had 7 main epics that user stories were catagorised into:
 
 #### Authentication
-The Authentication epic is for all user stories pertaining to user authentication and registration. This epic provides crutial functionaliy and security to the app and users. Without user authentication almost of all the features Pinterest95 currently has would not be do-able.
+The Authentication epic is for all user stories pertaining to user authentication and registration. This epic provides crutial functionaliy and security to the app and users. Without user authentication almost of all the features within Pinterest95, would not be do-able.
 
 #### Backend
 The Backend epic is for all stories related to the set up of the project and database. Another critical epic as without the server-side set up or database the app would not function.
@@ -129,7 +129,7 @@ The Home Page epic is for all user stories related to the home page. This is par
 The Image Boards epic is for all user stories relating to the mood boards of images that users can create. A big part of the goals of the app is to help users get visual inspiration, allowing users to save and collect images into one area that they can specify and customise is cruital to the user experience.
 
 #### Posts
-The Post epic is for user stories related to post creation, deletion, like, image tags etc.
+The Post epic is for user stories related to post creation, deletion, likes, image tags, etc.
 
 #### Profile
 The Profile epic is for all user stories related to the users own profile page. The profile page is where users can customise their experince and is the area that other users can also see. This page shows the users public image boards, all posts they have created, their public profile info and more.
@@ -200,7 +200,7 @@ The Profile epic is for all user stories related to the users own profile page. 
 ## Homepage
 
 ### Masonry Grid
----
+
 #### What The Feature Does
 The Masonry Grid on the dynamically arranges images in a visually appealing, staggered layout. This feature ensures that images of varying heights fit together neatly while maximizing screen space and providing a visually appealing browsing experience. The masonry grid is used in multiple areas within the project: the board detail page, home page and created pins section.
 
@@ -209,7 +209,7 @@ The Masonry Grid on the dynamically arranges images in a visually appealing, sta
 #### Implementation
 
 1. Backend (Django View)
-    - The `PostList` class-based view fetches posts ordered by creation date
+    - The `PostList` class-based view fetches posts ordered by creation date (in future releases image would be shown based on a users previous post interactions to show them the most relevant images)
     - Implements pagination to retrieve 10 posts per request
     - Supports HTMX-based dynamic loading, ensuring that new posts are loaded efficiently
 2. Frontend (HTML & CSS)
@@ -227,10 +227,8 @@ The Masonry Grid on the dynamically arranges images in a visually appealing, sta
 - Efficient grid updates when new posts are loaded
 - Smooth user experience without layout shifts or gaps
 
-#### User Stories Completed
-
 ### Infinite Scroll
----
+
 #### What The Feature Does
 Infinite scrolling allows users to continuously load more posts without having to navigate through traditional pagination. Instead of manually clicking through pages, new posts are fetched and displayed automatically as the user scrolls down.
 
@@ -256,11 +254,13 @@ Infinite scrolling allows users to continuously load more posts without having t
 - Prevents unnecessary requests by stopping when there are no more posts
 
 ### Navbar & Profile Page Button (Authenticated Users Only)
----
+
 #### What The Feature Does
 The Navbar provides users with quick access to (currently implemented) key sections of the website. It adjusts dynamically based on whether the user is authenticated. One key feature is the Profile Page Button, which is only visible to logged-in users. If a user is not authenticated, the profile button is hidden to prevent access to profile-related features.
 
-![Nav Bar](static/readme_images/Screenshot_18.png)
+![Nav Bar - Desktop](static/readme_images/Screenshot_18.png)
+
+![Nav Bar - Mobile](static/readme_images/Screenshot_46.png)
 
 #### Implementation
 1. Backend (Django view)
@@ -289,7 +289,7 @@ The Navbar provides users with quick access to (currently implemented) key secti
 - Efficient rendering using Django conditionals, avoiding unnecessary elements for non-authenticated users
 
 ### Sign-in/Up Modal
----
+
 #### What The Feature Does
 The Sign Up / Sign In Pop-Up Modal provides an interactive, AJAX-powered authentication system that allows users to log in or register without a full-page reload. Instead of navigating to a separate authentication page, users can open a modal window, enter their credentials, and submit the form dynamically.
 
@@ -328,7 +328,7 @@ The Sign Up / Sign In Pop-Up Modal provides an interactive, AJAX-powered authent
 - User-friendly → Provides immediate feedback for errors without refreshing the page
 
 ### Dynamic Top Bar
----
+
 #### What The Feature Does
 The Top Bar dynamically changes depending on whether the user is logged in or not
 - If the user is authenticated → Displays the logout option
@@ -376,14 +376,14 @@ The profile that created the post can be seen above the comment section, it disp
 #### Implementation
 1. Backend (Django View & Query Optimization)
     - The post_detail view retrieves the post details and related data (comments, tags, and user boards)
-    - Uses `select_related()` and `prefetch_related()` for optimized database queries:
+    - Uses `select_related()` for optimized database queries:
         - `select_related("user__profile")` → Fetches post author and profile in one query
-        - `prefetch_related("comments", "comments__author__profile")` → Preloads comments and authors for better performance
+        - `select_related("user__profile")` → Fetches the comments authors and profiles in one query
 2. Frontend (HTML & CSS)
     - Displays the post image, title, and description prominently
     - Lists comments in a structured format, allowing users to engage in discussions
-    - Includes buttons for liking, saving, and sharing for easy user interaction
-    - Tagging system shows related topics and enables discovery of similar posts
+    - Includes buttons for liking, saving, and commenting for easy user interaction
+    - Tagging system shows image tags
 3. JavaScript for Interactive Features
     - Liking a post updates the like count dynamically via AJAX
     - Saving a post to a board triggers an async request to update the user’s saved items
@@ -396,7 +396,7 @@ The profile that created the post can be seen above the comment section, it disp
 - Optimized database queries to improve performance
 
 ### Like Button
----
+
 #### What The Feature Does
 The Like Feature allows users to like and unlike posts, providing a way to interact with content. Each post displays a like count, which updates dynamically when a user likes or unlikes it.
 
@@ -430,14 +430,14 @@ The Like Feature allows users to like and unlike posts, providing a way to inter
 - Intuitive user interaction with a visual like toggle and real-time count updates.
 
 ### Comment
----
+
 #### What The Feature Does
 The Comment Section allows users to interact with posts by adding, editing, and deleting comments dynamically. It includes multiple interactive features, such as:
-- Real-time comment updates (new comments appear without page reloads)
+- Commenting on posts
 - Comment editing & deletion with instant UI updates
 - Animated pop-up modal for a smooth experience
 - Live comment counter that updates dynamically
-- "Time ago" display for each comment (e.g. "5 minutes ago")
+- "Time ago" display for each comment (e.g. "5 d")
 
 This creates a seamless and engaging user experience without unnecessary page reloads.
 
@@ -467,7 +467,6 @@ This creates a seamless and engaging user experience without unnecessary page re
     - The comment counter updates automatically, reflecting the number of comments in real-time
     - CSS animations enhance interactions, making transitions smoother when comments are added, updated, or deleted
 3. JavaScript for Dynamic Commenting
-    - New comments are posted asynchronously, ensuring they appear instantly without a refresh
     - Editing a comment updates the UI in real-time, allowing users to modify their text without disrupting the page
     - Deleting a comment instantly removes it, with the counter adjusting dynamically
     - Event listeners handle user interactions, ensuring buttons and modals function as expected
@@ -481,9 +480,9 @@ This creates a seamless and engaging user experience without unnecessary page re
 - The comment counter remains accurate in real-time, reflecting interactions instantly
 
 ### Save To/Create Board Modal
----
+
 #### What The Feature Does
-The Save to Board Modal allows users to save a post to one or more boards in an intuitive and dynamic way. Instead of navigating to a different page, users can quickly organize posts into boards through an interactive pop-up modal.
+The Save to Board modal allows users to save a post to one or more boards in an intuitive and dynamic way. Instead of navigating to a different page, users can quickly organize posts into boards through an interactive pop-up modal.
 
 Key functionalities include:
 - Displaying all user-created boards so users can choose where to save a post
@@ -555,7 +554,7 @@ This creates an organized and engaging profile experience, making it easy for us
         - The user’s created posts
         - The user’s saved posts, grouped into boards
         - The “All Pins” board, which consolidates all saved posts
-    - Django’s ORM optimizations (select_related(), prefetch_related()) ensure minimal database queries
+    - Django’s ORM optimizations ensure minimal database queries
 2. Frontend (Layout & Navigation)
     - The profile layout is divided into sections, with tabs for "Created" and "Saved" content
     - The user’s profile image and bio appear at the top, providing a personal touch
@@ -575,7 +574,7 @@ This creates an organized and engaging profile experience, making it easy for us
 - Board organization features make managing saved posts effortless
 
 ### Edit Profile Modal
----
+
 #### What The Feature Does
 The Edit Profile Modal allows users to update their profile details seamlessly without navigating away from the profile page. It provides a smooth and intuitive experience for modifying:
 - Profile Picture: Users can upload a new image or keep their existing one
@@ -614,7 +613,7 @@ This enhances personalization and ensures users can manage their profile easily 
 - Real-time updates ensure changes reflect instantly without navigating away
 
 ### Saved Section
----
+
 #### What The Feature Does
 The Saved Section allows users to view, organize, and manage posts they have saved into different boards. It provides an efficient way to categorize favorite posts and quickly access them later.
 
@@ -637,7 +636,7 @@ This ensures an intuitive and organized experience for managing saved content.
         - The user’s boards
         - The posts assigned to each board
         - The “All Pins” board, which automatically includes all saved posts
-    - Django ORM optimizations (`select_related()`, `prefetch_related()`) reduce database queries for better performance
+    - Django ORM optimizations reduce database queries for better performance
 2. Frontend (Layout & Navigation)
     - A masonry grid layout displays all user-created boards, making navigation easy
     - Clicking on a board dynamically filters the saved posts for that board
@@ -656,7 +655,7 @@ This ensures an intuitive and organized experience for managing saved content.
 - The "All Pins" board provides quick access to all saved posts, improving usability
 
 ### Created Posts Section
----
+
 #### What the Feature Does
 The Created Posts Section allows users to view all the posts they have uploaded. This section ensures that users can easily access their own content while keeping it separate from saved posts.
 
@@ -694,7 +693,7 @@ This creates an intuitive and efficient way to browse and manage saved content.
     - The Board model `ImageBoard` stores user-created boards with a visibility setting (public or private)
     - The `BoardImageRelationship` model links posts to boards, enabling Many-to-Many relationships
     - The view fetches all posts associated with a board, ensuring private boards are restricted to the owner
-    - Django ORM optimizations (`select_related()`, `prefetch_related()`) ensure minimal database queries for better performance
+    - Django ORM optimizations (`select_related()`) ensure minimal database queries for better performance
 2. Frontend (Layout & Navigation)
     - The board’s name appears as a header, helping users identify their current board
     - A masonry grid layout displays all saved posts, keeping the page visually structured
@@ -715,7 +714,7 @@ This creates an intuitive and efficient way to browse and manage saved content.
 - A visually appealing grid layout ensures content is easy to browse
 
 ### Edit Board Modal
----
+
 #### What the Feature Does
 The Edit Board Modal allows users to modify board details dynamically without leaving the board detail page. It provides an intuitive way to:
 
@@ -789,11 +788,11 @@ This page ensures that users can create engaging posts quickly and efficiently.
     - Error messages appear dynamically, preventing invalid submissions
     - A responsive and clean design ensures smooth navigation, even on mobile devices
 3. JavaScript for Interactive Features
-    AJAX-powered form submission prevents page reloads, keeping the process fast
-    Real-time image preview shows the uploaded file instantly before submission
-    Auto-suggestions for tags make it easy for users to find relevant categories
-    If an error occurs (e.g. missing fields or invalid image type), it is displayed instantly
-    After successful submission, the page updates dynamically, ensuring the new post appears without reloading
+    - AJAX-powered form submission prevents page reloads, keeping the process fast
+    - Real-time image preview shows the uploaded file instantly before submission
+    - Auto-suggestions for tags make it easy for users to find relevant categories
+    - If an error occurs (e.g. missing fields or invalid image type), it is displayed instantly
+    - After successful submission, the page updates dynamically, ensuring the new post appears without reloading
 
 #### Why This Implementation Works Well
 - Optimized database structure ensures posts are stored efficiently
@@ -803,7 +802,7 @@ This page ensures that users can create engaging posts quickly and efficiently.
 - Validation feedback prevents errors and ensures a smooth process
 
 ### Image Tagging
----
+
 #### What the Feature Does
 The Image Tagging feature allows users to categorize posts with relevant tags. 
 
@@ -827,19 +826,19 @@ With future implementations they would enable:
 
 #### How It Was Implemented
 1. Backend (Django Model & Views)
-    The `ImageTags` model stores individual tags, while `ImageTagRelationships` connects posts to multiple tags
-    The post creation view allows users to assign multiple tags to a post
-    AJAX-based tag suggestions retrieve existing tags from the database as users type, preventing duplicate tags
-    The tag suggestions view filters based on user input, returning up to 10 relevant tags dynamically
+    - The `ImageTags` model stores individual tags, while `ImageTagRelationships` connects posts to multiple tags
+    - The post creation view allows users to assign multiple tags to a post
+    - AJAX-based tag suggestions retrieve existing tags from the database as users type, preventing duplicate tags
+    - The tag suggestions view filters based on user input, returning up to 10 relevant tags dynamically
 2. Frontend (Tagging UI & User Experience)
-    Tag input with auto-suggestions enables users to quickly select or create tags
-    Each tag appears as a badge beneath the post, visually grouping content
-    A clean and interactive design ensures that tagging feels natural and intuitive
+    - Tag input with auto-suggestions enables users to quickly select or create tags
+    - Each tag appears as a badge beneath the post, visually grouping content
+    - A clean and interactive design ensures that tagging feels natural and intuitive
 3. JavaScript for Dynamic Tagging
-    Auto-suggestions fetch related tags from the database, appearing as dropdown options while typing
-    Tag selection updates in real-time, preventing duplicate selections
-    AJAX-based search filters content instantly when a user clicks a tag
-    Removing a tag updates the UI dynamically, reflecting changes without requiring a page refresh
+    - Auto-suggestions fetch related tags from the database, appearing as dropdown options while typing
+    - Tag selection updates in real-time, preventing duplicate selections
+    - AJAX-based search filters content instantly when a user clicks a tag
+    - Removing a tag updates the UI dynamically, reflecting changes without requiring a page refresh
 
 #### Why This Implementation Works Well
 - AJAX-based tag suggestions enhance usability and prevent duplicates
@@ -1036,11 +1035,11 @@ The Pinterest95 project utilizes a relational database structure to support user
 
 #### Post Model
 
-- Fields: `id (UUID)`, `image`, `title`, `author (FK)`, `likes`, `liked_by`, `created_on`
+- Fields: `id (UUID)`, `image`, `title`, `user (FK)`, `likes`, `liked_by`, `created_on`
 - Purpose:
     - Represents user-uploaded images with associated metadata (title, likes, timestamp)
     - Uses Cloudinary for image hosting to optimize performance
-    - Tracks likes (although this is redundant, as it can be derived from liked_by ManyToMany relationships)
+    - Tracks likes
 - Why It's Needed:
     - Core functionality revolves around image sharing
     - UUID is used instead of IntegerField for scalability and security
@@ -1059,7 +1058,7 @@ The Pinterest95 project utilizes a relational database structure to support user
 
 #### ImageBoard Model
 
-- Fields: `id`, `title`, `author (FK)`
+- Fields: `id`, `title`, `author (FK)`, `visibility`
 - Purpose:
     - Enables users to create boards for organizing images
     - Each board is user-specific and acts like a categorized collection
@@ -1099,7 +1098,7 @@ There were changes made to the database throughout the project after the Entity 
 
 | Aspect | ERD | Live Database|
 |----|----|----|
-| **Likes Handling** | `likes` is an IntegerField in `Post` | In the codebase, a Many-to-Many relationship (`liked_by`) is used instead of an IntegerField, which avoids inconsistencies. |
+| **Likes Handling** | There is no `liked_by` field | In the codebase, a Many-to-Many relationship (`liked_by`) is used which avoids inconsistencies. |
 | **Profile Model** | Contains `username` as a reference to the `User` model | In the live implementation, the Profile model uses OneToOneField(User), which is a better practice. |
 | **Tagging System** | Uses `ImageTags` with `tag_name` & `slug` | The live system implements a Many-to-Many relationship (ImageTagRelationships), improving flexibility. `slug` is also ommited as the tag search function has not been implemented yet. |
 
@@ -1113,6 +1112,8 @@ Security is a critical part of any web application and many steps have been take
     - Storing them in a separate file helps prevent accidental leaks of credentials and ensures that secrets are not hardcoded in the project
     - Database credentials, secret keys, and API keys are not stored directly in settings.py
     - The project imports env.py at runtime to load secrets
+
+SECRET_KEY was in the setting file for a while but this has been changed and moved into env.py.
 
 ### Authentication & Autherisation Security
 #### What’s Implemented:
