@@ -3,10 +3,16 @@ import { showPopUpMessage } from './pop_up.js';
 document.addEventListener('DOMContentLoaded', function() {
     const createPostForm = document.getElementById('post-create-form');
     const preview = document.getElementById('image-preview');
+    const submitButton = document.getElementById('create-post-btn');
 
     // Handles submission of create post form 
     createPostForm.addEventListener('submit', (e) => {
         e.preventDefault(); 
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Uploading...";
+        submitButton.style.color = "white";
+
 
         const formData = new FormData(createPostForm); // Collect form data
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -29,6 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
             .then((data) => {
                 if (data.success) {
                     showPopUpMessage('Your post has been created successfully!');
+                    submitButton.disabled = false;
+                    submitButton.textContent = "Create Another Post";
+                    submitButton.style.color = "black";
                     createPostForm.reset(); 
                     preview.style.display = 'none'; 
                     preview.src = ''; 

@@ -81,7 +81,7 @@ def profile_page(request, username):
         if not request.session.get(first_time_key, False):
             request.session[first_time_key] = True  # Mark the user as visited
             request.session.modified = True  # Ensure session saves changes
-            return redirect('profile_page', username=username)  # Refresh the page
+            return redirect('profile_page', username=username)
 
     return render(
         request,
