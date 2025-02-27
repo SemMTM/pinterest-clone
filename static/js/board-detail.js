@@ -142,52 +142,56 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Close the modal when the cancel button is clicked
-    unpinCancelBtn.addEventListener('click', () => {
-        unpinModal.classList.add('unpin-modal-hidden');
-        unpinModal.classList.remove('unpin-modal-visible');
-        currentImageId = null; 
-        currentBoardId = null; 
-    });
+    if (unpinCancelBtn) {
+        unpinCancelBtn.addEventListener('click', () => {
+            unpinModal.classList.add('unpin-modal-hidden');
+            unpinModal.classList.remove('unpin-modal-visible');
+            currentImageId = null; 
+            currentBoardId = null; 
+        });
+    }
 
     // Handle unpin confirmation
-    unpinConfirmBtn.addEventListener('click', () => {
-        if (!currentImageId || !currentBoardId) {
-            showPopUpMessage("Invalid image or board ID.");
-            return;
-        }
-
-        fetch(`/profile/board/${currentBoardId}/unpin/${currentImageId}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken,
-            },
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to unpin the post.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    // Remove the unpinned post from the DOM dynamically
-                    const postElement = document.querySelector(`.grid-item[data-post-id="${currentImageId}"]`);
-                    if (postElement) {
-                        postElement.remove(); // Remove the grid item directly from the DOM
-                    }
+    if (unpinConfirmBtn) {
+        unpinConfirmBtn.addEventListener('click', () => {
+            if (!currentImageId || !currentBoardId) {
+                showPopUpMessage("Invalid image or board ID.");
+                return;
+            }
     
-                    unpinModal.classList.add('unpin-modal-hidden');
-                    unpinModal.classList.remove('unpin-modal-visible');
-                    currentImageId = null; 
-                    currentBoardId = null; 
-                    showPopUpMessage('Post removed successfully!');
-                } else {
-                    showPopUpMessage('An error occurred while unpinning the post.');
-                }
+            fetch(`/profile/board/${currentBoardId}/unpin/${currentImageId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
             })
-            .catch(error => {
-                showPopUpMessage(error.message || 'Error unpinning the post:');
-            });
-    });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to unpin the post.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Remove the unpinned post from the DOM dynamically
+                        const postElement = document.querySelector(`.grid-item[data-post-id="${currentImageId}"]`);
+                        if (postElement) {
+                            postElement.remove(); // Remove the grid item directly from the DOM
+                        }
+        
+                        unpinModal.classList.add('unpin-modal-hidden');
+                        unpinModal.classList.remove('unpin-modal-visible');
+                        currentImageId = null; 
+                        currentBoardId = null; 
+                        showPopUpMessage('Post removed successfully!');
+                    } else {
+                        showPopUpMessage('An error occurred while unpinning the post.');
+                    }
+                })
+                .catch(error => {
+                    showPopUpMessage(error.message || 'Error unpinning the post:');
+                });
+        });
+    }
 });

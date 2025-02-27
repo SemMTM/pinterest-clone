@@ -26,16 +26,21 @@ document.addEventListener('DOMContentLoaded', () => {
         removeHidden.classList.remove('hidden');
     };
 
-    createdButton.addEventListener('click', () => {
-        toggleActive(createdButton, savedButton);
-        toggleHidden(savedContainer, createdContainer);
-        createdContainer.classList.add('image-grid');
-    });
-    savedButton.addEventListener('click', () => {
-        toggleActive(savedButton, createdButton);
-        toggleHidden(createdContainer, savedContainer);
-        createdContainer.classList.remove('image-grid');
-    });
+    if (createdButton) {
+        createdButton.addEventListener('click', () => {
+            toggleActive(createdButton, savedButton);
+            toggleHidden(savedContainer, createdContainer);
+            createdContainer.classList.add('image-grid');
+        });
+    }
+
+    if (savedButton) {
+        savedButton.addEventListener('click', () => {
+            toggleActive(savedButton, createdButton);
+            toggleHidden(createdContainer, savedContainer);
+            createdContainer.classList.remove('image-grid');
+        });
+    }
 
     const editBoardButton = document.getElementById('edit-board-btn');
     

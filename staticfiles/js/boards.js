@@ -9,16 +9,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
     // Open modal
-    saveButton.addEventListener('click', () => {
-        modal.classList.remove('save-modal-hidden');
-        modal.classList.add('save-modal-visible');
-    });
+    if (saveButton) {
+        saveButton.addEventListener('click', () => {
+            modal.classList.remove('save-modal-hidden');
+            modal.classList.add('save-modal-visible');
+        });
+    }
 
     // Close modal
-    closeModalButton.addEventListener('click', () => {
-        modal.classList.add('save-modal-hidden');
-        modal.classList.remove('save-modal-visible');
-    });
+    if (closeModalButton) {
+        closeModalButton.addEventListener('click', () => {
+            modal.classList.add('save-modal-hidden');
+            modal.classList.remove('save-modal-visible');
+        });
+    }
 
     
     // Save post to board function
@@ -63,15 +67,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const postImagePreview = document.getElementById('post-image-preview');
 
     // Open Create Board Modal
-    openCreateBoardBtn.addEventListener('click', () => {
-        saveModal.classList.add('save-modal-hidden');
-        createModal.classList.remove('create-modal-hidden');
-    });
+    if (openCreateBoardBtn) {
+        openCreateBoardBtn.addEventListener('click', () => {
+            saveModal.classList.add('save-modal-hidden');
+            createModal.classList.remove('create-modal-hidden');
+        });
+    }
 
     // Close Create Board Modal
-    cancelCreateBoardBtn.addEventListener('click', () => {
-        createModal.classList.add('create-modal-hidden');
-    });
+    if (cancelCreateBoardBtn) {
+        cancelCreateBoardBtn.addEventListener('click', () => {
+            createModal.classList.add('create-modal-hidden');
+        });
+    }
 
     // Submit Create Board
     submitCreateBoardBtn.addEventListener('click', () => {
