@@ -48,6 +48,7 @@ The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.h
     - [Technology Used](#technology-used)
     - [Python Modules Used](#python-standard-modules)
     - [External Python Modules Used](#external-python-modules)
+- [Testing](#testing)
 - [Bugs](#bugs)
     - [Fixed Bugs](#fixed-bugs)
     - [Unfixed Bugs](#unfixed-bugs)
@@ -898,6 +899,8 @@ This non-intrusive system enhances usability by keeping users informed without d
 
 Informs the user of unautherised actions and allows the user to navigate back to the homepage via a button.
 
+![403 error page](static/readme_images/Screenshot_47.png)
+
 ### 404 - Page Not Found
 
 Informs the user of a non-existing page and allows the user to navigate back to the homepage via a button.
@@ -1392,6 +1395,9 @@ MySQL is the **relational database** used to **store structured data**.
 | `whitenoise` | 6.8.2 | Static File Serving |
 
 [Back to Table of Contents](#table-of-contents)
+
+# Testing
+All testing can be found in the TESTING.md file [HERE.](/TESTING.md)
 
 # Bugs
 ### Fixed Bugs
