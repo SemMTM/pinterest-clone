@@ -1410,6 +1410,7 @@ All testing can be found in the TESTING.md file [HERE.](/TESTING.md)
 | You can duplicate a board name if you rename it throught the edit board modal. Board names per user should be unique | Added server-side and client-side validation to prevent this |
 | The unpin modal doesn't reappear after unpinning an image | The modal was hidden by applying and removing styles via JavaScript to hide/show the modal. The correct styles were not being removed after unpinning a post. Corrected this and it fixed the issue |
 | AttributeError returned when trying to edit user Profile page info. New bug intorduced after implementing file size validation to Cloudinary image | Removed the previously implemented server-side validation and added client-side validation to catch the issue before submission |
+| Uncaught TypeError: Cannot read properties of null (reading 'addEventListener') from console when going onto post detail page | Added an if statement around every JavaScript function that added an event listener to an object to check for the object existance first before trying to add the listener  |
 
 
 ### Unfixed Bugs
