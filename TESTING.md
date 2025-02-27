@@ -128,7 +128,8 @@
 | TC098 | [User Story - Account registration](https://github.com/users/SemMTM/projects/2/views/1?pane=issue&itemId=87987195&issue=SemMTM%7Cpinterest-clone%7C20) | Sign up/Log in visisble in top bar for unauthenticated users | Log out of signed in account | Log-in and sign-up buttons are visisble in top bar | As expected | PASS |
 
 ## Unit Tests
-Extensive unit tests were created for forms and views in each app.
+Extensive unit tests were created for forms and views in each app. 
+- Note: For unit tests to be successful, please set DEBUG to True
 
 ### Post App
 - [Views tests](post/test_views.py)
