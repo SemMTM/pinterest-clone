@@ -23,7 +23,7 @@ def get_or_create_all_pins_board(user):
     return ImageBoard.objects.get_or_create(
         user=user,
         title="All Pins",
-        visibility=1
+        visibility=1,
     )[0]
 
 

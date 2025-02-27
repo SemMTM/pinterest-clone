@@ -144,8 +144,8 @@ Extensive unit tests were created for forms and views in each app.
 
 | User | Features Used Successfully | Results |
 |---|---|---|
-| User 1 | 100% | User was able to use all features with no issues or errors. |
-| User 2 | 100% | User was able to use all features with no issues or errors. |
+| User 1 | 100% | User was able to upload an image twice when clicking submit on post creation before post request was submitted. Users device width was also causing delete button on post detail page to overflow. |
+| User 2 | 100% | Users boards section was returing a 500 error with error: profile_page.models.ImageBoard.MultipleObjectsReturned: get() returned more than one ImageBoard -- it returned 2!  |
 | User 3 | 100% | User was able to use all features, one error occoured when trying to upload a large image, the error was shown in the dynamic pop up, the form was cleared, they tried again and were able to upload the image. |
 | User 4 | 100% | User was able to use all features with no issues or errors. |
 | User 5 | 100% | User was able to use all features with no issues or errors. |
