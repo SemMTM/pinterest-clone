@@ -1412,6 +1412,7 @@ All testing can be found in the TESTING.md file [HERE.](/TESTING.md)
 | AttributeError returned when trying to edit user Profile page info. New bug intorduced after implementing file size validation to Cloudinary image | Removed the previously implemented server-side validation and added client-side validation to catch the issue before submission |
 | Uncaught TypeError: Cannot read properties of null (reading 'addEventListener') from console when going onto post detail page | Added an if statement around every JavaScript function that added an event listener to an object to check for the object existance first before trying to add the listener  |
 | Saved boards returning 500 error for some new users | Redirect to profile page after sign up to initalise "All Pins" board |
+| Profile edit form returning error when trying to update info after profile picture upload | Updated image compression to only activate on local uploads |
 
 
 ### Unfixed Bugs

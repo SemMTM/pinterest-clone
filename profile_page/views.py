@@ -63,7 +63,6 @@ def profile_page(request, username):
         return redirect('profile_page', username=user.username.lower())
 
     profile, created = Profile.objects.get_or_create(user=user)
-
     all_pins_board = get_or_create_all_pins_board(user)
 
     if created:
@@ -76,6 +75,13 @@ def profile_page(request, username):
                 post_id=post,
                 board_id=all_pins_board
             )
+
+        # Check if this is the user's first visit to their profile page
+        first_time_key = f"profile_first_visit_{user.id}"
+        if not request.session.get(first_time_key, False):
+            request.session[first_time_key] = True  # Mark the user as visited
+            request.session.modified = True  # Ensure session saves changes
+            return redirect('profile_page', username=username)  # Refresh the page
 
     return render(
         request,
