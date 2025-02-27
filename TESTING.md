@@ -131,13 +131,24 @@
 Extensive unit tests were created for forms and views in each app.
 
 ### Post App
-- [Views tests](post\test_views.py)
-- [Forms tests](post\test_forms.py)
+- [Views tests](post/test_views.py)
+- [Forms tests](post/test_forms.py)
 
 ### Profile_page App
-- [Views tests](profile_page\test_views.py)
+- [Views tests](profile_page/test_views.py)
 
 ## User Tests
+
+6 Users were asked to create an account and use all features within the app. They were asked to provide comments on the user experience and provide any potental feedback
+
+| User | Features Used Successfully | User Comments |
+|---|---|---|
+| User 1 | 100% | |
+| User 2 | 100% | |
+| User 3 | 100% | |
+| User 4 | 100% | |
+| User 5 | 100% | |
+| User 6 | 100% | |
 
 ## PageSpeed Insight Testing
 PageSpeed Insight testing was performed and found performance to be sub par on a few areas. 

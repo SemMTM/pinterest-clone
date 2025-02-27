@@ -33,6 +33,7 @@ The deployed site can be found [HERE](https://pinterest-clone-sem-29d41bc2ed17.h
         - [Board Detail Page](#board-detail-page)
         - [Create Post Page](#create-post-page)
         - [Dynamic Pop-up](#dynamic-pop-up)
+        - [Error Pages](#error-pages)
     - [Unimplemented Features](#unimplemented-features)
     - [Future Features](#future-features)
 - [The Skeleton Frame](#the-skeleton-plane)
@@ -892,6 +893,51 @@ This non-intrusive system enhances usability by keeping users informed without d
 - Animations improve user experience, making notifications smooth and natural
 - Fully reusable across different parts of the site, improving consistency
 
+## Error Pages
+### 403 - Unauthorised Actions
+
+Informs the user of unautherised actions and allows the user to navigate back to the homepage via a button.
+
+### 404 - Page Not Found
+
+Informs the user of a non-existing page and allows the user to navigate back to the homepage via a button.
+
+### 505 - Server Error
+
+Informs the user of a server error and allows the user to navigate back to the homepage via a button.
+
+## Image Compression
+#### What the Feature Does
+The image compression feature automatically optimizes and converts images to JPEG format when users upload images for:
+- Posts: Ensures post images are efficiently stored and loaded quickly
+- Profile Pictures: Reduces file size while maintaining image quality
+By applying lossless compression and format conversion, this feature helps improve page load speeds, reduce storage costs, and enhance overall performance without sacrificing image quality.
+
+#### How It Was Implemented
+1. Backend (Django Utility for Image Processing)
+    - A utility function `compress_and_convert_to_jpeg()` is used to handle image optimization
+    - This function:
+        - Opens the uploaded image using the Pillow library
+        - Resizes the image if necessary to reduce excessive file sizes
+        - Converts all images to JPEG format for consistency
+        - Applies compression to minimize file size without noticeable quality loss
+        - Saves the optimized image back to the model field before storing it in the database
+2. Integration with Post & Profile Models
+    - In the Post model, this function is applied before saving post images
+    - In the Profile model, it ensures that profile images are also compressed
+- Post Image Compression in `save()`
+    - Before saving a post, the uploaded image is processed and optimized, ensuring every image follows the same quality standards
+- Profile Image Compression in `save()`
+    - When a user uploads a profile picture, it is automatically optimized before being stored, preventing unnecessarily large profile images
+
+#### Why This Implementation Works Well
+- Seamless integration with Django models, ensuring images are compressed automatically
+- No manual intervention needed – users upload images normally while the system optimizes them in the background
+- Prevents unnecessary storage bloat, making the platform more scalable
+- Improves overall site performance by ensuring images load efficiently
+
+This intelligent image processing system ensures that users can upload high-quality images without impacting speed or storage efficiency.
+
 ## Unimplemented Features
 Serveral features were not implemented due to time constraints and can be seen in the [backlog](https://github.com/users/SemMTM/projects/2).
 
@@ -1402,10 +1448,9 @@ These are the steps for inital deployment after you have created your Github rep
     - os.environ.setdefault(
         "SECRET_KEY", "your_secret_key"
     )
-    - os.environ["DEBUG"] = "your_debug_setting"
 7. Go back to your settiings.py file, import your env.py file and add the following:
     - `SECRET_KEY = {'default': os.environ.get("SECRET_KEY")}`
-    - `DEBUG = 'DEBUG' in os.environ`
+    - `DEBUG = True`
     - `DATABASES = {'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))}`
 8. Install the packages required to connect to your database of choice, as this project uses PostgreSQL you need to install the following:
     - `pip3 install dj-database-url psycopg2`
@@ -1444,7 +1489,6 @@ The site was deployed to Heroku. The steps to deploy are al follows:
     - Add the following Keys and their values:
         - `CLOUDINARY_URL`
         - `DATABASE_URL`
-        - `DEBUG`
         - `SECRET_KEY`
 9. Navigate to the `Deploy` tab and select `GitHub`
 10. Click `Connect to Github` and log in to your GitHub account
