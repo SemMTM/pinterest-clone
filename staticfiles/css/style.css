@@ -1308,12 +1308,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .error-container > h1 {
     padding-top: 15px;
+    padding-bottom: 15px;
 }
 
 .error-container > p {
-    padding-top: 15px;
-}
-
-.error-container > a {
-    padding-top: 15px;
+    padding-bottom: 15px;
 }
