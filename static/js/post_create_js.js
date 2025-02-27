@@ -6,54 +6,56 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitButton = document.getElementById('create-post-btn');
 
     // Handles submission of create post form 
-    createPostForm.addEventListener('submit', (e) => {
-        e.preventDefault(); 
-
-        submitButton.disabled = true;
-        submitButton.textContent = "Uploading...";
-        submitButton.style.color = "white";
-
-
-        const formData = new FormData(createPostForm); // Collect form data
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-        fetch(createPostForm.action, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken,
-            },
-            body: formData,
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    return response.json().then((data) => {
-                        throw new Error(data.error || 'An error occurred.');
-                    });
-                }
-                return response.json();
+    if (createPostForm) {
+        createPostForm.addEventListener('submit', (e) => {
+            e.preventDefault(); 
+    
+            submitButton.disabled = true;
+            submitButton.textContent = "Uploading...";
+            submitButton.style.color = "white";
+    
+    
+            const formData = new FormData(createPostForm); // Collect form data
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+            fetch(createPostForm.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                },
+                body: formData,
             })
-            .then((data) => {
-                if (data.success) {
-                    showPopUpMessage('Your post has been created successfully!');
-                    submitButton.disabled = false;
-                    submitButton.textContent = "Create Another Post";
-                    submitButton.style.color = "black";
-                    createPostForm.reset(); 
-                    preview.style.display = 'none'; 
-                    preview.src = ''; 
-
-                    // Clear selected tags
-                    selectedTags = []; 
-                    selectedTagsContainer.innerHTML = '';  
-                    hiddenTagsContainer.innerHTML = ''; 
-                } else {
-                    showPopUpMessage('An error occurred.');
-                }
-            })
-            .catch(() => {
-                showPopUpMessage('An unexpected error occurred.');
-            });
-    });
+                .then((response) => {
+                    if (!response.ok) {
+                        return response.json().then((data) => {
+                            throw new Error(data.error || 'An error occurred.');
+                        });
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.success) {
+                        showPopUpMessage('Your post has been created successfully!');
+                        submitButton.disabled = false;
+                        submitButton.textContent = "Create Another Post";
+                        submitButton.style.color = "black";
+                        createPostForm.reset(); 
+                        preview.style.display = 'none'; 
+                        preview.src = ''; 
+    
+                        // Clear selected tags
+                        selectedTags = []; 
+                        selectedTagsContainer.innerHTML = '';  
+                        hiddenTagsContainer.innerHTML = ''; 
+                    } else {
+                        showPopUpMessage('An error occurred.');
+                    }
+                })
+                .catch(() => {
+                    showPopUpMessage('An unexpected error occurred.');
+                });
+        });
+    }
 
     const max_file_size = 20 * 1024 * 1024;
 

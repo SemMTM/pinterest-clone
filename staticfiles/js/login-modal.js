@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault(); // Prevent default form submission
         const form = e.target;
         const formData = new FormData(form);
+        const isSignup = form.action.includes("/accounts/signup/");
 
         try {
             const response = await fetch(form.action, {
@@ -73,13 +74,23 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                window.location.reload(); // Reload the page on successful login/signup
+                if (isSignup) {
+                    // Directly construct and redirect to the profile page
+                    const username = formData.get("username"); // Get the username from form data
+                    if (username) {
+                        window.location.href = `/profile/${username}/`; // Redirect to profile page
+                    } else {
+                        window.location.reload(); // Fallback: Reload if username is missing
+                    }
+                } else {
+                    window.location.reload(); // Reload the page after login
+                }
             } else {
                 const data = await response.json();
-                authModalContent.innerHTML = data.html; // Reload the modal with error messages
+                authModalContent.innerHTML = data.html; // Reload modal with error messages
             }
         } catch (error) {
-            console.error('Error submitting form:', error);
+            console.error("Error submitting form:", error);
         }
     });
 

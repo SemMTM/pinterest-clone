@@ -68,9 +68,13 @@ document.addEventListener('DOMContentLoaded', () => {
         editProfileModalContent.classList.remove('edit-profile-modal-visible');
     };
     
-    editProfileButton.addEventListener('click', showModal);
+    if (editBoardButton) {
+        editProfileButton.addEventListener('click', showModal);
+    }
 
-    cancelEditProfileButton.addEventListener('click', hideModal);
+    if (cancelEditProfileButton) {
+        cancelEditProfileButton.addEventListener('click', hideModal);
+    }
 
     // ----- Client-Side Validation for edit profile form -----
     const imagePreview = document.getElementById('profile-image-preview');
