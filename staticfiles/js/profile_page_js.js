@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         editProfileModalContent.classList.remove('edit-profile-modal-visible');
     };
     
-    if (editBoardButton) {
+    if (editProfileButton) {
         editProfileButton.addEventListener('click', showModal);
     }
 
